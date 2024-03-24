@@ -52,100 +52,95 @@ class _InformationPageState extends State<InformationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          // Background image
-          Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(
-                    "assets/frontbackground.png"), // Ganti dengan path gambar latar belakang
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: ListView(
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/frontbackground.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: ListView(
+          children: [
+            SizedBox(height: 180.0),
+            Column(
               children: [
-                SizedBox(height: 180.0),
-                Column(
-                  children: [
-                    Image.asset(
-                      _imagePaths[_currentPageIndex],
-                      height: 300,
-                      width: 300,
-                    ),
-                    SizedBox(height: 100), // Jarak antara gambar dan judul
-                    Text(
-                      _titles[_currentPageIndex],
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                    ),
-                  ],
+                Image.asset(
+                  _imagePaths[
+                      _currentPageIndex], // Gunakan _currentPageIndex untuk memilih gambar yang sesuai
+                  height: 300,
+                  width: 300,
                 ),
-                SizedBox(height: 10), // Jarak antara judul dan teks
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Column(
+                SizedBox(height: 80), // Jarak antara gambar dan judul
+                Text(
+                  _titles[
+                      _currentPageIndex], // Menggunakan judul sesuai dengan indeks gambar saat ini
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 10), // Jarak antara gambar dan teks
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Column(
+                children: [
+                  Text(
+                    _texts[_currentPageIndex],
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  SizedBox(height: 80), // Jarak antara teks dan tombol
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        _texts[_currentPageIndex],
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 16),
+                      TextButton(
+                        onPressed: () {
+                          setState(() {
+                            _currentPageIndex =
+                                (_currentPageIndex - 1).clamp(0, 2);
+                          });
+                        },
+                        style: TextButton.styleFrom(
+                          backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(20.0), // Bentuk tombol
+                          ),
+                        ),
+                        child: Text(
+                          "Previous",
+                          style: TextStyle(
+                            color: const Color.fromARGB(255, 17, 17, 17),
+                            fontSize: 15,
+                          ),
+                        ),
                       ),
-                      SizedBox(height: 60), // Jarak antara teks dan tombol
+                      SizedBox(width: 200), // Jarak antara tombol
+                      TextButton(
+                        onPressed: _navigateToNextInfo,
+                        style: TextButton.styleFrom(
+                          backgroundColor:
+                              const Color.fromARGB(255, 255, 255, 255),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                        ),
+                        child: Text(
+                          "Next",
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 32, 122, 8),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Positioned(
-            bottom: 60,
-            left: 20,
-            right: 20,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextButton(
-                  onPressed: () {
-                    setState(() {
-                      _currentPageIndex = (_currentPageIndex - 1).clamp(0, 2);
-                    });
-                  },
-                  style: TextButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 255, 255, 255),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                  ),
-                  child: Text(
-                    "Previous",
-                    style: TextStyle(
-                      color: const Color.fromARGB(255, 17, 17, 17),
-                      fontSize: 15,
-                    ),
-                  ),
-                ),
-                TextButton(
-                  onPressed: _navigateToNextInfo,
-                  style: TextButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                  ),
-                  child: Text(
-                    "Next",
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 32, 122, 8),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
