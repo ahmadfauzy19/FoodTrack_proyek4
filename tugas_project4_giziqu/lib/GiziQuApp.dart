@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'LoginPage.dart';
 import 'InformationPage.dart';
 
 class GiziQuApp extends StatefulWidget {

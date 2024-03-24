@@ -27,40 +27,84 @@ class _LoginPageState extends State<LoginPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.amber,
+      backgroundColor: const Color.fromARGB(255, 101, 187, 65),
       body: Center(
         child: Column(children: [
           const SizedBox(height: 150.0),
           Expanded(
             child: Container(
-              padding: EdgeInsets.all(20),
-              margin: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
+              margin: const EdgeInsets.all(20),
               color: Colors.white,
               child: Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Logo"),
-                      // Image.asset(name),
-                      const SizedBox(width: 30),
+                      // const Text("Logo"),
+                      Image.asset(
+                        "assets/logo.png",
+                        width: 120,
+                        height: 120,
+                      ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("GiziQu"),
-                          Text("Keep Happy And Healthy")
+                          RichText(
+                            text: const TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: 'Gizi',
+                                  style: TextStyle(
+                                    fontFamily: 'EB Garamond',
+                                    fontSize: 24,
+                                    color: Colors
+                                        .green, // Warna hijau untuk "Gizi"
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: 'Qu',
+                                  style: TextStyle(
+                                    fontFamily: 'EBGaramond.ttf',
+                                    fontSize: 24,
+                                    color: Colors
+                                        .orange, // Warna orange untuk "Qu"
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const Text("Keep Happy And Healthy")
                         ],
                       )
                     ],
                   ),
-                  TabBar(controller: _tabController, tabs: const [
-                    Tab(
-                      text: "Masuk",
+                  Container(
+                    height: 45,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(25),
                     ),
-                    Tab(
-                      text: "Daftar",
-                    ),
-                  ]),
+                    child: TabBar(
+                        controller: _tabController,
+                        indicator: BoxDecoration(
+                            borderRadius: BorderRadius.circular(25),
+                            color: Colors.green // Creates border
+                            ),
+                        labelColor: Colors.white,
+                        indicatorSize: TabBarIndicatorSize.tab,
+                        unselectedLabelColor:
+                            const Color.fromARGB(255, 255, 182, 52),
+                        tabs: const [
+                          Tab(
+                            text: "Masuk",
+                          ),
+                          Tab(
+                            text: "Daftar",
+                          ),
+                        ]),
+                  ),
                   const SizedBox(
                     height: 20,
                   ),
@@ -88,19 +132,19 @@ class _LoginPageState extends State<LoginPage>
 
   Widget _buildLoginForm() {
     return Container(
-      padding: EdgeInsets.all(10),
-      margin: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.all(10),
       child: Column(
         children: [
-          TextField(
+          const TextField(
             decoration: InputDecoration(labelText: "Username/Email"),
           ),
-          TextField(
+          const TextField(
             decoration: InputDecoration(labelText: "Password"),
             obscureText: true,
           ),
           const SizedBox(
-            height: 200,
+            height: 170,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -109,10 +153,17 @@ class _LoginPageState extends State<LoginPage>
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => LandingPage()),
+                    MaterialPageRoute(
+                        builder: (context) => const LandingPage()),
                   );
                 },
-                child: Text("Masuk"),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                ),
+                child: const Text(
+                  "Masuk",
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ],
           )
@@ -123,26 +174,26 @@ class _LoginPageState extends State<LoginPage>
 
   Widget _buildRegisterForm() {
     return Container(
-      padding: EdgeInsets.all(10),
-      margin: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.all(10),
       child: Column(
         children: [
-          TextField(
+          const TextField(
             decoration: InputDecoration(labelText: "Nama Lengkap"),
           ),
-          TextField(
+          const TextField(
             decoration: InputDecoration(labelText: "Username/Email"),
           ),
-          TextField(
+          const TextField(
             decoration: InputDecoration(labelText: "Password"),
             obscureText: true,
           ),
-          TextField(
+          const TextField(
             decoration: InputDecoration(labelText: "Validasi Password"),
             obscureText: true,
           ),
           const SizedBox(
-            height: 100,
+            height: 40,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -151,10 +202,16 @@ class _LoginPageState extends State<LoginPage>
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => LoginPage()),
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
                   );
                 },
-                child: Text("Daftar"),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                ),
+                child: const Text(
+                  "Daftar",
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ],
           )
