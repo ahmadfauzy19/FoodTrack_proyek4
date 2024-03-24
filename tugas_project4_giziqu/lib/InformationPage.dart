@@ -21,9 +21,9 @@ class _InformationPageState extends State<InformationPage> {
   ];
 
   final List<String> _imagePaths = [
-    "assets/image1.jpg",
-    "assets/image2.jpg",
-    "assets/image3.jpg",
+    "assets/gambar1.png",
+    "assets/gambar2.png",
+    "assets/gambar3.png",
   ];
 
   final List<String> _titles = [
@@ -54,27 +54,27 @@ class _InformationPageState extends State<InformationPage> {
     return Scaffold(
       body: ListView(
         children: [
-          SizedBox(height: 200.0),
+          SizedBox(height: 180.0),
           Column(
             children: [
               Image.asset(
                 _imagePaths[
                     _currentPageIndex], // Gunakan _currentPageIndex untuk memilih gambar yang sesuai
-                height: 100,
-                width: 100,
+                height: 300,
+                width: 300,
               ),
-              SizedBox(height: 300), // Jarak antara gambar dan judul
+              SizedBox(height: 80), // Jarak antara gambar dan judul
               Text(
                 _titles[
                     _currentPageIndex], // Menggunakan judul sesuai dengan indeks gambar saat ini
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 16,
+                  fontSize: 18,
                 ),
               ),
             ],
           ),
-          SizedBox(height: 20), // Jarak antara gambar dan teks
+          SizedBox(height: 10), // Jarak antara gambar dan teks
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Column(
@@ -82,26 +82,50 @@ class _InformationPageState extends State<InformationPage> {
                 Text(
                   _texts[_currentPageIndex],
                   textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16),
                 ),
-                SizedBox(height: 80), // Jarak antara teks dan tombol
+                SizedBox(height: 100), // Jarak antara teks dan tombol
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ElevatedButton(
+                    TextButton(
                       onPressed: () {
                         setState(() {
                           _currentPageIndex =
                               (_currentPageIndex - 1).clamp(0, 2);
                         });
                       },
-                      child: Text("Previous"),
+                      style: TextButton.styleFrom(
+                        backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(20.0), // Bentuk tombol
+                        ),
+                      ),
+                      child: Text(
+                        "Previous",
+                        style: TextStyle(
+                          color: const Color.fromARGB(255, 17, 17, 17),
+                          fontSize: 15,
+                        ),
+                      ),
                     ),
-                    SizedBox(
-                        width:
-                            150), // Jarak antara tombol "Previous" dan "Next"
-                    ElevatedButton(
+                    SizedBox(width: 200), // Jarak antara tombol
+                    TextButton(
                       onPressed: _navigateToNextInfo,
-                      child: Text("Next"),
+                      style: TextButton.styleFrom(
+                        backgroundColor:
+                            const Color.fromARGB(255, 255, 255, 255),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                      ),
+                      child: Text(
+                        "Next",
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 32, 122, 8),
+                        ),
+                      ),
                     ),
                   ],
                 ),
