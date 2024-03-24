@@ -35,18 +35,27 @@ class _LoginPageState extends State<LoginPage>
             child: Container(
               padding: const EdgeInsets.all(20),
               margin: const EdgeInsets.all(20),
-              color: Colors.white,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius:
+                    BorderRadius.circular(30), // Menambahkan BorderRadius
+                border: Border.all(
+                  color: Colors.grey, // Warna border
+                  width: 1, // Lebar border
+                ),
+              ),
               child: Column(
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       // const Text("Logo"),
                       Image.asset(
                         "assets/logo.png",
-                        width: 120,
-                        height: 120,
+                        width: 100,
+                        height: 100,
                       ),
+
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -56,7 +65,6 @@ class _LoginPageState extends State<LoginPage>
                                 TextSpan(
                                   text: 'Gizi',
                                   style: TextStyle(
-                                    fontFamily: 'EB Garamond',
                                     fontSize: 24,
                                     color: Colors
                                         .green, // Warna hijau untuk "Gizi"
@@ -65,7 +73,6 @@ class _LoginPageState extends State<LoginPage>
                                 TextSpan(
                                   text: 'Qu',
                                   style: TextStyle(
-                                    fontFamily: 'EBGaramond.ttf',
                                     fontSize: 24,
                                     color: Colors
                                         .orange, // Warna orange untuk "Qu"
@@ -78,6 +85,9 @@ class _LoginPageState extends State<LoginPage>
                         ],
                       )
                     ],
+                  ),
+                  SizedBox(
+                    height: 10,
                   ),
                   Container(
                     height: 45,
