@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'LoginPage.dart';
+import 'InformationPage.dart';
 
 class GiziQuApp extends StatefulWidget {
   const GiziQuApp({super.key});
@@ -15,7 +16,7 @@ class _GiziQuAppState extends State<GiziQuApp> {
       title: 'Shrine',
       initialRoute: '/login',
       routes: {
-        '/login': (BuildContext context) => const LoginPage(),
+        '/login': (BuildContext context) => const InformationPage(),
       },
     );
   }
