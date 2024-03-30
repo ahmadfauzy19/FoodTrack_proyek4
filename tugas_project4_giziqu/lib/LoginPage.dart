@@ -27,7 +27,7 @@ class _LoginPageState extends State<LoginPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 101, 187, 65),
+      backgroundColor: Color.fromARGB(255, 255, 255, 255),
       body: Center(
         child: Column(children: [
           const SizedBox(height: 150.0),
@@ -86,7 +86,7 @@ class _LoginPageState extends State<LoginPage>
                       )
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Container(

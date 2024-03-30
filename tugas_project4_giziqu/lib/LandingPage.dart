@@ -16,19 +16,44 @@ class _LandingPageState extends State<LandingPage> {
         child: Column(
           children: [
             Container(
-              margin: EdgeInsets.all(40),
+              height: 200,
+              padding: EdgeInsets.all(20),
+              // margin: EdgeInsets.all(30),
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/BG.jpg"),
+                  fit: BoxFit.cover, // Atur sesuai kebutuhan Anda
+                ),
+              ),
               child: Row(
                 children: [
                   CircleAvatar(
-                    radius: 50, // Atur radius sesuai kebutuhan Anda
-                    backgroundImage: AssetImage("assets/profile_picture.jpg"),
+                    radius: 30, // Atur radius sesuai kebutuhan Anda
+                    backgroundImage: AssetImage("assets/default.jpeg"),
                   ),
                   Container(
                     margin: EdgeInsets.all(20),
-                    child: Column(
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Selamat Datang,"),
-                        Text("Nama"),
+                        Text(
+                          "Selamat Datang,",
+                          style: TextStyle(
+                              fontFamily: "fonts/Schyler-Italic.ttf",
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                        Text(
+                          "Nama",
+                          style: TextStyle(
+                            fontFamily: "fonts/Schyler-Italic.ttf",
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -79,38 +104,50 @@ class _LandingPageState extends State<LandingPage> {
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Tambahkan logika untuk membuka halaman untuk memindai QR code
+        },
+        backgroundColor: Colors.green,
+        shape:
+            const CircleBorder(side: BorderSide(color: Colors.white, width: 2)),
+        child: const Icon(
+          Icons.qr_code_scanner_rounded,
+          color: Colors.white,
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
         color: Colors.white,
-        child: Container(
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: [
-              IconButton(
-                onPressed: () {
-                  // Tambahkan logika untuk navigasi ke halaman beranda
-                },
-                icon: Icon(Icons.home),
-              ),
-              IconButton(
-                onPressed: () {
-                  // Tambahkan logika untuk navigasi ke halaman berita
-                },
-                icon: Icon(Icons.newspaper),
-              ),
-              IconButton(
-                onPressed: () {
-                  // Tambahkan logika untuk navigasi ke halaman favorit
-                },
-                icon: Icon(Icons.favorite),
-              ),
-              IconButton(
-                onPressed: () {
-                  // Tambahkan logika untuk navigasi ke halaman profil
-                },
-                icon: Icon(Icons.person),
-              ),
-            ],
-          ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            IconButton(
+              onPressed: () {
+                // Tambahkan logika untuk navigasi ke halaman beranda
+              },
+              icon: Icon(Icons.home),
+            ),
+            IconButton(
+              onPressed: () {
+                // Tambahkan logika untuk navigasi ke halaman berita
+              },
+              icon: Icon(Icons.newspaper),
+            ),
+            SizedBox(width: 50),
+            IconButton(
+              onPressed: () {
+                // Tambahkan logika untuk navigasi ke halaman search
+              },
+              icon: Icon(Icons.search),
+            ),
+            IconButton(
+              onPressed: () {
+                // Tambahkan logika untuk navigasi ke halaman profil
+              },
+              icon: Icon(Icons.person),
+            ),
+          ],
         ),
       ),
     );
