@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import "TambahMakanan.dart";
 
 class AdminPage extends StatefulWidget {
   const AdminPage({super.key});
@@ -65,7 +66,7 @@ class _AdminPageState extends State<AdminPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
+                    const Row(
                       children: [
                         Text(
                           "Kelola",
@@ -80,9 +81,13 @@ class _AdminPageState extends State<AdminPage> {
                     SizedBox(height: 10), // Jarak antara teks dan tombol
                     TextButton(
                       onPressed: () {
-                        // Tindakan yang akan dilakukan saat tombol ditekan
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => TambahMakanan()),
+                        );
                       },
-                      child: Row(
+                      child: const Row(
                         children: [
                           Icon(
                             Icons.add_circle_outline,
@@ -102,7 +107,7 @@ class _AdminPageState extends State<AdminPage> {
                       onPressed: () {
                         // Tindakan yang akan dilakukan saat tombol ditekan
                       },
-                      child: Row(
+                      child: const Row(
                         children: [
                           Icon(
                             Icons.food_bank_outlined,
@@ -122,7 +127,7 @@ class _AdminPageState extends State<AdminPage> {
                       onPressed: () {
                         // Tindakan yang akan dilakukan saat tombol ditekan
                       },
-                      child: Row(
+                      child: const Row(
                         children: [
                           Icon(
                             Icons.article_outlined,

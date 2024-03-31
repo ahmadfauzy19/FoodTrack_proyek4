@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tugas_project4_giziqu/AdminPage.dart';
+import 'Admin/AdminPage.dart';
 import 'LandingPage.dart';
 
 class LoginPage extends StatefulWidget {
@@ -173,11 +173,29 @@ class _LoginPageState extends State<LoginPage>
                       MaterialPageRoute(
                           builder: (context) => const AdminPage()),
                     );
-                  } else {
+                  } else if (username == 'user') {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => const LandingPage()),
+                    );
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Informasi'),
+                          content: Text('Masukan username yang benar'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(); // Menutup dialog
+                              },
+                              child: Text('OK'),
+                            ),
+                          ],
+                        );
+                      },
                     );
                   }
                 },
