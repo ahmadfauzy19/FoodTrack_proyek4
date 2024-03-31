@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tugas_project4_giziqu/AdminPage.dart';
 import 'LandingPage.dart';
 
 class LoginPage extends StatefulWidget {
@@ -141,16 +142,21 @@ class _LoginPageState extends State<LoginPage>
   }
 
   Widget _buildLoginForm() {
+    String username = '';
     return Container(
       padding: const EdgeInsets.all(10),
       margin: const EdgeInsets.all(10),
       child: Column(
         children: [
-          const TextField(
+          TextField(
             decoration: InputDecoration(labelText: "Username/Email"),
+            onChanged: (value) {
+              username = value;
+            },
           ),
-          const TextField(
+          TextField(
             decoration: InputDecoration(labelText: "Password"),
+            onChanged: (value) {},
             obscureText: true,
           ),
           const SizedBox(
@@ -161,11 +167,19 @@ class _LoginPageState extends State<LoginPage>
             children: [
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const LandingPage()),
-                  );
+                  if (username == 'admin') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const AdminPage()),
+                    );
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LandingPage()),
+                    );
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
