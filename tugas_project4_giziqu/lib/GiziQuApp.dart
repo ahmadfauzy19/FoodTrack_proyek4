@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'InformationPage.dart';
+import 'package:tugas_project4_giziqu/SplashScreen.dart';
 
 class GiziQuApp extends StatefulWidget {
   const GiziQuApp({super.key});
@@ -15,7 +15,7 @@ class _GiziQuAppState extends State<GiziQuApp> {
       title: 'Shrine',
       initialRoute: '/login',
       routes: {
-        '/login': (BuildContext context) => const InformationPage(),
+        '/login': (BuildContext context) => const SplashScreen(),
       },
     );
   }
