@@ -59,87 +59,83 @@ class _InformationPageState extends State<InformationPage> {
             fit: BoxFit.cover,
           ),
         ),
-        child: ListView(
-          children: [
-            SizedBox(height: 180.0),
-            Column(
+        child: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image.asset(
-                  _imagePaths[
-                      _currentPageIndex], // Gunakan _currentPageIndex untuk memilih gambar yang sesuai
-                  height: 300,
-                  width: 300,
+                SizedBox(height: 180.0),
+                Column(
+                  children: [
+                    Image.asset(
+                      _imagePaths[_currentPageIndex],
+                      height: 300,
+                      width: 300,
+                    ),
+                    SizedBox(height: 80),
+                    Text(
+                      _titles[_currentPageIndex],
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(height: 80), // Jarak antara gambar dan judul
+                SizedBox(height: 10),
                 Text(
-                  _titles[
-                      _currentPageIndex], // Menggunakan judul sesuai dengan indeks gambar saat ini
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
+                  _texts[_currentPageIndex],
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16),
+                ),
+                SizedBox(height: 60),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        setState(() {
+                          _currentPageIndex =
+                              (_currentPageIndex - 1).clamp(0, 2);
+                        });
+                      },
+                      style: TextButton.styleFrom(
+                        backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                      ),
+                      child: Text(
+                        "Previous",
+                        style: TextStyle(
+                          color: const Color.fromARGB(255, 17, 17, 17),
+                          fontSize: 15,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 80),
+                    TextButton(
+                      onPressed: _navigateToNextInfo,
+                      style: TextButton.styleFrom(
+                        backgroundColor:
+                            const Color.fromARGB(255, 255, 255, 255),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                      ),
+                      child: Text(
+                        "Next",
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 32, 122, 8),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-            SizedBox(height: 10), // Jarak antara gambar dan teks
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Column(
-                children: [
-                  Text(
-                    _texts[_currentPageIndex],
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  SizedBox(height: 80), // Jarak antara teks dan tombol
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          setState(() {
-                            _currentPageIndex =
-                                (_currentPageIndex - 1).clamp(0, 2);
-                          });
-                        },
-                        style: TextButton.styleFrom(
-                          backgroundColor: Color.fromARGB(255, 255, 255, 255),
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(20.0), // Bentuk tombol
-                          ),
-                        ),
-                        child: Text(
-                          "Previous",
-                          style: TextStyle(
-                            color: const Color.fromARGB(255, 17, 17, 17),
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 200), // Jarak antara tombol
-                      TextButton(
-                        onPressed: _navigateToNextInfo,
-                        style: TextButton.styleFrom(
-                          backgroundColor:
-                              const Color.fromARGB(255, 255, 255, 255),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                        ),
-                        child: Text(
-                          "Next",
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 32, 122, 8),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
