@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import "TambahMakanan.dart";
+import "KelolaMakanan.dart";
 
 class AdminPage extends StatefulWidget {
   const AdminPage({super.key});
@@ -105,7 +106,11 @@ class _AdminPageState extends State<AdminPage> {
                     ),
                     TextButton(
                       onPressed: () {
-                        // Tindakan yang akan dilakukan saat tombol ditekan
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => KelolaMakanan()),
+                        );
                       },
                       child: const Row(
                         children: [
