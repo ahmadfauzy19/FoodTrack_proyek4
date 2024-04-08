@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import "package:tugas_project4_giziqu/Admin/KelolaArtikel.dart";
 import "TambahMakanan.dart";
 import "KelolaMakanan.dart";
 
@@ -130,7 +131,11 @@ class _AdminPageState extends State<AdminPage> {
                     ),
                     TextButton(
                       onPressed: () {
-                        // Tindakan yang akan dilakukan saat tombol ditekan
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => KelolaArtikel()),
+                        );
                       },
                       child: const Row(
                         children: [
