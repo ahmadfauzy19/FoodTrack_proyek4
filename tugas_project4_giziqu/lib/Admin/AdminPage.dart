@@ -104,9 +104,7 @@ class _AdminPageState extends State<AdminPage> {
                       ),
                     ),
                     TextButton(
-                      onPressed: () {
-                        // Tindakan yang akan dilakukan saat tombol ditekan
-                      },
+                      onPressed: () {},
                       child: const Row(
                         children: [
                           Icon(
@@ -124,9 +122,7 @@ class _AdminPageState extends State<AdminPage> {
                       ),
                     ),
                     TextButton(
-                      onPressed: () {
-                        // Tindakan yang akan dilakukan saat tombol ditekan
-                      },
+                      onPressed: () {},
                       child: const Row(
                         children: [
                           Icon(

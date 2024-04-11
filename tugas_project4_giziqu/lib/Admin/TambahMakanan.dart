@@ -1,19 +1,23 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
+import 'TambahGizi.dart';
 
 class TambahMakanan extends StatefulWidget {
-  const TambahMakanan({super.key});
+  const TambahMakanan({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _TambahMakananState();
+  // ignore: library_private_types_in_public_api
+  _TambahMakananState createState() => _TambahMakananState();
 }
 
 class _TambahMakananState extends State<TambahMakanan> {
   String? _selectedChoice;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tambah Makanan'),
+        title: Text('Tambah Produk'),
         bottom: const PreferredSize(
           preferredSize: Size.fromHeight(0),
           child: Divider(
@@ -24,7 +28,7 @@ class _TambahMakananState extends State<TambahMakanan> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context); // Kembali ke halaman sebelumnya
+            Navigator.pop(context);
           },
         ),
       ),
@@ -34,23 +38,19 @@ class _TambahMakananState extends State<TambahMakanan> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Text('Nama Makanan'),
-                ],
-              ),
-              SizedBox(height: 5), // Jarak antara judul dan teksfield
+              Text('Nama Produk'),
+              SizedBox(height: 5),
               TextField(
                 decoration: InputDecoration(
-                    hintText: "Nama Makanan",
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(width: 0),
-                      borderRadius: BorderRadius.circular(
-                          50), // Mengatur radius border menjadi 50
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 10)),
+                  hintText: "Nama Produk",
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(width: 0),
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+                ),
               ),
-              SizedBox(height: 0.5), // Jarak antara TextField dan pilihan
+              SizedBox(height: 0.5),
               Row(
                 children: [
                   Radio(
@@ -58,7 +58,7 @@ class _TambahMakananState extends State<TambahMakanan> {
                     groupValue: _selectedChoice,
                     onChanged: (value) {
                       setState(() {
-                        _selectedChoice = value;
+                        _selectedChoice = value as String?;
                       });
                     },
                   ),
@@ -69,11 +69,92 @@ class _TambahMakananState extends State<TambahMakanan> {
                     groupValue: _selectedChoice,
                     onChanged: (value) {
                       setState(() {
-                        _selectedChoice = value;
+                        _selectedChoice = value as String?;
                       });
                     },
                   ),
                   Text('Minuman'),
+                ],
+              ),
+              SizedBox(height: 10),
+              Text("Menguploud Foto"),
+              SizedBox(height: 10),
+              Container(
+                padding: EdgeInsets.all(2),
+                decoration: BoxDecoration(
+                  border:
+                      Border.all(color: const Color.fromARGB(255, 69, 68, 68)),
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                child: Row(
+                  children: [
+                    SizedBox(width: 10),
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: Text(
+                        "Uploud Image",
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            const Color.fromARGB(255, 187, 186, 186),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(0),
+                        ),
+                        fixedSize: Size(140, 40),
+                        side: const BorderSide(
+                          color: Colors.black,
+                          width: 1,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 10),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: "No Barcode",
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(width: 1),
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                        prefixIcon: Icon(Icons.qr_code_scanner_outlined),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: max(300, 0)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 300,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const TambahGizi()),
+                        );
+                      },
+                      child: Text(
+                        "Lanjutkan",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ],

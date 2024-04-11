@@ -149,7 +149,7 @@ class _LoginPageState extends State<LoginPage>
       child: Column(
         children: [
           TextField(
-            decoration: InputDecoration(labelText: "Username/Email"),
+            decoration: const InputDecoration(labelText: "Username/Email"),
             onChanged: (value) {
               username = value;
             },
