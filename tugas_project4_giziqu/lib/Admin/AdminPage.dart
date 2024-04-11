@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import "package:tugas_project4_giziqu/Admin/KelolaArtikel.dart";
 import "TambahMakanan.dart";
+import "KelolaMakanan.dart";
 
 class AdminPage extends StatefulWidget {
   const AdminPage({super.key});
@@ -104,7 +106,13 @@ class _AdminPageState extends State<AdminPage> {
                       ),
                     ),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => KelolaMakanan()),
+                        );
+                      },
                       child: const Row(
                         children: [
                           Icon(
@@ -122,7 +130,13 @@ class _AdminPageState extends State<AdminPage> {
                       ),
                     ),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => KelolaArtikel()),
+                        );
+                      },
                       child: const Row(
                         children: [
                           Icon(
