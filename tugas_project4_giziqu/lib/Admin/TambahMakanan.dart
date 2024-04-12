@@ -88,11 +88,11 @@ class _TambahMakananState extends State<TambahMakanan> {
                 ),
                 child: Row(
                   children: [
-                    SizedBox(width: 10),
+                    SizedBox(width: 12),
                     ElevatedButton(
                       onPressed: () {},
                       child: Text(
-                        "Uploud Image",
+                        "Pilih File",
                         style: TextStyle(
                           color: Colors.black,
                         ),
@@ -103,7 +103,7 @@ class _TambahMakananState extends State<TambahMakanan> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(0),
                         ),
-                        fixedSize: Size(140, 40),
+                        fixedSize: Size(105, 35),
                         side: const BorderSide(
                           color: Colors.black,
                           width: 1,

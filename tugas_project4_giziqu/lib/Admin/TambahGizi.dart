@@ -1,5 +1,148 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:tugas_project4_giziqu/Admin/AdminPage.dart';
+
+class CounterField extends StatefulWidget {
+  final TextEditingController controller;
+
+  const CounterField({Key? key, required this.controller}) : super(key: key);
+
+  @override
+  _CounterFieldState createState() => _CounterFieldState();
+}
+
+class _CounterFieldState extends State<CounterField> {
+  int _counter = 0;
+
+  void _incrementCounter() {
+    setState(() {
+      if (widget.controller.text.isEmpty || _counter == 0) {
+        _counter = 1;
+      } else {
+        _counter = int.parse(widget.controller.text) + 1;
+      }
+      widget.controller.text = '$_counter';
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: TextField(
+        controller: widget.controller,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(0),
+          ),
+          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          suffixIcon: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                icon: Icon(Icons.arrow_drop_up),
+                onPressed: _incrementCounter,
+              ),
+            ],
+          ),
+        ),
+        textAlign: TextAlign.center,
+        keyboardType: TextInputType.number,
+      ),
+    );
+  }
+}
+
+class TakaranField extends StatefulWidget {
+  final TextEditingController controller;
+
+  final String unit;
+
+  const TakaranField({
+    Key? key,
+    required this.controller,
+    required this.unit,
+  }) : super(key: key);
+
+  @override
+  _TakaranFieldState createState() => _TakaranFieldState();
+}
+
+class _TakaranFieldState extends State<TakaranField> {
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: TextField(
+        controller: widget.controller,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          suffixIcon: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(widget.unit),
+            ],
+          ),
+        ),
+        textAlign: TextAlign.start,
+        keyboardType: TextInputType.number,
+      ),
+    );
+  }
+}
+
+class DropdownField extends StatelessWidget {
+  final List<String> items;
+  final String? selectedValue;
+  final void Function(String?) onChanged;
+
+  const DropdownField({
+    Key? key,
+    required this.items,
+    required this.selectedValue,
+    required this.onChanged,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton2<String>(
+          isExpanded: true,
+          hint: Text(
+            'Select Item',
+            style: TextStyle(
+              fontSize: 14,
+              color: Theme.of(context).hintColor,
+            ),
+          ),
+          items: items
+              .map((String item) => DropdownMenuItem<String>(
+                    value: item,
+                    child: Text(
+                      item,
+                      style: const TextStyle(
+                        fontSize: 14,
+                      ),
+                    ),
+                  ))
+              .toList(),
+          value: selectedValue,
+          onChanged: onChanged,
+          buttonStyleData: ButtonStyleData(
+            decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          ),
+          menuItemStyleData: const MenuItemStyleData(
+            height: 20,
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 class TambahGizi extends StatefulWidget {
   const TambahGizi({Key? key}) : super(key: key);
@@ -10,7 +153,27 @@ class TambahGizi extends StatefulWidget {
 }
 
 class _TambahGiziState extends State<TambahGizi> {
-  String? _selectedChoice;
+  TextEditingController _energiController = TextEditingController();
+  String? selectedTakaranValue;
+  TextEditingController _controller = TextEditingController();
+  String? selectedValue;
+  final List<String> items = [
+    "pcs",
+    "dus",
+    "pack",
+    "Kaleng",
+    "Sachet",
+    "Botol",
+    "Tray",
+    "Toples"
+  ];
+  final List<String> items1 = ["gram", "ml"];
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.text = '0';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +194,171 @@ class _TambahGiziState extends State<TambahGizi> {
           },
         ),
       ),
-      body: Center(
-        child: Text("Tambah Gizi"),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Container(
+          child: SingleChildScrollView(
+            // Menggunakan SingleChildScrollView di sini
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Jumlah Takaran Persaji",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 10),
+                Row(
+                  children: [
+                    CounterField(controller: _controller),
+                    SizedBox(width: 20),
+                    DropdownField(
+                      items: items,
+                      selectedValue: selectedValue,
+                      onChanged: (String? value) {
+                        setState(() {
+                          selectedValue = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Takaran Saji",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    CounterField(controller: _controller),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    DropdownField(
+                      items: items1,
+                      selectedValue: selectedValue,
+                      onChanged: (String? value) {
+                        setState(() {
+                          selectedValue = value;
+                        });
+                      },
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text("Energi"),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    TakaranField(
+                      controller: _energiController,
+                      unit: selectedValue ??
+                          "kkal", // Memasukkan unit yang dipilih
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text("Lemak Total"),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    TakaranField(
+                      controller: _energiController,
+                      unit:
+                          selectedValue ?? "g", // Memasukkan unit yang dipilih
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text("Protein"),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    TakaranField(
+                      controller: _energiController,
+                      unit:
+                          selectedValue ?? "g", // Memasukkan unit yang dipilih
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text("Karbohidrat Total"),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    TakaranField(
+                      controller: _energiController,
+                      unit:
+                          selectedValue ?? "g", // Memasukkan unit yang dipilih
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text("Natrium"),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    TakaranField(
+                      controller: _energiController,
+                      unit:
+                          selectedValue ?? "mg", // Memasukkan unit yang dipilih
+                    ),
+                  ],
+                ),
+                SizedBox(height: 40),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 300,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const AdminPage()),
+                          );
+                        },
+                        child: Text(
+                          "Simpan",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
