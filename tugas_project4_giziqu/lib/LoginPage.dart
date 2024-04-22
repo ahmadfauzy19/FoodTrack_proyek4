@@ -135,7 +135,7 @@ class _LoginPageState extends State<LoginPage>
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const LandingPage()),
+                              builder: (context) => LandingPage()),
                         );
                       },
                       child: const Text('OK'),
@@ -321,7 +321,37 @@ class _LoginPageState extends State<LoginPage>
             children: [
               ElevatedButton(
                 onPressed: () {
-                  loginUser(nameController.text, passwordController.text);
+                  if (username == 'admin') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const AdminPage()),
+                    );
+                  } else if (username == 'user') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LandingPage()),
+                    );
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Informasi'),
+                          content: Text('Masukan username yang benar'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(); // Menutup dialog
+                              },
+                              child: Text('OK'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
