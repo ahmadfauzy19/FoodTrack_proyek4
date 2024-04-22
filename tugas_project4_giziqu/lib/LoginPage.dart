@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'Admin/AdminPage.dart';
 import 'LandingPage.dart';
+// ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
@@ -33,7 +34,6 @@ class _LoginPageState extends State<LoginPage>
 
       if (response.statusCode == 200) {
         _tabController.animateTo(0);
-        // ignore: use_build_context_synchronously
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -53,7 +53,6 @@ class _LoginPageState extends State<LoginPage>
         );
         return "berhasil";
       } else {
-        // ignore: use_build_context_synchronously
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -99,7 +98,6 @@ class _LoginPageState extends State<LoginPage>
             ? 'Login Berhasil, Selamat datang Admin'
             : 'Login Berhasil, Selamat datang, $name';
         if (isAdmin) {
-          // ignore: use_build_context_synchronously
           showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -122,7 +120,6 @@ class _LoginPageState extends State<LoginPage>
             },
           );
         } else {
-          // ignore: use_build_context_synchronously
           showDialog(
               context: context,
               builder: (BuildContext context) {
@@ -321,37 +318,7 @@ class _LoginPageState extends State<LoginPage>
             children: [
               ElevatedButton(
                 onPressed: () {
-                  if (username == 'admin') {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const AdminPage()),
-                    );
-                  } else if (username == 'user') {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const LandingPage()),
-                    );
-                  } else {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text('Informasi'),
-                          content: Text('Masukan username yang benar'),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop(); // Menutup dialog
-                              },
-                              child: Text('OK'),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  }
+                  loginUser(nameController.text, passwordController.text);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
