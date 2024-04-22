@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'Admin/AdminPage.dart';
 import 'LandingPage.dart';
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  const LoginPage({Key? key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -12,6 +15,162 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+
+  Future<String> registerUser(
+      String name, String username, String email, String password) async {
+    final Uri uri = Uri.parse('http://127.0.0.1:8000/api/daftar');
+
+    try {
+      final response = await http.post(
+        uri,
+        body: {
+          'name': name,
+          'username': username,
+          'email': email,
+          'password': password,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        _tabController.animateTo(0);
+        // ignore: use_build_context_synchronously
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Informasi'),
+              content: const Text('Registrasi berhasil. Silakan masuk.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+        return "berhasil";
+      } else {
+        // ignore: use_build_context_synchronously
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Informasi'),
+              content: Text('Registrasi gagal: ${response.body}'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+        return "gagal";
+      }
+    } catch (error) {
+      print('Kesalahan saat melakukan registrasi: $error');
+    }
+    return "gagal";
+  }
+
+  Future<void> loginUser(String username, String password) async {
+    final Uri uri = Uri.parse('http://127.0.0.1:8000/api/login');
+    print(username);
+    try {
+      final response = await http.post(
+        uri,
+        body: {
+          'username': username,
+          'password': password,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final responseData = json.decode(response.body);
+        bool isAdmin = responseData['isAdmin'] ?? false;
+        String name = responseData['name'] ?? '';
+        String welcomeMessage = isAdmin
+            ? 'Login Berhasil, Selamat datang Admin'
+            : 'Login Berhasil, Selamat datang, $name';
+        if (isAdmin) {
+          // ignore: use_build_context_synchronously
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Informasi'),
+                content: Text(welcomeMessage),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AdminPage()),
+                      );
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        } else {
+          // ignore: use_build_context_synchronously
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text('Informasi'),
+                  content: Text(welcomeMessage),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LandingPage()),
+                        );
+                      },
+                      child: const Text('OK'),
+                    ),
+                  ],
+                );
+              });
+        }
+      } else {
+        _showDialog('Login gagal: ${response.body}');
+      }
+    } catch (error) {
+      _showDialog('Kesalahan saat melakukan login: $error');
+    }
+  }
+
+  void _showDialog(String message, {bool isAdmin = false}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Informasi'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   void initState() {
@@ -28,7 +187,7 @@ class _LoginPageState extends State<LoginPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       body: Center(
         child: Column(children: [
           const SizedBox(height: 150.0),
@@ -38,11 +197,10 @@ class _LoginPageState extends State<LoginPage>
               margin: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius:
-                    BorderRadius.circular(30), // Menambahkan BorderRadius
+                borderRadius: BorderRadius.circular(30),
                 border: Border.all(
-                  color: Colors.grey, // Warna border
-                  width: 1, // Lebar border
+                  color: Colors.grey,
+                  width: 1,
                 ),
               ),
               child: Column(
@@ -50,13 +208,11 @@ class _LoginPageState extends State<LoginPage>
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      // const Text("Logo"),
                       Image.asset(
                         "assets/logo.png",
                         width: 100,
                         height: 100,
                       ),
-
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -67,16 +223,14 @@ class _LoginPageState extends State<LoginPage>
                                   text: 'Gizi',
                                   style: TextStyle(
                                     fontSize: 24,
-                                    color: Colors
-                                        .green, // Warna hijau untuk "Gizi"
+                                    color: Colors.green,
                                   ),
                                 ),
                                 TextSpan(
                                   text: 'Qu',
                                   style: TextStyle(
                                     fontSize: 24,
-                                    color: Colors
-                                        .orange, // Warna orange untuk "Qu"
+                                    color: Colors.orange,
                                   ),
                                 ),
                               ],
@@ -98,23 +252,24 @@ class _LoginPageState extends State<LoginPage>
                       borderRadius: BorderRadius.circular(25),
                     ),
                     child: TabBar(
-                        controller: _tabController,
-                        indicator: BoxDecoration(
-                            borderRadius: BorderRadius.circular(25),
-                            color: Colors.green // Creates border
-                            ),
-                        labelColor: Colors.white,
-                        indicatorSize: TabBarIndicatorSize.tab,
-                        unselectedLabelColor:
-                            const Color.fromARGB(255, 255, 182, 52),
-                        tabs: const [
-                          Tab(
-                            text: "Masuk",
-                          ),
-                          Tab(
-                            text: "Daftar",
-                          ),
-                        ]),
+                      controller: _tabController,
+                      indicator: BoxDecoration(
+                        borderRadius: BorderRadius.circular(25),
+                        color: Colors.green,
+                      ),
+                      labelColor: Colors.white,
+                      indicatorSize: TabBarIndicatorSize.tab,
+                      unselectedLabelColor:
+                          const Color.fromARGB(255, 255, 182, 52),
+                      tabs: const [
+                        Tab(
+                          text: "Masuk",
+                        ),
+                        Tab(
+                          text: "Daftar",
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(
                     height: 20,
@@ -142,22 +297,21 @@ class _LoginPageState extends State<LoginPage>
   }
 
   Widget _buildLoginForm() {
-    String username = '';
+    TextEditingController nameController = TextEditingController();
+    TextEditingController passwordController = TextEditingController();
+
     return Container(
       padding: const EdgeInsets.all(10),
       margin: const EdgeInsets.all(10),
       child: Column(
         children: [
           TextField(
-            decoration: const InputDecoration(labelText: "Username/Email"),
-            onChanged: (value) {
-              username = value;
-            },
+            controller: nameController,
+            decoration: const InputDecoration(labelText: "username/email"),
           ),
           TextField(
-            decoration: InputDecoration(labelText: "Password"),
-            onChanged: (value) {},
-            obscureText: true,
+            controller: passwordController,
+            decoration: const InputDecoration(labelText: "Password"),
           ),
           const SizedBox(
             height: 170,
@@ -167,37 +321,7 @@ class _LoginPageState extends State<LoginPage>
             children: [
               ElevatedButton(
                 onPressed: () {
-                  if (username == 'admin') {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const AdminPage()),
-                    );
-                  } else if (username == 'user') {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const LandingPage()),
-                    );
-                  } else {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text('Informasi'),
-                          content: Text('Masukan username yang benar'),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop(); // Menutup dialog
-                              },
-                              child: Text('OK'),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  }
+                  loginUser(nameController.text, passwordController.text);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
@@ -215,48 +339,57 @@ class _LoginPageState extends State<LoginPage>
   }
 
   Widget _buildRegisterForm() {
+    TextEditingController nameController = TextEditingController();
+    TextEditingController usernameController = TextEditingController();
+    TextEditingController emailController = TextEditingController();
+    TextEditingController passwordController = TextEditingController();
+
     return Container(
       padding: const EdgeInsets.all(10),
       margin: const EdgeInsets.all(10),
       child: Column(
         children: [
-          const TextField(
-            decoration: InputDecoration(labelText: "Nama Lengkap"),
+          TextField(
+            controller: nameController,
+            decoration: const InputDecoration(labelText: "Nama Lengkap"),
           ),
-          const TextField(
-            decoration: InputDecoration(labelText: "Username/Email"),
+          TextField(
+            controller: usernameController,
+            decoration: const InputDecoration(labelText: "Username"),
           ),
-          const TextField(
-            decoration: InputDecoration(labelText: "Password"),
-            obscureText: true,
+          TextField(
+            controller: emailController,
+            decoration: const InputDecoration(labelText: "Email"),
           ),
-          const TextField(
-            decoration: InputDecoration(labelText: "Validasi Password"),
+          TextField(
+            controller: passwordController,
+            decoration: const InputDecoration(labelText: "Password"),
             obscureText: true,
           ),
           const SizedBox(
-            height: 40,
+            height: 20,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                ),
-                child: const Text(
-                  "Daftar",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ],
-          )
+          ElevatedButton(
+            onPressed: () {
+              registerUser(nameController.text, usernameController.text,
+                      emailController.text, passwordController.text)
+                  .then((result) {
+                if (result == "berhasil") {
+                  nameController.clear();
+                  usernameController.clear();
+                  emailController.clear();
+                  passwordController.clear();
+                }
+              });
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green,
+            ),
+            child: const Text(
+              "Daftar",
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
         ],
       ),
     );
