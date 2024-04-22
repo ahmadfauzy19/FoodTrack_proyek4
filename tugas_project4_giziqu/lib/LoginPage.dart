@@ -16,7 +16,8 @@ class _LoginPageState extends State<LoginPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
-  Future<String> registerUser(String name, String username, String email, String password) async {
+  Future<String> registerUser(
+      String name, String username, String email, String password) async {
     final Uri uri = Uri.parse('http://127.0.0.1:8000/api/daftar');
 
     try {
@@ -130,7 +131,7 @@ class _LoginPageState extends State<LoginPage>
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const LandingPage()),
+                              builder: (context) => LandingPage()),
                         );
                       },
                       child: const Text('OK'),
