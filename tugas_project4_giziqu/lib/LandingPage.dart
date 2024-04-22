@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:tugas_project4_giziqu/NewsPage.dart';
+import 'package:tugas_project4_giziqu/SearchPage.dart';
+import 'BarcodeScannerScreen.dart'; // Hanya butuh di sini, menghapus yang lain
+import 'ProfilePage.dart';
 
 class LandingPage extends StatefulWidget {
-  const LandingPage({super.key});
-
   @override
   State<LandingPage> createState() => _LandingPageState();
 }
@@ -11,36 +13,34 @@ class _LandingPageState extends State<LandingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 233, 230, 223),
+      backgroundColor: Colors.grey, // Ubah ke warna abu-abu yang sudah ada
       body: Center(
         child: Column(
           children: [
             Container(
               height: 200,
               padding: EdgeInsets.all(20),
-              // margin: EdgeInsets.all(30),
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage("assets/BG.jpg"),
-                  fit: BoxFit.cover, // Atur sesuai kebutuhan Anda
+                  fit: BoxFit.cover,
                 ),
               ),
               child: Row(
                 children: [
                   CircleAvatar(
-                    radius: 30, // Atur radius sesuai kebutuhan Anda
+                    radius: 30,
                     backgroundImage: AssetImage("assets/default.jpeg"),
                   ),
                   Container(
                     margin: EdgeInsets.all(20),
-                    child: const Column(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           "Selamat Datang,",
                           style: TextStyle(
-                              fontFamily: "fonts/Schyler-Italic.ttf",
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                               color: Colors.white),
@@ -48,7 +48,6 @@ class _LandingPageState extends State<LandingPage> {
                         Text(
                           "Nama",
                           style: TextStyle(
-                            fontFamily: "fonts/Schyler-Italic.ttf",
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -107,11 +106,14 @@ class _LandingPageState extends State<LandingPage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Tambahkan logika untuk membuka halaman untuk memindai QR code
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => BarcodeScannerScreen()),
+          );
         },
         backgroundColor: Colors.green,
-        shape:
-            const CircleBorder(side: BorderSide(color: Colors.white, width: 2)),
-        child: const Icon(
+        shape: CircleBorder(side: BorderSide(color: Colors.white, width: 2)),
+        child: Icon(
           Icons.qr_code_scanner_rounded,
           color: Colors.white,
         ),
@@ -131,6 +133,10 @@ class _LandingPageState extends State<LandingPage> {
             IconButton(
               onPressed: () {
                 // Tambahkan logika untuk navigasi ke halaman berita
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => NewsPage()),
+                );
               },
               icon: Icon(Icons.newspaper),
             ),
@@ -138,12 +144,20 @@ class _LandingPageState extends State<LandingPage> {
             IconButton(
               onPressed: () {
                 // Tambahkan logika untuk navigasi ke halaman search
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SearchPage()),
+                );
               },
               icon: Icon(Icons.search),
             ),
             IconButton(
               onPressed: () {
                 // Tambahkan logika untuk navigasi ke halaman profil
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfilePage()),
+                );
               },
               icon: Icon(Icons.person),
             ),

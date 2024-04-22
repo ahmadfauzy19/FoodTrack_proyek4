@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class SearchPage extends StatelessWidget {
+class ComparisonPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,7 +19,7 @@ class SearchPage extends StatelessWidget {
           children: [
             Center(
               child: Text(
-                'Cari Makanan',
+                'Bandingkan Produk',
                 style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
               ),
             ),
@@ -44,38 +44,6 @@ class SearchPage extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: 5.0),
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30.0),
-                        border: Border.all(color: Colors.grey),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButtonFormField<String>(
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                            ),
-                            isExpanded: true,
-                            hint: Text('Kategori'),
-                            items: [
-                              DropdownMenuItem<String>(
-                                value: 'Makanan Ringan',
-                                child: Text('Makanan Ringan'),
-                              ),
-                              DropdownMenuItem<String>(
-                                value: 'Makanan Berat',
-                                child: Text('Makanan Berat'),
-                              ),
-                            ],
-                            onChanged: (value) {},
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),

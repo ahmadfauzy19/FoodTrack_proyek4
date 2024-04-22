@@ -176,8 +176,7 @@ class _LoginPageState extends State<LoginPage>
                   } else if (username == 'user') {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => const LandingPage()),
+                      MaterialPageRoute(builder: (context) => LandingPage()),
                     );
                   } else {
                     showDialog(
