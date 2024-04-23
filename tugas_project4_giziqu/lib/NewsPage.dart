@@ -135,7 +135,10 @@ class NewsPage extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => LandingPage()),
+                  MaterialPageRoute(
+                      builder: (context) => const LandingPage(
+                            username: "nama user",
+                          )),
                 );
               },
               icon: Icon(Icons.home),

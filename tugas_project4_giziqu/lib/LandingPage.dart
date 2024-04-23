@@ -1,3 +1,7 @@
+// ignore_for_file: use_key_in_widget_constructors, unnecessary_this
+
+// import 'dart:js_util';
+
 import 'package:flutter/material.dart';
 import 'package:tugas_project4_giziqu/NewsPage.dart';
 import 'package:tugas_project4_giziqu/SearchPage.dart';
@@ -5,6 +9,9 @@ import 'BarcodeScannerScreen.dart'; // Hanya butuh di sini, menghapus yang lain
 import 'ProfilePage.dart';
 
 class LandingPage extends StatefulWidget {
+  final String username;
+  const LandingPage({Key? key, required this.username}) : super(key: key);
+
   @override
   State<LandingPage> createState() => _LandingPageState();
 }
@@ -13,14 +20,14 @@ class _LandingPageState extends State<LandingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey, // Ubah ke warna abu-abu yang sudah ada
+      backgroundColor: Colors.grey,
       body: Center(
         child: Column(
           children: [
             Container(
               height: 200,
-              padding: EdgeInsets.all(20),
-              decoration: BoxDecoration(
+              padding: const EdgeInsets.all(20),
+              decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage("assets/BG.jpg"),
                   fit: BoxFit.cover,
@@ -28,26 +35,27 @@ class _LandingPageState extends State<LandingPage> {
               ),
               child: Row(
                 children: [
-                  CircleAvatar(
+                  const CircleAvatar(
                     radius: 30,
                     backgroundImage: AssetImage("assets/default.jpeg"),
                   ),
                   Container(
-                    margin: EdgeInsets.all(20),
+                    margin: const EdgeInsets.all(20),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           "Selamat Datang,",
                           style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
                         ),
                         Text(
-                          "Nama",
-                          style: TextStyle(
+                          widget.username, // Gunakan nilai username dari widget
+                          style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -60,17 +68,17 @@ class _LandingPageState extends State<LandingPage> {
               ),
             ),
             Container(
-              margin: EdgeInsets.all(30),
+              margin: const EdgeInsets.all(30),
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(25)),
               child: Row(
                 children: [
-                  Expanded(
+                  const Expanded(
                       child: TextField(
                     decoration: InputDecoration(labelText: "Search"),
                   )),
                   IconButton(
-                    icon: Icon(Icons.search),
+                    icon: const Icon(Icons.search),
                     onPressed: () {
                       // Tambahkan logika untuk melakukan pencarian di sini
                     },
@@ -82,19 +90,19 @@ class _LandingPageState extends State<LandingPage> {
               children: [
                 Expanded(
                     child: Container(
-                  margin: EdgeInsets.all(20),
+                  margin: const EdgeInsets.all(20),
                   height: 70,
                   color: Colors.white,
                 )),
                 Expanded(
                     child: Container(
-                  margin: EdgeInsets.all(20),
+                  margin: const EdgeInsets.all(20),
                   height: 70,
                   color: Colors.white,
                 )),
                 Expanded(
                     child: Container(
-                  margin: EdgeInsets.all(20),
+                  margin: const EdgeInsets.all(20),
                   height: 70,
                   color: Colors.white,
                 ))
@@ -112,8 +120,9 @@ class _LandingPageState extends State<LandingPage> {
           );
         },
         backgroundColor: Colors.green,
-        shape: CircleBorder(side: BorderSide(color: Colors.white, width: 2)),
-        child: Icon(
+        shape:
+            const CircleBorder(side: BorderSide(color: Colors.white, width: 2)),
+        child: const Icon(
           Icons.qr_code_scanner_rounded,
           color: Colors.white,
         ),
@@ -128,19 +137,19 @@ class _LandingPageState extends State<LandingPage> {
               onPressed: () {
                 // Tambahkan logika untuk navigasi ke halaman beranda
               },
-              icon: Icon(Icons.home),
+              icon: const Icon(Icons.home),
             ),
             IconButton(
               onPressed: () {
                 // Tambahkan logika untuk navigasi ke halaman berita
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => NewsPage()),
+                  MaterialPageRoute(builder: (context) => const NewsPage()),
                 );
               },
-              icon: Icon(Icons.newspaper),
+              icon: const Icon(Icons.newspaper),
             ),
-            SizedBox(width: 50),
+            const SizedBox(width: 50),
             IconButton(
               onPressed: () {
                 // Tambahkan logika untuk navigasi ke halaman search
@@ -149,17 +158,17 @@ class _LandingPageState extends State<LandingPage> {
                   MaterialPageRoute(builder: (context) => SearchPage()),
                 );
               },
-              icon: Icon(Icons.search),
+              icon: const Icon(Icons.search),
             ),
             IconButton(
               onPressed: () {
                 // Tambahkan logika untuk navigasi ke halaman profil
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ProfilePage()),
+                  MaterialPageRoute(builder: (context) => const ProfilePage()),
                 );
               },
-              icon: Icon(Icons.person),
+              icon: const Icon(Icons.person),
             ),
           ],
         ),

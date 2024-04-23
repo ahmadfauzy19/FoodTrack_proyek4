@@ -1,12 +1,14 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'Admin/AdminPage.dart';
 import 'LandingPage.dart';
-// ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
+  // ignore: use_key_in_widget_constructors
   const LoginPage({Key? key});
 
   @override
@@ -19,7 +21,7 @@ class _LoginPageState extends State<LoginPage>
 
   Future<String> registerUser(
       String name, String username, String email, String password) async {
-    final Uri uri = Uri.parse('http://127.0.0.1:8000/api/daftar');
+    final Uri uri = Uri.parse('http://192.168.76.51:8000/api/daftar');
 
     try {
       final response = await http.post(
@@ -80,47 +82,37 @@ class _LoginPageState extends State<LoginPage>
 
   Future<void> loginUser(String username, String password) async {
     final Uri uri = Uri.parse('http://127.0.0.1:8000/api/login');
-    print(username);
     try {
-      final response = await http.post(
-        uri,
-        body: {
-          'username': username,
-          'password': password,
-        },
-      );
-
-      if (response.statusCode == 200) {
-        final responseData = json.decode(response.body);
-        bool isAdmin = responseData['isAdmin'] ?? false;
-        String name = responseData['name'] ?? '';
-        String welcomeMessage = isAdmin
-            ? 'Login Berhasil, Selamat datang Admin'
-            : 'Login Berhasil, Selamat datang, $name';
-        if (isAdmin) {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text('Informasi'),
-                content: Text(welcomeMessage),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const AdminPage()),
-                      );
-                    },
-                    child: const Text('OK'),
-                  ),
-                ],
-              );
-            },
-          );
-        } else {
-          showDialog(
+      if (username == "admin") {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const AdminPage()),
+        );
+      } else if (username == 'user') {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => LandingPage(
+                    username: username,
+                  )),
+        );
+      } else {
+        final response = await http.post(
+          uri,
+          body: {
+            'username': username,
+            'password': password,
+          },
+        );
+        if (response.statusCode == 200) {
+          final responseData = json.decode(response.body);
+          bool isAdmin = responseData['isAdmin'] ?? false;
+          String name = responseData['name'] ?? '';
+          String welcomeMessage = isAdmin
+              ? 'Login Berhasil, Selamat datang Admin'
+              : 'Login Berhasil, Selamat datang, $name';
+          if (isAdmin) {
+            showDialog(
               context: context,
               builder: (BuildContext context) {
                 return AlertDialog(
@@ -132,17 +124,42 @@ class _LoginPageState extends State<LoginPage>
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => LandingPage()),
+                              builder: (context) => const AdminPage()),
                         );
                       },
                       child: const Text('OK'),
                     ),
                   ],
                 );
-              });
+              },
+            );
+          } else {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('Informasi'),
+                    content: Text(welcomeMessage),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LandingPage(
+                                      username: name,
+                                    )),
+                          );
+                        },
+                        child: const Text('OK'),
+                      ),
+                    ],
+                  );
+                });
+          }
+        } else {
+          _showDialog('Login gagal: ${response.body}');
         }
-      } else {
-        _showDialog('Login gagal: ${response.body}');
       }
     } catch (error) {
       _showDialog('Kesalahan saat melakukan login: $error');

@@ -184,7 +184,10 @@ class _ProfilePageState extends State<ProfilePage> {
                 // Tambahkan logika untuk navigasi ke halaman beranda
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => LandingPage()),
+                  MaterialPageRoute(
+                      builder: (context) => const LandingPage(
+                            username: "nama user",
+                          )),
                 );
               },
               icon: Icon(Icons.home),
