@@ -1,10 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
-
+import 'global/link.dart';
 import 'package:flutter/material.dart';
 import 'Admin/AdminPage.dart';
-import 'LandingPage.dart';
+import 'user/LandingPage.dart';
 import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
@@ -21,7 +21,7 @@ class _LoginPageState extends State<LoginPage>
 
   Future<String> registerUser(
       String name, String username, String email, String password) async {
-    final Uri uri = Uri.parse('http://192.168.76.51:8000/api/daftar');
+    final Uri uri = Uri.parse("${link}api/daftar");
 
     try {
       final response = await http.post(
@@ -81,38 +81,51 @@ class _LoginPageState extends State<LoginPage>
   }
 
   Future<void> loginUser(String username, String password) async {
-    final Uri uri = Uri.parse('http://127.0.0.1:8000/api/login');
+    final Uri uri = Uri.parse('${link}api/login');
+    print(username);
     try {
-      if (username == "admin") {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const AdminPage()),
-        );
-      } else if (username == 'user') {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => LandingPage(
-                    username: username,
-                  )),
-        );
-      } else {
-        final response = await http.post(
-          uri,
-          body: {
-            'username': username,
-            'password': password,
-          },
-        );
-        if (response.statusCode == 200) {
-          final responseData = json.decode(response.body);
-          bool isAdmin = responseData['isAdmin'] ?? false;
-          String name = responseData['name'] ?? '';
-          String welcomeMessage = isAdmin
-              ? 'Login Berhasil, Selamat datang Admin'
-              : 'Login Berhasil, Selamat datang, $name';
-          if (isAdmin) {
-            showDialog(
+      final response = await http.post(
+        uri,
+        body: {
+          'username': username,
+          'password': password,
+        },
+      );
+      if (response.statusCode == 200) {
+        final responseData = json.decode(response.body);
+        String role = responseData['user']['role'];
+        String name = responseData['user']['name'];
+
+        // Periksa jika 'name' tidak null sebelum digunakan
+        String welcomeMessage = role == "admin"
+            ? 'Login Berhasil, Selamat datang Admin'
+            : 'Login Berhasil, Selamat datang, $name';
+        if (role == 'admin') {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Informasi'),
+                content: Text(welcomeMessage),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AdminPage(
+                                  username: name,
+                                )),
+                      );
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        } else {
+          showDialog(
               context: context,
               builder: (BuildContext context) {
                 return AlertDialog(
@@ -124,42 +137,19 @@ class _LoginPageState extends State<LoginPage>
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const AdminPage()),
+                              builder: (context) => LandingPage(
+                                    username: name,
+                                  )),
                         );
                       },
                       child: const Text('OK'),
                     ),
                   ],
                 );
-              },
-            );
-          } else {
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text('Informasi'),
-                    content: Text(welcomeMessage),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => LandingPage(
-                                      username: name,
-                                    )),
-                          );
-                        },
-                        child: const Text('OK'),
-                      ),
-                    ],
-                  );
-                });
-          }
-        } else {
-          _showDialog('Login gagal: ${response.body}');
+              });
         }
+      } else {
+        _showDialog('Login gagal: ${response.body}');
       }
     } catch (error) {
       _showDialog('Kesalahan saat melakukan login: $error');
@@ -201,16 +191,16 @@ class _LoginPageState extends State<LoginPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: Color.fromARGB(255, 255, 255, 255),
       body: Center(
         child: Column(children: [
-          const SizedBox(height: 150.0),
+          const SizedBox(height: 70.0),
           Expanded(
             child: Container(
               padding: const EdgeInsets.all(20),
               margin: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Color.fromARGB(255, 255, 255, 255),
                 borderRadius: BorderRadius.circular(30),
                 border: Border.all(
                   color: Colors.grey,
@@ -305,6 +295,9 @@ class _LoginPageState extends State<LoginPage>
               ),
             ),
           ),
+          SizedBox(
+            height: 100,
+          )
         ]),
       ),
     );
@@ -328,7 +321,7 @@ class _LoginPageState extends State<LoginPage>
             decoration: const InputDecoration(labelText: "Password"),
           ),
           const SizedBox(
-            height: 170,
+            height: 100,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

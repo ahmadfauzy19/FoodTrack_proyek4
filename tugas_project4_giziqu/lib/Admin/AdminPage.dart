@@ -4,23 +4,24 @@ import "TambahMakanan.dart";
 import "KelolaMakanan.dart";
 
 class AdminPage extends StatefulWidget {
-  const AdminPage({super.key});
+  final String username;
+  const AdminPage({Key? key, required this.username}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _AdminPageState();
+  State<AdminPage> createState() => _AdminPageState();
 }
 
 class _AdminPageState extends State<AdminPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 233, 230, 223),
+      backgroundColor: const Color.fromARGB(255, 233, 230, 223),
       body: Center(
         child: Column(
           children: [
             Container(
               height: 200,
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               // margin: EdgeInsets.all(30),
               decoration: const BoxDecoration(
                 image: DecorationImage(
@@ -35,20 +36,21 @@ class _AdminPageState extends State<AdminPage> {
                     backgroundImage: AssetImage("assets/default.jpeg"),
                   ),
                   Container(
-                    margin: EdgeInsets.all(20),
-                    child: const Column(
+                    margin: const EdgeInsets.all(20),
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Hai Admin,",
-                          style: TextStyle(
+                          semanticsLabel: "hai",
+                          widget.username,
+                          style: const TextStyle(
                               fontFamily: "fonts/Schyler-Italic.ttf",
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                               color: Colors.white),
                         ),
-                        Text(
+                        const Text(
                           "Selamat Datang Kembali",
                           style: TextStyle(
                             fontFamily: "fonts/Schyler-Italic.ttf",
@@ -64,7 +66,7 @@ class _AdminPageState extends State<AdminPage> {
               ),
             ),
             Container(
-                margin: EdgeInsets.all(30),
+                margin: const EdgeInsets.all(30),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -80,13 +82,13 @@ class _AdminPageState extends State<AdminPage> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 10), // Jarak antara teks dan tombol
+                    const SizedBox(height: 10), // Jarak antara teks dan tombol
                     TextButton(
                       onPressed: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => TambahMakanan()),
+                              builder: (context) => const TambahMakanan()),
                         );
                       },
                       child: const Row(
@@ -110,7 +112,7 @@ class _AdminPageState extends State<AdminPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => KelolaMakanan()),
+                              builder: (context) => const KelolaMakanan()),
                         );
                       },
                       child: const Row(
@@ -134,7 +136,7 @@ class _AdminPageState extends State<AdminPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => KelolaArtikel()),
+                              builder: (context) => const KelolaArtikel()),
                         );
                       },
                       child: const Row(

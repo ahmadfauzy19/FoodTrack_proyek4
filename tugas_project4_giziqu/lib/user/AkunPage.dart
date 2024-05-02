@@ -1,29 +1,30 @@
 import 'package:flutter/material.dart';
 import "package:tugas_project4_giziqu/Admin/KelolaArtikel.dart";
 import 'package:tugas_project4_giziqu/BarcodeScannerScreen.dart';
-import 'package:tugas_project4_giziqu/LandingPage.dart';
-import 'package:tugas_project4_giziqu/ProfilePage.dart';
-import 'package:tugas_project4_giziqu/UbahEmailPage.dart';
-import 'package:tugas_project4_giziqu/UbahPasswordPage.dart';
+import 'package:tugas_project4_giziqu/user/LandingPage.dart';
+import 'package:tugas_project4_giziqu/user/ProfilePage.dart';
+import 'package:tugas_project4_giziqu/user/UbahEmailPage.dart';
+import 'package:tugas_project4_giziqu/user/UbahPasswordPage.dart';
 
 class AkunPage extends StatefulWidget {
-  const AkunPage({super.key});
+  final String username;
+  const AkunPage({Key? key, required this.username}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _AkunPageState();
+  State<AkunPage> createState() => _AkunPageState();
 }
 
 class _AkunPageState extends State<AkunPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 233, 230, 223),
+      backgroundColor: const Color.fromARGB(255, 233, 230, 223),
       body: Center(
         child: Column(
           children: [
             Container(
               height: 200,
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               // margin: EdgeInsets.all(30),
               decoration: const BoxDecoration(
                 image: DecorationImage(
@@ -38,20 +39,20 @@ class _AkunPageState extends State<AkunPage> {
                     backgroundImage: AssetImage("assets/default.jpeg"),
                   ),
                   Container(
-                    margin: EdgeInsets.all(20),
-                    child: const Column(
+                    margin: const EdgeInsets.all(20),
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Hai (Nama User),",
-                          style: TextStyle(
+                          widget.username,
+                          style: const TextStyle(
                               fontFamily: "fonts/Schyler-Italic.ttf",
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                               color: Colors.white),
                         ),
-                        Text(
+                        const Text(
                           "Selamat Datang Kembali",
                           style: TextStyle(
                             fontFamily: "fonts/Schyler-Italic.ttf",
@@ -67,7 +68,7 @@ class _AkunPageState extends State<AkunPage> {
               ),
             ),
             Container(
-                margin: EdgeInsets.all(30),
+                margin: const EdgeInsets.all(30),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -83,13 +84,13 @@ class _AkunPageState extends State<AkunPage> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 10), // Jarak antara teks dan tombol
+                    const SizedBox(height: 10), // Jarak antara teks dan tombol
                     TextButton(
                       onPressed: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => UbahEmailPage()),
+                              builder: (context) => const UbahEmailPage()),
                         );
                       },
                       child: const Row(
@@ -113,7 +114,7 @@ class _AkunPageState extends State<AkunPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => UbahPasswordPage()),
+                              builder: (context) => const UbahPasswordPage()),
                         );
                       },
                       child: const Row(
@@ -146,8 +147,9 @@ class _AkunPageState extends State<AkunPage> {
           );
         },
         backgroundColor: Colors.green,
-        shape: CircleBorder(side: BorderSide(color: Colors.white, width: 2)),
-        child: Icon(
+        shape:
+            const CircleBorder(side: BorderSide(color: Colors.white, width: 2)),
+        child: const Icon(
           Icons.qr_code_scanner_rounded,
           color: Colors.white,
         ),
@@ -164,35 +166,38 @@ class _AkunPageState extends State<AkunPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const LandingPage(
-                            username: "nama user",
+                      builder: (context) => LandingPage(
+                            username: widget.username,
                           )),
                 );
               },
-              icon: Icon(Icons.home),
+              icon: const Icon(Icons.home),
             ),
             IconButton(
               onPressed: () {
                 // Tambahkan logika untuk navigasi ke halaman berita
               },
-              icon: Icon(Icons.newspaper),
+              icon: const Icon(Icons.newspaper),
             ),
-            SizedBox(width: 50),
+            const SizedBox(width: 50),
             IconButton(
               onPressed: () {
                 // Tambahkan logika untuk navigasi ke halaman search
               },
-              icon: Icon(Icons.search),
+              icon: const Icon(Icons.search),
             ),
             IconButton(
               onPressed: () {
                 // Tambahkan logika untuk navigasi ke halaman profil
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ProfilePage()),
+                  MaterialPageRoute(
+                      builder: (context) => ProfilePage(
+                            username: widget.username,
+                          )),
                 );
               },
-              icon: Icon(Icons.person),
+              icon: const Icon(Icons.person),
             ),
           ],
         ),

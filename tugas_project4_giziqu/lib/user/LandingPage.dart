@@ -5,7 +5,7 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_project4_giziqu/NewsPage.dart';
 import 'package:tugas_project4_giziqu/SearchPage.dart';
-import 'BarcodeScannerScreen.dart'; // Hanya butuh di sini, menghapus yang lain
+import '../BarcodeScannerScreen.dart'; // Hanya butuh di sini, menghapus yang lain
 import 'ProfilePage.dart';
 
 class LandingPage extends StatefulWidget {
@@ -20,7 +20,7 @@ class _LandingPageState extends State<LandingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey,
+      backgroundColor: Color.fromARGB(255, 102, 183, 65),
       body: Center(
         child: Column(
           children: [
@@ -36,7 +36,7 @@ class _LandingPageState extends State<LandingPage> {
               child: Row(
                 children: [
                   const CircleAvatar(
-                    radius: 30,
+                    radius: 40,
                     backgroundImage: AssetImage("assets/default.jpeg"),
                   ),
                   Container(
@@ -48,7 +48,7 @@ class _LandingPageState extends State<LandingPage> {
                         const Text(
                           "Selamat Datang,",
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 22,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
@@ -68,46 +68,97 @@ class _LandingPageState extends State<LandingPage> {
               ),
             ),
             Container(
-              margin: const EdgeInsets.all(30),
+              margin: const EdgeInsets.symmetric(horizontal: 0),
+              height: 576,
               decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(25)),
-              child: Row(
+                color: Color.fromARGB(255, 255, 255, 255),
+                borderRadius: BorderRadius.only(
+                  topLeft:
+                      Radius.circular(MediaQuery.of(context).size.width * 0.10),
+                  topRight:
+                      Radius.circular(MediaQuery.of(context).size.width * 0.10),
+                ),
+              ),
+              child: Column(
                 children: [
-                  const Expanded(
-                      child: TextField(
-                    decoration: InputDecoration(labelText: "Search"),
-                  )),
-                  IconButton(
-                    icon: const Icon(Icons.search),
-                    onPressed: () {
-                      // Tambahkan logika untuk melakukan pencarian di sini
-                    },
+                  Container(
+                    margin: const EdgeInsets.all(0),
+                    height: 150,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.all(20),
+                                height: 70,
+                                decoration: BoxDecoration(
+                                  color:
+                                      const Color.fromARGB(255, 148, 147, 147),
+                                  borderRadius: BorderRadius.circular(
+                                      20), // Ujung yang tumpul
+                                ),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text("Protein bos")
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            margin: const EdgeInsets.all(20),
+                            height: 70,
+                            decoration: BoxDecoration(
+                              color: const Color.fromARGB(255, 121, 119, 119),
+                              borderRadius: BorderRadius.circular(
+                                  20), // Ujung yang tumpul
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            margin: const EdgeInsets.all(20),
+                            height: 70,
+                            decoration: BoxDecoration(
+                              color: const Color.fromARGB(255, 124, 122, 122),
+                              borderRadius: BorderRadius.circular(
+                                  20), // Ujung yang tumpul
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(20, 0, 20,
+                        3), // Mengatur margin dari kiri, atas, kanan, bawah
+                    alignment:
+                        Alignment.topLeft, // Menempatkan teks di kiri atas
+                    child: Text(
+                      'Judul di Atas Kotak Baru',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign:
+                          TextAlign.left, // Mengatur teks menjadi rata kiri
+                    ),
+                  ),
+                  SizedBox(height: 0),
+                  Container(
+                    margin: const EdgeInsets.all(20),
+                    height: 100,
+                    decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 161, 155, 155), // Warna merah
+                      borderRadius:
+                          BorderRadius.circular(20), // Ujung yang tumpul
+                    ),
                   ),
                 ],
               ),
             ),
-            Row(
-              children: [
-                Expanded(
-                    child: Container(
-                  margin: const EdgeInsets.all(20),
-                  height: 70,
-                  color: Colors.white,
-                )),
-                Expanded(
-                    child: Container(
-                  margin: const EdgeInsets.all(20),
-                  height: 70,
-                  color: Colors.white,
-                )),
-                Expanded(
-                    child: Container(
-                  margin: const EdgeInsets.all(20),
-                  height: 70,
-                  color: Colors.white,
-                ))
-              ],
-            )
           ],
         ),
       ),
@@ -165,7 +216,9 @@ class _LandingPageState extends State<LandingPage> {
                 // Tambahkan logika untuk navigasi ke halaman profil
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const ProfilePage()),
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          ProfilePage(username: widget.username)),
                 );
               },
               icon: const Icon(Icons.person),

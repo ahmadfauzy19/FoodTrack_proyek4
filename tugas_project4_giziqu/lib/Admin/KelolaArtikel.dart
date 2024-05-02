@@ -8,36 +8,69 @@ class KelolaArtikel extends StatefulWidget {
 }
 
 class _KelolaArtikelState extends State<KelolaArtikel> {
-  List<Map<String, String>> artikelList = [
-    {
-      'judul artikel': 'Cara Diet Tanpa Menyiksa Tubuh',
-      'jenis': 'Tutorial',
-    },
-    {
-      'judul artikel': 'Tips Memilih Makanan Sesuai Dengan Kondisi Tubuh',
-      'jenis': 'Tutorial',
-    },
-    {
-      'judul artikel': 'Review Makanan Kemasana yang katanya "sehat"',
-      'jenis': 'makan',
-    },
-    {
-      'judul artikel': 'Review Makanan Kemasana yang katanya "sehat"',
-      'jenis': 'makan',
-    },
-    {
-      'judul artikel': 'Review Makanan Kemasana yang katanya "sehat"',
-      'jenis': 'makan',
-    },
-    {
-      'judul artikel': 'Review Makanan Kemasana yang katanya "sehat"',
-      'jenis': 'makan',
-    },
-    {
-      'judul artikel': 'Review Makanan Kemasana yang katanya "sehat"',
-      'jenis': 'makan',
-    },
+  final List<Map<String, String>> artikelList = [
+    {'judulartikel': 'Sebagai Manusia Perlu Berpikir', 'jenis': 'Pemikiran'},
+    {'judulartikel': 'Makanan Sehat untuk Otak', 'jenis': 'Kesehatan'},
+    {'judulartikel': 'Belajar dari Kegagalan', 'jenis': 'Pembelajaran'},
   ];
+
+  Widget buildTable() {
+    return Table(
+      border: TableBorder.all(),
+      children: [
+        buildTableRow(['Judul Artikel', 'Jenis', 'Aksi'], isHeader: true),
+        for (var artikel in artikelList)
+          buildTableRow(
+              [artikel['judulartikel']!, artikel['jenis']!, buildActionCell()])
+      ],
+    );
+  }
+
+  TableRow buildTableRow(List<dynamic> cells, {bool isHeader = false}) {
+    final cellStyle =
+        TextStyle(fontWeight: isHeader ? FontWeight.bold : FontWeight.normal);
+    return TableRow(
+      children: cells.map((cell) {
+        if (cell is String) {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(
+              child: Text(
+                cell,
+                style: cellStyle,
+              ),
+            ),
+          );
+        } else {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(child: cell),
+          );
+        }
+      }).toList(),
+    );
+  }
+
+  Widget buildActionCell() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.edit),
+            color: Colors.blue,
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.delete),
+            color: Colors.red,
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,76 +78,14 @@ class _KelolaArtikelState extends State<KelolaArtikel> {
       appBar: AppBar(
         title: Text("Kelola Artikel"),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(16),
-          child: Card(
-            elevation: 5,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: DataTable(
-              horizontalMargin: 10,
-              columns: [
-                DataColumn(
-                  label: Text(
-                    'Judul Artikel',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-                DataColumn(
-                  label: Text(
-                    'Jenis',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-                DataColumn(
-                  label: Center(
-                    child: Text(
-                      'Aksi',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
-              ],
-              rows: artikelList.map((item) {
-                return DataRow(
-                  cells: [
-                    DataCell(
-                      Center(
-                        child: Text(
-                            item['judul artikel'] ?? 'Judul tidak tersedia'),
-                      ),
-                    ),
-                    DataCell(
-                      Center(
-                        child: Text(item['jenis'] ?? 'Jenis tidak tersedia'),
-                      ),
-                    ),
-                    DataCell(
-                      Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.edit),
-                              color: Colors.blue,
-                            ),
-                            IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.delete),
-                              color: Colors.red,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              }).toList(),
-            ),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Container(
+          decoration: const BoxDecoration(
+            // borderRadius: BorderRadius.circular(15),
+            color: Colors.grey,
           ),
+          child: buildTable(),
         ),
       ),
     );

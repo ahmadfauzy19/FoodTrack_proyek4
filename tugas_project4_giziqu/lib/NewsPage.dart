@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tugas_project4_giziqu/LandingPage.dart';
+import 'package:tugas_project4_giziqu/user/LandingPage.dart';
 import 'SearchPage.dart'; // Pastikan file search_page.dart diimpor dengan benar
 
 class NewsPage extends StatelessWidget {
@@ -10,20 +10,20 @@ class NewsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        title: Text("Berita"),
+        title: const Text("Berita"),
       ),
       body: ListView(
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Text(
                   "Paling Populer",
                   style: TextStyle(
@@ -56,8 +56,8 @@ class NewsPage extends StatelessWidget {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Text(
                   "Terkini",
                   style: TextStyle(
@@ -68,8 +68,8 @@ class NewsPage extends StatelessWidget {
               ),
               for (int i = 0; i < 5; i++)
                 Container(
-                  margin: EdgeInsets.all(8.0),
-                  padding: EdgeInsets.all(8.0),
+                  margin: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
@@ -86,8 +86,8 @@ class NewsPage extends StatelessWidget {
                           fit: BoxFit.cover,
                         ),
                       ),
-                      SizedBox(width: 10),
-                      Expanded(
+                      const SizedBox(width: 10),
+                      const Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -141,15 +141,15 @@ class NewsPage extends StatelessWidget {
                           )),
                 );
               },
-              icon: Icon(Icons.home),
+              icon: const Icon(Icons.home),
             ),
             IconButton(
               onPressed: () {
                 // Tambahkan logika untuk navigasi ke halaman berita
               },
-              icon: Icon(Icons.newspaper),
+              icon: const Icon(Icons.newspaper),
             ),
-            SizedBox(width: 50),
+            const SizedBox(width: 50),
             IconButton(
               onPressed: () {
                 Navigator.push(
@@ -157,13 +157,13 @@ class NewsPage extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => SearchPage()),
                 );
               },
-              icon: Icon(Icons.search),
+              icon: const Icon(Icons.search),
             ),
             IconButton(
               onPressed: () {
                 // Tambahkan logika untuk navigasi ke halaman profil
               },
-              icon: Icon(Icons.person),
+              icon: const Icon(Icons.person),
             ),
           ],
         ),
@@ -174,7 +174,7 @@ class NewsPage extends StatelessWidget {
   Widget _buildNewsCard(BuildContext context,
       {required String image, required String title}) {
     return Container(
-      margin: EdgeInsets.all(8.0),
+      margin: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         image: DecorationImage(
@@ -186,14 +186,14 @@ class NewsPage extends StatelessWidget {
         child: Align(
           alignment: Alignment.bottomCenter,
           child: Container(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             decoration: BoxDecoration(
               color: Colors.black.withOpacity(0.5),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Text(
               title,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 20,
                 color: Colors.white,
                 fontWeight: FontWeight.bold,

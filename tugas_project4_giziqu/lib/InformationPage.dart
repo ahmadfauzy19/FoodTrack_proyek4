@@ -51,6 +51,8 @@ class _InformationPageState extends State<InformationPage> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -65,7 +67,7 @@ class _InformationPageState extends State<InformationPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(height: 180.0),
+                SizedBox(height: 90.0),
                 Column(
                   children: [
                     Image.asset(
@@ -89,45 +91,50 @@ class _InformationPageState extends State<InformationPage> {
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 16),
                 ),
-                SizedBox(height: 60),
+                SizedBox(height: 40),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    TextButton(
-                      onPressed: () {
-                        setState(() {
-                          _currentPageIndex =
-                              (_currentPageIndex - 1).clamp(0, 2);
-                        });
-                      },
-                      style: TextButton.styleFrom(
-                        backgroundColor: Color.fromARGB(255, 255, 255, 255),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0),
+                    SizedBox(
+                      width: screenWidth * 0.4,
+                      child: TextButton(
+                        onPressed: () {
+                          setState(() {
+                            _currentPageIndex =
+                                (_currentPageIndex - 1).clamp(0, 2);
+                          });
+                        },
+                        style: TextButton.styleFrom(
+                          backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
                         ),
-                      ),
-                      child: Text(
-                        "Previous",
-                        style: TextStyle(
-                          color: const Color.fromARGB(255, 17, 17, 17),
-                          fontSize: 15,
+                        child: Text(
+                          "Previous",
+                          style: TextStyle(
+                            color: const Color.fromARGB(255, 17, 17, 17),
+                            fontSize: 15,
+                          ),
                         ),
                       ),
                     ),
-                    SizedBox(width: 80),
-                    TextButton(
-                      onPressed: _navigateToNextInfo,
-                      style: TextButton.styleFrom(
-                        backgroundColor:
-                            const Color.fromARGB(255, 255, 255, 255),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0),
+                    SizedBox(
+                      width: screenWidth * 0.4,
+                      child: TextButton(
+                        onPressed: _navigateToNextInfo,
+                        style: TextButton.styleFrom(
+                          backgroundColor:
+                              const Color.fromARGB(255, 255, 255, 255),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
                         ),
-                      ),
-                      child: Text(
-                        "Next",
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 32, 122, 8),
+                        child: Text(
+                          "Next",
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 32, 122, 8),
+                          ),
                         ),
                       ),
                     ),

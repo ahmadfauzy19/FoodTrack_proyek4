@@ -39,7 +39,7 @@ class SearchPage extends StatelessWidget {
                         ),
                         contentPadding: EdgeInsets.symmetric(
                             vertical: 12.0, horizontal: 16.0),
-                        prefixIcon: Icon(Icons.search), // Icon search di sini
+                        prefixIcon: Icon(Icons.search),
                       ),
                     ),
                   ),
@@ -85,8 +85,6 @@ class SearchPage extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {},
                 style: ElevatedButton.styleFrom(
-                  // primary: Colors.green,
-                  // onPrimary: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),
                   ),

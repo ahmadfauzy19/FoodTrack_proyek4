@@ -35,12 +35,13 @@ class _CounterFieldState extends State<CounterField> {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(0),
           ),
-          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           suffixIcon: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconButton(
-                icon: Icon(Icons.arrow_drop_up),
+                icon: const Icon(Icons.arrow_drop_up),
                 onPressed: _incrementCounter,
               ),
             ],
@@ -78,7 +79,8 @@ class _TakaranFieldState extends State<TakaranField> {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           suffixIcon: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -133,7 +135,7 @@ class DropdownField extends StatelessWidget {
           onChanged: onChanged,
           buttonStyleData: ButtonStyleData(
             decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           ),
           menuItemStyleData: const MenuItemStyleData(
             height: 20,
@@ -153,9 +155,9 @@ class TambahGizi extends StatefulWidget {
 }
 
 class _TambahGiziState extends State<TambahGizi> {
-  TextEditingController _energiController = TextEditingController();
+  final TextEditingController _energiController = TextEditingController();
   String? selectedTakaranValue;
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
   String? selectedValue;
   final List<String> items = [
     "pcs",
@@ -179,7 +181,7 @@ class _TambahGiziState extends State<TambahGizi> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tambah Gizi'),
+        title: const Text('Tambah Gizi'),
         bottom: const PreferredSize(
           preferredSize: Size.fromHeight(0),
           child: Divider(
@@ -188,7 +190,7 @@ class _TambahGiziState extends State<TambahGizi> {
           ),
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -196,21 +198,22 @@ class _TambahGiziState extends State<TambahGizi> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
+        // ignore: avoid_unnecessary_containers
         child: Container(
           child: SingleChildScrollView(
             // Menggunakan SingleChildScrollView di sini
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   "Jumlah Takaran Persaji",
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Row(
                   children: [
                     CounterField(controller: _controller),
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     DropdownField(
                       items: items,
                       selectedValue: selectedValue,
@@ -222,20 +225,20 @@ class _TambahGiziState extends State<TambahGizi> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
-                Text(
+                const Text(
                   "Takaran Saji",
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Row(
                   children: [
                     CounterField(controller: _controller),
-                    SizedBox(
+                    const SizedBox(
                       width: 20,
                     ),
                     DropdownField(
@@ -249,11 +252,11 @@ class _TambahGiziState extends State<TambahGizi> {
                     )
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
-                Text("Energi"),
-                SizedBox(
+                const Text("Energi"),
+                const SizedBox(
                   height: 10,
                 ),
                 Row(
@@ -265,27 +268,11 @@ class _TambahGiziState extends State<TambahGizi> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
-                Text("Lemak Total"),
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  children: [
-                    TakaranField(
-                      controller: _energiController,
-                      unit:
-                          selectedValue ?? "g", // Memasukkan unit yang dipilih
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text("Protein"),
-                SizedBox(
+                const Text("Lemak Total"),
+                const SizedBox(
                   height: 10,
                 ),
                 Row(
@@ -297,11 +284,27 @@ class _TambahGiziState extends State<TambahGizi> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
+                  height: 10,
+                ),
+                const Text("Protein"),
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    TakaranField(
+                      controller: _energiController,
+                      unit:
+                          selectedValue ?? "g", // Memasukkan unit yang dipilih
+                    ),
+                  ],
+                ),
+                const SizedBox(
                   height: 20,
                 ),
-                Text("Karbohidrat Total"),
-                SizedBox(
+                const Text("Karbohidrat Total"),
+                const SizedBox(
                   height: 10,
                 ),
                 Row(
@@ -313,11 +316,11 @@ class _TambahGiziState extends State<TambahGizi> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
-                Text("Natrium"),
-                SizedBox(
+                const Text("Natrium"),
+                const SizedBox(
                   height: 10,
                 ),
                 Row(
@@ -329,7 +332,7 @@ class _TambahGiziState extends State<TambahGizi> {
                     ),
                   ],
                 ),
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -338,18 +341,15 @@ class _TambahGiziState extends State<TambahGizi> {
                       width: 300,
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const AdminPage()),
-                          );
+                          Navigator.popUntil(
+                              context, ModalRoute.withName('/admin'));
                         },
-                        child: Text(
-                          "Simpan",
-                          style: TextStyle(color: Colors.white),
-                        ),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green,
+                        ),
+                        child: const Text(
+                          "Simpan",
+                          style: TextStyle(color: Colors.white),
                         ),
                       ),
                     ),
