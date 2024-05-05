@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tugas_project4_giziqu/user/Scanresult.dart';
 
 class SearchPage extends StatelessWidget {
   @override
@@ -83,7 +84,12 @@ class SearchPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 60.0),
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Scanresult()),
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),

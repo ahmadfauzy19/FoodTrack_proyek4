@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import "package:tugas_project4_giziqu/Admin/KelolaArtikel.dart";
 import "TambahMakanan.dart";
 import "KelolaMakanan.dart";
+import "../user/Scanresult.dart";
 
 class AdminPage extends StatefulWidget {
   final String username;
@@ -126,6 +127,30 @@ class _AdminPageState extends State<AdminPage> {
                           ),
                           Text(
                             'Kelola Makanan',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ],
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const KelolaMakanan()),
+                        );
+                      },
+                      child: const Row(
+                        children: [
+                          Icon(
+                            Icons.add_circle_outline,
+                            color: Colors.black,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            'Tambah Artikel',
                             style: TextStyle(color: Colors.black),
                           ),
                         ],

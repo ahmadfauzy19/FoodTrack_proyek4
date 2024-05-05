@@ -1,7 +1,3 @@
-// ignore_for_file: use_key_in_widget_constructors, unnecessary_this
-
-// import 'dart:js_util';
-
 import 'package:flutter/material.dart';
 import 'package:tugas_project4_giziqu/NewsPage.dart';
 import 'package:tugas_project4_giziqu/SearchPage.dart';
@@ -86,7 +82,8 @@ class _LandingPageState extends State<LandingPage> {
                     height: 150,
                     child: Row(
                       children: [
-                        Expanded(
+                        Flexible(
+                          flex: 1,
                           child: Column(
                             children: [
                               Container(
@@ -106,7 +103,8 @@ class _LandingPageState extends State<LandingPage> {
                             ],
                           ),
                         ),
-                        Expanded(
+                        Flexible(
+                          flex: 1,
                           child: Container(
                             margin: const EdgeInsets.all(20),
                             height: 70,
@@ -117,7 +115,8 @@ class _LandingPageState extends State<LandingPage> {
                             ),
                           ),
                         ),
-                        Expanded(
+                        Flexible(
+                          flex: 1,
                           child: Container(
                             margin: const EdgeInsets.all(20),
                             height: 70,
