@@ -6,7 +6,10 @@ import "../user/Scanresult.dart";
 
 class AdminPage extends StatefulWidget {
   final String username;
-  const AdminPage({Key? key, required this.username}) : super(key: key);
+  final String name;
+
+  const AdminPage({Key? key, required this.username, required this.name})
+      : super(key: key);
 
   @override
   State<AdminPage> createState() => _AdminPageState();

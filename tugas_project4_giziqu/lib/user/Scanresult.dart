@@ -5,7 +5,10 @@ import '../NewsPage.dart';
 import '../SearchPage.dart';
 
 class Scanresult extends StatelessWidget {
-  const Scanresult({Key? key});
+  final String username;
+  final String name;
+  const Scanresult({Key? key, required this.name, required this.username})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,20 +27,20 @@ class Scanresult extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           'Produk 1',
                           style: TextStyle(
                             fontSize: 30,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Text(
+                        const Text(
                           'Informasi Nilai Gizi',
                           style: TextStyle(
                             fontSize: 22,
                           ),
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         Container(
                           height: 400,
                           width: 350,
@@ -49,7 +52,7 @@ class Scanresult extends StatelessWidget {
                             itemCount: 12,
                             itemBuilder: (context, index) {
                               return ListTile(
-                                title: Text('Test'),
+                                title: const Text('Test'),
                                 onTap: () {
                                   // Aksi ketika item diklik
                                   print('Tapped on ');
@@ -63,24 +66,24 @@ class Scanresult extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Container(
                 width: 350,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Ringkasan Gizi",
+                    const Text("Ringkasan Gizi",
                         style: TextStyle(
                           fontSize: 22,
                         )),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Container(
-                          margin: EdgeInsets.only(right: 20),
+                          margin: const EdgeInsets.only(right: 20),
                           width: 165,
                           height: 60,
                           decoration: BoxDecoration(
@@ -98,18 +101,18 @@ class Scanresult extends StatelessWidget {
                         )
                       ],
                     ),
-                    SizedBox(height: 10),
-                    Text("Produk Terkait",
+                    const SizedBox(height: 10),
+                    const Text("Produk Terkait",
                         style: TextStyle(
                           fontSize: 22,
                         )),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Container(
-                          margin: EdgeInsets.only(right: 20),
+                          margin: const EdgeInsets.only(right: 20),
                           width: 165,
                           height: 150,
                           decoration: BoxDecoration(
@@ -119,7 +122,7 @@ class Scanresult extends StatelessWidget {
                           child: Stack(
                             children: [
                               Padding(
-                                padding: EdgeInsets.all(
+                                padding: const EdgeInsets.all(
                                     10.0), // Ubah sesuai kebutuhan
                                 child: Container(
                                   width: 500,
@@ -129,7 +132,8 @@ class Scanresult extends StatelessWidget {
                                         .blue, // Ubah warna sesuai kebutuhan
                                     borderRadius: BorderRadius.circular(18),
                                   ),
-                                  child: Icon(Icons.photo, color: Colors.white),
+                                  child: const Icon(Icons.photo,
+                                      color: Colors.white),
                                 ),
                               ),
                               // Judul
@@ -138,8 +142,8 @@ class Scanresult extends StatelessWidget {
                                 left: 0,
                                 right: 0,
                                 child: Container(
-                                  padding: EdgeInsets.all(8),
-                                  child: Text(
+                                  padding: const EdgeInsets.all(8),
+                                  child: const Text(
                                     'Produk Lain',
                                     style: TextStyle(color: Colors.white),
                                     textAlign: TextAlign.center,
@@ -162,7 +166,7 @@ class Scanresult extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.only(left: 20.0),
                 child: Align(
@@ -171,7 +175,11 @@ class Scanresult extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Scanresult()),
+                        MaterialPageRoute(
+                            builder: (context) => Scanresult(
+                                  username: username,
+                                  name: name,
+                                )),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -179,7 +187,7 @@ class Scanresult extends StatelessWidget {
                         borderRadius: BorderRadius.circular(30.0),
                       ),
                     ),
-                    child: Text('Bandingkan'),
+                    child: const Text('Bandingkan'),
                   ),
                 ),
               ),
@@ -216,7 +224,11 @@ class Scanresult extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const NewsPage()),
+                  MaterialPageRoute(
+                      builder: (context) => NewsPage(
+                            username: username,
+                            name: name,
+                          )),
                 );
               },
               icon: const Icon(Icons.newspaper),
@@ -226,7 +238,11 @@ class Scanresult extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SearchPage()),
+                  MaterialPageRoute(
+                      builder: (context) => SearchPage(
+                            username: username,
+                            name: name,
+                          )),
                 );
               },
               icon: const Icon(Icons.search),
@@ -234,10 +250,10 @@ class Scanresult extends StatelessWidget {
             IconButton(
               onPressed: () {
                 Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ProfilePage(username: "user")),
-                );
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            ProfilePage(username: username, name: name)));
               },
               icon: const Icon(Icons.person),
             ),

@@ -6,7 +6,9 @@ import 'package:tugas_project4_giziqu/user/LandingPage.dart';
 
 class ProfilePage extends StatefulWidget {
   final String username;
-  const ProfilePage({Key? key, required this.username}) : super(key: key);
+  final String name;
+  const ProfilePage({Key? key, required this.username, required this.name})
+      : super(key: key);
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -43,7 +45,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          widget.username,
+                          widget.name,
                           style: const TextStyle(
                               fontFamily: "fonts/Schyler-Italic.ttf",
                               fontSize: 20,
@@ -89,8 +91,8 @@ class _ProfilePageState extends State<ProfilePage> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => AkunPage(
-                                    username: widget.username,
-                                  )),
+                                  username: widget.username,
+                                  name: widget.name)),
                         );
                       },
                       child: const Row(
@@ -192,6 +194,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   MaterialPageRoute(
                       builder: (context) => LandingPage(
                             username: widget.username,
+                            name: widget.name,
                           )),
                 );
               },
@@ -218,6 +221,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   MaterialPageRoute(
                       builder: (context) => ProfilePage(
                             username: widget.username,
+                            name: widget.name,
                           )),
                 );
               },

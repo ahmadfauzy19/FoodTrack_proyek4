@@ -3,7 +3,10 @@ import 'package:tugas_project4_giziqu/user/LandingPage.dart';
 import 'SearchPage.dart'; // Pastikan file search_page.dart diimpor dengan benar
 
 class NewsPage extends StatelessWidget {
-  const NewsPage({Key? key}) : super(key: key);
+  final String username;
+  final String name;
+  const NewsPage({Key? key, required this.username, required this.name})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -136,8 +139,9 @@ class NewsPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const LandingPage(
-                            username: "nama user",
+                      builder: (context) => LandingPage(
+                            username: username,
+                            name: name,
                           )),
                 );
               },
@@ -154,7 +158,11 @@ class NewsPage extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SearchPage()),
+                  MaterialPageRoute(
+                      builder: (context) => SearchPage(
+                            username: username,
+                            name: name,
+                          )),
                 );
               },
               icon: const Icon(Icons.search),

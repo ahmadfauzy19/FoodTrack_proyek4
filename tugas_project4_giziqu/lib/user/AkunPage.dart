@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import "package:tugas_project4_giziqu/Admin/KelolaArtikel.dart";
+// import "package:tugas_project4_giziqu/Admin/KelolaArtikel.dart";
 import 'package:tugas_project4_giziqu/BarcodeScannerScreen.dart';
 import 'package:tugas_project4_giziqu/user/LandingPage.dart';
 import 'package:tugas_project4_giziqu/user/ProfilePage.dart';
@@ -8,7 +8,9 @@ import 'package:tugas_project4_giziqu/user/UbahPasswordPage.dart';
 
 class AkunPage extends StatefulWidget {
   final String username;
-  const AkunPage({Key? key, required this.username}) : super(key: key);
+  final String name;
+  const AkunPage({Key? key, required this.username, required this.name})
+      : super(key: key);
 
   @override
   State<AkunPage> createState() => _AkunPageState();
@@ -45,7 +47,7 @@ class _AkunPageState extends State<AkunPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          widget.username,
+                          widget.name,
                           style: const TextStyle(
                               fontFamily: "fonts/Schyler-Italic.ttf",
                               fontSize: 20,
@@ -133,6 +135,30 @@ class _AkunPageState extends State<AkunPage> {
                         ],
                       ),
                     ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const UbahPasswordPage()),
+                        );
+                      },
+                      child: const Row(
+                        children: [
+                          Icon(
+                            Icons.logout,
+                            color: Colors.black,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            'Logout',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 )),
           ],
@@ -168,6 +194,7 @@ class _AkunPageState extends State<AkunPage> {
                   MaterialPageRoute(
                       builder: (context) => LandingPage(
                             username: widget.username,
+                            name: widget.name,
                           )),
                 );
               },
@@ -194,6 +221,7 @@ class _AkunPageState extends State<AkunPage> {
                   MaterialPageRoute(
                       builder: (context) => ProfilePage(
                             username: widget.username,
+                            name: widget.name,
                           )),
                 );
               },

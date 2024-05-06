@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:tugas_project4_giziqu/user/Scanresult.dart';
 
 class SearchPage extends StatelessWidget {
+  final String username;
+  final String name;
+  const SearchPage({Key? key, required this.username, required this.name})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,7 +91,11 @@ class SearchPage extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Scanresult()),
+                    MaterialPageRoute(
+                        builder: (context) => Scanresult(
+                              username: username,
+                              name: name,
+                            )),
                   );
                 },
                 style: ElevatedButton.styleFrom(
