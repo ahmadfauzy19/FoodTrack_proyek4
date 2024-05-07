@@ -15,7 +15,6 @@ class Scanresult extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(),
       body: SingleChildScrollView(
-        // Menggunakan SingleChildScrollView di sini
         child: Center(
           child: Column(
             children: [
@@ -83,12 +82,26 @@ class Scanresult extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Container(
-                          margin: const EdgeInsets.only(right: 20),
+                          margin: EdgeInsets.only(right: 20),
                           width: 165,
                           height: 60,
                           decoration: BoxDecoration(
                             color: Colors.grey,
                             borderRadius: BorderRadius.circular(18),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Energi",
+                                style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text("5 Gram")
+                            ],
                           ),
                         ),
                         Container(
@@ -98,10 +111,24 @@ class Scanresult extends StatelessWidget {
                             color: Colors.grey,
                             borderRadius: BorderRadius.circular(18),
                           ),
-                        )
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Protein",
+                                style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text("100 gram")
+                            ],
+                          ),
+                        ),
                       ],
                     ),
-                    const SizedBox(height: 10),
+                    SizedBox(height: 10),
                     const Text("Produk Terkait",
                         style: TextStyle(
                           fontSize: 22,
@@ -122,14 +149,13 @@ class Scanresult extends StatelessWidget {
                           child: Stack(
                             children: [
                               Padding(
-                                padding: const EdgeInsets.all(
-                                    10.0), // Ubah sesuai kebutuhan
+                                padding: const EdgeInsets.all(10.0),
                                 child: Container(
                                   width: 500,
                                   height: 100,
                                   decoration: BoxDecoration(
-                                    color: Colors
-                                        .blue, // Ubah warna sesuai kebutuhan
+                                    color: const Color.fromARGB(
+                                        255, 220, 217, 217),
                                     borderRadius: BorderRadius.circular(18),
                                   ),
                                   child: const Icon(Icons.photo,
@@ -155,12 +181,44 @@ class Scanresult extends StatelessWidget {
                         ),
                         Container(
                           width: 165,
-                          height: 80,
+                          height: 150,
                           decoration: BoxDecoration(
                             color: Colors.grey,
                             borderRadius: BorderRadius.circular(18),
                           ),
-                        )
+                          child: Stack(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Container(
+                                  width: 500,
+                                  height: 100,
+                                  decoration: BoxDecoration(
+                                    color: const Color.fromARGB(
+                                        255, 220, 217, 217),
+                                    borderRadius: BorderRadius.circular(18),
+                                  ),
+                                  child: const Icon(Icons.photo,
+                                      color: Colors.white),
+                                ),
+                              ),
+                              // Judul
+                              Positioned(
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                                child: Container(
+                                  padding: const EdgeInsets.all(8),
+                                  child: const Text(
+                                    'Produk Lain',
+                                    style: TextStyle(color: Colors.white),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     )
                   ],
