@@ -1,6 +1,8 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/widgets.dart';
+import 'package:tugas_project4_giziqu/user_auth/FirebaseAuth.dart';
+
 import 'global/link.dart';
 import 'package:flutter/material.dart';
 import 'Admin/AdminPage.dart';
@@ -17,6 +19,10 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage>
     with SingleTickerProviderStateMixin {
+  final FirebaseAuthService _auth = FirebaseAuthService();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+
   late TabController _tabController;
 
   Future<String> registerUser(
@@ -75,15 +81,14 @@ class _LoginPageState extends State<LoginPage>
         return "gagal";
       }
     } catch (error) {
-      // ignore: avoid_print
       print('Kesalahan saat melakukan registrasi: $error');
     }
     return "gagal";
   }
 
   Future<void> loginUser(String username, String password) async {
-    final Uri uri =
-        Uri.parse('https://cbc8-114-5-251-106.ngrok-free.app/api/login');
+    final Uri uri = Uri.parse('${link}api/login');
+    print(username);
     try {
       final response = await http.post(
         uri,
@@ -113,11 +118,7 @@ class _LoginPageState extends State<LoginPage>
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => AdminPage(
-                                  name: name,
-                                  username: username,
-                                )),
+                        MaterialPageRoute(builder: (context) => AdminPage()),
                       );
                     },
                     child: const Text('OK'),
@@ -139,10 +140,7 @@ class _LoginPageState extends State<LoginPage>
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => LandingPage(
-                                    name: name,
-                                    username: username,
-                                  )),
+                              builder: (context) => LandingPage()),
                         );
                       },
                       child: const Text('OK'),
@@ -159,7 +157,7 @@ class _LoginPageState extends State<LoginPage>
     }
   }
 
-  void _showDialog(String message) {
+  void _showDialog(String message, {bool isAdmin = false}) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -194,136 +192,144 @@ class _LoginPageState extends State<LoginPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: [
-              const SizedBox(height: 70.0),
-              Container(
-                padding: const EdgeInsets.all(20),
-                margin: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 255, 255, 255),
-                  borderRadius: BorderRadius.circular(30),
-                  border: Border.all(
-                    color: Colors.grey,
-                    width: 1,
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Image.asset(
-                          "assets/logo.png",
-                          width: 100,
-                          height: 100,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            RichText(
-                              text: const TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: 'Gizi',
-                                    style: TextStyle(
-                                      fontSize: 24,
-                                      color: Colors.green,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: 'Qu',
-                                    style: TextStyle(
-                                      fontSize: 24,
-                                      color: Colors.orange,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const Text("Keep Happy And Healthy")
-                          ],
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      height: 45,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      child: TabBar(
-                        controller: _tabController,
-                        indicator: BoxDecoration(
-                          borderRadius: BorderRadius.circular(25),
-                          color: Colors.green,
-                        ),
-                        labelColor: Colors.white,
-                        indicatorSize: TabBarIndicatorSize.tab,
-                        unselectedLabelColor:
-                            const Color.fromARGB(255, 255, 182, 52),
-                        tabs: const [
-                          Tab(
-                            text: "Masuk",
-                          ),
-                          Tab(
-                            text: "Daftar",
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    SizedBox(
-                      height: 300, // Atur tinggi sesuai kebutuhan
-                      child: TabBarView(
-                        controller: _tabController,
-                        children: [
-                          SingleChildScrollView(
-                            child: _buildLoginForm(),
-                          ),
-                          SingleChildScrollView(
-                            child: _buildRegisterForm(),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+      body: Center(
+        child: Column(children: [
+          const SizedBox(height: 70.0),
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              margin: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 255, 255, 255),
+                borderRadius: BorderRadius.circular(30),
+                border: Border.all(
+                  color: Colors.grey,
+                  width: 1,
                 ),
               ),
-              const SizedBox(
-                height: 100,
-              )
-            ],
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Image.asset(
+                        "assets/logo.png",
+                        width: 100,
+                        height: 100,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          RichText(
+                            text: const TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: 'Gizi',
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    color: Colors.green,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: 'Qu',
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    color: Colors.orange,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const Text("Keep Happy And Healthy")
+                        ],
+                      )
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    height: 45,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: TabBar(
+                      controller: _tabController,
+                      indicator: BoxDecoration(
+                        borderRadius: BorderRadius.circular(25),
+                        color: Colors.green,
+                      ),
+                      labelColor: Colors.white,
+                      indicatorSize: TabBarIndicatorSize.tab,
+                      unselectedLabelColor:
+                          const Color.fromARGB(255, 255, 182, 52),
+                      tabs: const [
+                        Tab(
+                          text: "Masuk",
+                        ),
+                        Tab(
+                          text: "Daftar",
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Expanded(
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: [
+                        SingleChildScrollView(
+                          child: _buildLoginForm(),
+                        ),
+                        SingleChildScrollView(
+                          child: _buildRegisterForm(),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
-        ),
+          SizedBox(
+            height: 100,
+          )
+        ]),
       ),
     );
   }
 
-  Widget _buildLoginForm() {
-    TextEditingController nameController = TextEditingController();
-    TextEditingController passwordController = TextEditingController();
+  void _signIn() async {
+    String email = _emailController.text;
+    String password = _passwordController.text;
 
+    User? user = await _auth.signInWithEmailAndPassword(email, password);
+
+    if (user != null) {
+      print("User is Succesfully Created");
+      Navigator.pushNamed(context, "/landingpage");
+    } else {
+      print("Some error happen");
+    }
+  }
+
+  Widget _buildLoginForm() {
     return Container(
       padding: const EdgeInsets.all(10),
       margin: const EdgeInsets.all(10),
       child: Column(
         children: [
           TextField(
-            controller: nameController,
+            controller: _emailController,
             decoration: const InputDecoration(labelText: "Username/email"),
           ),
           TextField(
-            controller: passwordController,
+            controller: _passwordController,
             decoration: const InputDecoration(labelText: "Password"),
           ),
           const SizedBox(
@@ -334,7 +340,7 @@ class _LoginPageState extends State<LoginPage>
             children: [
               ElevatedButton(
                 onPressed: () {
-                  loginUser(nameController.text, passwordController.text);
+                  _signIn();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,

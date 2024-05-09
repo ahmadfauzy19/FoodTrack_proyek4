@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "452585413053",
+    "firebase_url": "https://giziqu-14e75-default-rtdb.firebaseio.com",
+    "project_id": "giziqu-14e75",
+    "storage_bucket": "giziqu-14e75.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:452585413053:android:778cfeacf7cf35954e1ad4",
+        "android_client_info": {
+          "package_name": "com.example.tugas_project4_giziqu"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMIK25GM8YnSymDs9-pueQ0m-i9A4ewaA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

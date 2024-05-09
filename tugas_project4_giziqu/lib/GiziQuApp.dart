@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_project4_giziqu/SplashScreen.dart';
+import 'package:tugas_project4_giziqu/user/LandingPage.dart';
 
 class GiziQuApp extends StatefulWidget {
   const GiziQuApp({super.key});
@@ -16,6 +17,7 @@ class _GiziQuAppState extends State<GiziQuApp> {
       initialRoute: '/login',
       routes: {
         '/login': (BuildContext context) => const SplashScreen(),
+        '/landingpage': (BuildContext context) => const LandingPage(),
       },
     );
   }

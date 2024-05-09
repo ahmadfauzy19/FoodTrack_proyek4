@@ -7,10 +7,9 @@ import 'package:tugas_project4_giziqu/user/UbahEmailPage.dart';
 import 'package:tugas_project4_giziqu/user/UbahPasswordPage.dart';
 
 class AkunPage extends StatefulWidget {
-  final String username;
-  final String name;
-  const AkunPage({Key? key, required this.username, required this.name})
-      : super(key: key);
+  const AkunPage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<AkunPage> createState() => _AkunPageState();
@@ -47,7 +46,7 @@ class _AkunPageState extends State<AkunPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          widget.name,
+                          "Test",
                           style: const TextStyle(
                               fontFamily: "fonts/Schyler-Italic.ttf",
                               fontSize: 20,
@@ -191,11 +190,7 @@ class _AkunPageState extends State<AkunPage> {
                 // Tambahkan logika untuk navigasi ke halaman beranda
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => LandingPage(
-                            username: widget.username,
-                            name: widget.name,
-                          )),
+                  MaterialPageRoute(builder: (context) => LandingPage()),
                 );
               },
               icon: const Icon(Icons.home),
@@ -218,11 +213,7 @@ class _AkunPageState extends State<AkunPage> {
                 // Tambahkan logika untuk navigasi ke halaman profil
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => ProfilePage(
-                            username: widget.username,
-                            name: widget.name,
-                          )),
+                  MaterialPageRoute(builder: (context) => ProfilePage()),
                 );
               },
               icon: const Icon(Icons.person),

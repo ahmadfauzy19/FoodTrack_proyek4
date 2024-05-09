@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tugas_project4_giziqu/NewsPage.dart';
 import 'package:tugas_project4_giziqu/SearchPage.dart';
@@ -5,16 +6,21 @@ import '../BarcodeScannerScreen.dart'; // Hanya butuh di sini, menghapus yang la
 import 'ProfilePage.dart';
 
 class LandingPage extends StatefulWidget {
-  final String username;
-  final String name;
-  const LandingPage({Key? key, required this.username, required this.name})
-      : super(key: key);
+  const LandingPage({Key? key}) : super(key: key);
 
   @override
   State<LandingPage> createState() => _LandingPageState();
 }
 
 class _LandingPageState extends State<LandingPage> {
+  late User? currentUser;
+
+  @override
+  void initState() {
+    super.initState();
+    currentUser = FirebaseAuth.instance.currentUser;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +59,9 @@ class _LandingPageState extends State<LandingPage> {
                             ),
                           ),
                           Text(
-                            widget.name, // Gunakan nilai username dari widget
+                            currentUser != null
+                                ? currentUser!.displayName ?? "Guest"
+                                : "Guest",
                             style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -199,11 +207,7 @@ class _LandingPageState extends State<LandingPage> {
                 // Tambahkan logika untuk navigasi ke halaman berita
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => NewsPage(
-                            username: widget.username,
-                            name: widget.name,
-                          )),
+                  MaterialPageRoute(builder: (context) => NewsPage()),
                 );
               },
               icon: const Icon(Icons.newspaper),
@@ -214,11 +218,7 @@ class _LandingPageState extends State<LandingPage> {
                 // Tambahkan logika untuk navigasi ke halaman search
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => SearchPage(
-                            username: widget.username,
-                            name: widget.name,
-                          )),
+                  MaterialPageRoute(builder: (context) => SearchPage()),
                 );
               },
               icon: const Icon(Icons.search),
@@ -228,9 +228,7 @@ class _LandingPageState extends State<LandingPage> {
                 // Tambahkan logika untuk navigasi ke halaman profil
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => ProfilePage(
-                          username: widget.username, name: widget.name)),
+                  MaterialPageRoute(builder: (context) => ProfilePage()),
                 );
               },
               icon: const Icon(Icons.person),

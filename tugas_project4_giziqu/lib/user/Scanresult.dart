@@ -5,10 +5,9 @@ import '../NewsPage.dart';
 import '../SearchPage.dart';
 
 class Scanresult extends StatelessWidget {
-  final String username;
-  final String name;
-  const Scanresult({Key? key, required this.name, required this.username})
-      : super(key: key);
+  const Scanresult({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -233,11 +232,7 @@ class Scanresult extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => Scanresult(
-                                  username: username,
-                                  name: name,
-                                )),
+                        MaterialPageRoute(builder: (context) => Scanresult()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -282,11 +277,7 @@ class Scanresult extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => NewsPage(
-                            username: username,
-                            name: name,
-                          )),
+                  MaterialPageRoute(builder: (context) => NewsPage()),
                 );
               },
               icon: const Icon(Icons.newspaper),
@@ -296,22 +287,15 @@ class Scanresult extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => SearchPage(
-                            username: username,
-                            name: name,
-                          )),
+                  MaterialPageRoute(builder: (context) => SearchPage()),
                 );
               },
               icon: const Icon(Icons.search),
             ),
             IconButton(
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            ProfilePage(username: username, name: name)));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ProfilePage()));
               },
               icon: const Icon(Icons.person),
             ),

@@ -5,10 +5,9 @@ import 'package:tugas_project4_giziqu/BarcodeScannerScreen.dart';
 import 'package:tugas_project4_giziqu/user/LandingPage.dart';
 
 class ProfilePage extends StatefulWidget {
-  final String username;
-  final String name;
-  const ProfilePage({Key? key, required this.username, required this.name})
-      : super(key: key);
+  const ProfilePage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -45,7 +44,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          widget.name,
+                          "Test",
                           style: const TextStyle(
                               fontFamily: "fonts/Schyler-Italic.ttf",
                               fontSize: 20,
@@ -88,12 +87,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     TextButton(
                       onPressed: () {
                         Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AkunPage(
-                                  username: widget.username,
-                                  name: widget.name)),
-                        );
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AkunPage()));
                       },
                       child: const Row(
                         children: [
@@ -191,11 +187,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 // Tambahkan logika untuk navigasi ke halaman beranda
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => LandingPage(
-                            username: widget.username,
-                            name: widget.name,
-                          )),
+                  MaterialPageRoute(builder: (context) => LandingPage()),
                 );
               },
               icon: const Icon(Icons.home),
@@ -218,11 +210,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 // Tambahkan logika untuk navigasi ke halaman profil
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => ProfilePage(
-                            username: widget.username,
-                            name: widget.name,
-                          )),
+                  MaterialPageRoute(builder: (context) => ProfilePage()),
                 );
               },
               icon: const Icon(Icons.person),

@@ -5,11 +5,9 @@ import "KelolaMakanan.dart";
 import "../user/Scanresult.dart";
 
 class AdminPage extends StatefulWidget {
-  final String username;
-  final String name;
-
-  const AdminPage({Key? key, required this.username, required this.name})
-      : super(key: key);
+  const AdminPage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<AdminPage> createState() => _AdminPageState();
@@ -47,7 +45,7 @@ class _AdminPageState extends State<AdminPage> {
                       children: [
                         Text(
                           semanticsLabel: "hai",
-                          widget.username,
+                          "test",
                           style: const TextStyle(
                               fontFamily: "fonts/Schyler-Italic.ttf",
                               fontSize: 20,
