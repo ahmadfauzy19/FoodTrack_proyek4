@@ -304,17 +304,38 @@ class _LoginPageState extends State<LoginPage>
     );
   }
 
-  void _signIn() async {
+  void _signIn(BuildContext context) async {
     String email = _emailController.text;
     String password = _passwordController.text;
 
-    User? user = await _auth.signInWithEmailAndPassword(email, password);
-
-    if (user != null) {
-      print("User is Succesfully Created");
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      // Login berhasil, arahkan ke halaman beranda
       Navigator.pushNamed(context, "/landingpage");
-    } else {
-      print("Some error happen");
+    } catch (e) {
+      // Jika login gagal, tampilkan pesan kesalahan
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Login Gagal"),
+            content: Text("Email atau password salah. Silakan coba lagi."),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Tutup dialog
+                },
+                child: Text("OK"),
+              ),
+            ],
+          );
+        },
+      );
+      print("Error: $e");
     }
   }
 
@@ -340,7 +361,7 @@ class _LoginPageState extends State<LoginPage>
             children: [
               ElevatedButton(
                 onPressed: () {
-                  _signIn();
+                  _signIn(context);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
