@@ -1,10 +1,42 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:tugas_project4_giziqu/user/Scanresult.dart';
+import 'global/link.dart';
 
-class SearchPage extends StatelessWidget {
-  const SearchPage({
-    Key? key,
-  }) : super(key: key);
+class SearchPage extends StatefulWidget {
+  @override
+  _SearchPageState createState() => _SearchPageState();
+}
+
+class _SearchPageState extends State<SearchPage> {
+  TextEditingController _searchController = TextEditingController();
+
+  Future<void> _search(String keyword) async {
+    // Ganti URL_API dengan URL endpoint API yang sesuai
+    final Uri uri =
+        Uri.parse("${link}api/makanan/search_makanan?keyword=$keyword");
+
+    try {
+      var response = await http.get(uri);
+      if (response.statusCode == 200) {
+        var data = json.decode(response.body);
+        print(data);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Scanresult(
+                    data: data,
+                  )), // Perubahan di sini
+        );
+      } else {
+        print('Error: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Exception: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,78 +60,32 @@ class SearchPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20.0),
-            ConstrainedBox(
-              constraints: BoxConstraints(maxHeight: 500),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    flex: 3,
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Nama Makanan',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30.0),
-                        ),
-                        contentPadding: EdgeInsets.symmetric(
-                            vertical: 12.0, horizontal: 16.0),
-                        prefixIcon: Icon(Icons.search),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 5.0),
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30.0),
-                        border: Border.all(color: Colors.grey),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButtonFormField<String>(
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                            ),
-                            isExpanded: true,
-                            hint: Text('Kategori'),
-                            items: [
-                              DropdownMenuItem<String>(
-                                value: 'Makanan Ringan',
-                                child: Text('Makanan Ringan'),
-                              ),
-                              DropdownMenuItem<String>(
-                                value: 'Makanan Berat',
-                                child: Text('Makanan Berat'),
-                              ),
-                            ],
-                            onChanged: (value) {},
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+            TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: 'Nama Makanan',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+                prefixIcon: Icon(Icons.search),
               ),
             ),
-            SizedBox(height: 80.0),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 60.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Scanresult()),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                  ),
+            SizedBox(height: 20.0),
+            ElevatedButton(
+              onPressed: () {
+                String keyword = _searchController.text.trim();
+                if (keyword.isNotEmpty) {
+                  _search(keyword);
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
                 ),
-                child: Text('Search'),
               ),
+              child: Text('Search'),
             ),
           ],
         ),
