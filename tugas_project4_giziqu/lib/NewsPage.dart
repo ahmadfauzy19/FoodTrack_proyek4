@@ -1,11 +1,88 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:tugas_project4_giziqu/user/LandingPage.dart';
-import 'SearchPage.dart'; // Pastikan file search_page.dart diimpor dengan benar
+import 'SearchPage.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
-class NewsPage extends StatelessWidget {
-  const NewsPage({
-    Key? key,
-  }) : super(key: key);
+import 'package:tugas_project4_giziqu/global/link.dart';
+
+class FoodImage extends StatelessWidget {
+  final String imageUrl;
+
+  const FoodImage({Key? key, required this.imageUrl}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<String>(
+      future: getImageDownloadUrl(),
+      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else if (snapshot.hasData) {
+          return Image.network(snapshot.data!);
+        } else {
+          return Text('No image available');
+        }
+      },
+    );
+  }
+
+  Future<String> getImageDownloadUrl() async {
+    try {
+      final downloadUrl = await firebase_storage.FirebaseStorage.instance
+          .ref('Images/ArtikelImage/$imageUrl')
+          .getDownloadURL();
+      return downloadUrl;
+    } catch (e) {
+      print('Error getting download URL: $e');
+      throw e;
+    }
+  }
+}
+
+class NewsPage extends StatefulWidget {
+  const NewsPage({Key? key}) : super(key: key);
+
+  @override
+  _NewsPageState createState() => _NewsPageState();
+}
+
+class _NewsPageState extends State<NewsPage> {
+  List<Map<String, dynamic>> _newsData = [];
+  bool _isLoading =
+      true; // Menandakan apakah sedang dalam proses loading atau tidak
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchNews();
+  }
+
+  // Fungsi untuk mengambil data dari API
+  Future<void> _fetchNews() async {
+    final response =
+        await http.get(Uri.parse('${link}api/read_semua_artikel_makanan'));
+    if (response.statusCode == 200) {
+      final List<dynamic> responseData = jsonDecode(response.body);
+      final List<Map<String, dynamic>> filteredData = responseData
+          .where((data) => data != null)
+          .cast<Map<String, dynamic>>()
+          .toList();
+
+      setState(() {
+        _newsData = filteredData;
+        _isLoading =
+            false; // Setelah data terambil, tidak lagi dalam proses loading
+      });
+      // Cetak _newsData setelah diperbarui
+      print(_newsData);
+    } else {
+      throw Exception('Failed to load news');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,103 +96,47 @@ class NewsPage extends StatelessWidget {
         ),
         title: const Text("Berita"),
       ),
-      body: ListView(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  "Paling Populer",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height / 4,
-                child: PageView(
+      body: _isLoading
+          ? Center(
+              child:
+                  CircularProgressIndicator(), // Tampilkan loading indicator jika data belum termuat
+            )
+          : ListView(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildNewsCard(
-                      context,
-                      image: "assets/gambar1.png",
-                      title:
-                          "banjir dikabupaten padalarang disebabkan oleh badai salju yang berada di inggris kecamatan nagreg darusasalam",
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        "Paling Populer",
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
-                    _buildNewsCard(
-                      context,
-                      image: "assets/gambar2.png",
-                      title: "Judul Berita Utama 2",
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height / 4,
+                      child: PageView(
+                        children: _buildPopularNews(context),
+                      ),
                     ),
-                    _buildNewsCard(
-                      context,
-                      image: "assets/gambar3.png",
-                      title: "Judul Berita Utama 3",
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        "Terkini",
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
-                    // Tambahkan berita utama lainnya sesuai kebutuhan
+                    _buildLatestNews(context),
                   ],
                 ),
-              ),
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  "Terkini",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              for (int i = 0; i < 5; i++)
-                Container(
-                  margin: const EdgeInsets.all(8.0),
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.asset(
-                          "assets/gambar1.png",
-                          width: 100,
-                          height: 100,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      const Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Judul Berita Terkini",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 5),
-                            Text(
-                              "Isi Berita Terkini",
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-            ],
-          ),
-        ],
-      ),
+              ],
+            ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
         backgroundColor: Colors.green,
@@ -170,36 +191,126 @@ class NewsPage extends StatelessWidget {
     );
   }
 
+  List<Widget> _buildPopularNews(BuildContext context) {
+    List<Widget> popularNewsWidgets = [];
+    if (_newsData.length > 0) {
+      for (int i = 0; i < _newsData.length; i++) {
+        if (_newsData[i] != null) {
+          popularNewsWidgets.add(_buildNewsCard(
+            context,
+            image: _newsData[i]['foto'],
+            title: _newsData[i]['nama_artikel'],
+          ));
+        }
+      }
+    }
+    return popularNewsWidgets;
+  }
+
+  Widget _buildLatestNews(BuildContext context) {
+    List<Widget> latestNewsWidgets = [];
+    if (_newsData.length > 0) {
+      for (int i = 0; i < _newsData.length; i++) {
+        if (_newsData[i] != null) {
+          latestNewsWidgets.add(_buildLatestNewsItem(
+            context,
+            image: _newsData[i]['foto'],
+            title: _newsData[i]['nama_artikel'],
+            content: _newsData[i]['deskripsi'],
+          ));
+        }
+      }
+    }
+    return Column(
+      children: latestNewsWidgets,
+    );
+  }
+
   Widget _buildNewsCard(BuildContext context,
       {required String image, required String title}) {
     return Container(
       margin: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        image: DecorationImage(
-          image: AssetImage(image),
-          fit: BoxFit.cover,
-        ),
       ),
-      child: Center(
-        child: Align(
-          alignment: Alignment.bottomCenter,
-          child: Container(
-            padding: const EdgeInsets.all(8.0),
-            decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.5),
-              borderRadius: BorderRadius.circular(10),
+      child: Stack(
+        children: [
+          Center(
+            child: SizedBox(
+              width: double.infinity,
+              height: double.infinity,
+              child:
+                  FoodImage(imageUrl: image), // Menggunakan FoodImage di sini
             ),
-            child: Text(
-              title,
-              style: const TextStyle(
-                fontSize: 20,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
+          ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              padding: const EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.5),
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(10),
+                ),
+              ),
+              child: Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
-        ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLatestNewsItem(BuildContext context,
+      {required String image, required String title, required String content}) {
+    return Container(
+      margin: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        crossAxisAlignment:
+            CrossAxisAlignment.center, // Ubah menjadi CrossAxisAlignment.center
+        children: [
+          Container(
+            width: 120,
+            height: 120,
+            child: FoodImage(imageUrl: image), // Gunakan FoodImage di sini
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 5),
+                Text(
+                  content,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

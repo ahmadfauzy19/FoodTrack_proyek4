@@ -1,6 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:tugas_project4_giziqu/global/link.dart';
+import 'package:tugas_project4_giziqu/user/Scanresult.dart';
+import 'package:http/http.dart' as http;
 
 class BarcodeScannerScreen extends StatefulWidget {
   @override
@@ -21,33 +26,6 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
     });
 
     // Tampilkan dialog dengan tombol tambahan
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Tombol Tambahan"),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text("Tekan tombol tambahan untuk melakukan sesuatu."),
-              SizedBox(height: 20),
-              if (_isScanning)
-                CircularProgressIndicator(), // Tampilkan indicator loading selama pemindaian sedang berlangsung
-            ],
-          ),
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                // Logika saat tombol tambahan ditekan
-                Navigator.pop(context);
-              },
-              child: Text("Tombol"),
-            ),
-          ],
-        );
-      },
-    );
 
     try {
       // Mulai pemindaian barcode
@@ -57,6 +35,28 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
         true,
         ScanMode.BARCODE,
       );
+
+      final Uri uri = Uri.parse(
+          "${link}api/makanan/search_makanan_barcode?keyword=$barcodeScanRes");
+
+      try {
+        var response = await http.get(uri);
+        if (response.statusCode == 200) {
+          var data = json.decode(response.body);
+          print(data);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Scanresult(
+                      data: data,
+                    )), // Perubahan di sini
+          );
+        } else {
+          print('Error: ${response.statusCode}');
+        }
+      } catch (e) {
+        print('Exception: $e');
+      }
 
       setState(() {
         _barcodeScanRes = barcodeScanRes; // Simpan hasil pemindaian barcode
