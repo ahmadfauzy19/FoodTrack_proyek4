@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tugas_project4_giziqu/Admin/AdminPage.dart';
 import 'package:tugas_project4_giziqu/SplashScreen.dart';
 import 'package:tugas_project4_giziqu/user/LandingPage.dart';
 
@@ -18,6 +19,7 @@ class _GiziQuAppState extends State<GiziQuApp> {
       routes: {
         '/login': (BuildContext context) => const SplashScreen(),
         '/landingpage': (BuildContext context) => const LandingPage(),
+        // '/adminpage': (BuildContext context) => const AdminPage(),
       },
     );
   }

@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, avoid_print, library_private_types_in_public_api, sized_box_for_whitespace, unnecessary_null_comparison
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -18,13 +20,13 @@ class FoodImage extends StatelessWidget {
       future: getImageDownloadUrl(),
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else if (snapshot.hasData) {
           return Image.network(snapshot.data!);
         } else {
-          return Text('No image available');
+          return const Text('No image available');
         }
       },
     );
@@ -38,7 +40,7 @@ class FoodImage extends StatelessWidget {
       return downloadUrl;
     } catch (e) {
       print('Error getting download URL: $e');
-      throw e;
+      rethrow;
     }
   }
 }
@@ -97,7 +99,7 @@ class _NewsPageState extends State<NewsPage> {
         title: const Text("Berita"),
       ),
       body: _isLoading
-          ? Center(
+          ? const Center(
               child:
                   CircularProgressIndicator(), // Tampilkan loading indicator jika data belum termuat
             )
@@ -158,7 +160,7 @@ class _NewsPageState extends State<NewsPage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => LandingPage()),
+                  MaterialPageRoute(builder: (context) => const LandingPage()),
                 );
               },
               icon: const Icon(Icons.home),
@@ -193,7 +195,7 @@ class _NewsPageState extends State<NewsPage> {
 
   List<Widget> _buildPopularNews(BuildContext context) {
     List<Widget> popularNewsWidgets = [];
-    if (_newsData.length > 0) {
+    if (_newsData.isNotEmpty) {
       for (int i = 0; i < _newsData.length; i++) {
         if (_newsData[i] != null) {
           popularNewsWidgets.add(_buildNewsCard(
@@ -209,7 +211,7 @@ class _NewsPageState extends State<NewsPage> {
 
   Widget _buildLatestNews(BuildContext context) {
     List<Widget> latestNewsWidgets = [];
-    if (_newsData.length > 0) {
+    if (_newsData.isNotEmpty) {
       for (int i = 0; i < _newsData.length; i++) {
         if (_newsData[i] != null) {
           latestNewsWidgets.add(_buildLatestNewsItem(
@@ -251,7 +253,7 @@ class _NewsPageState extends State<NewsPage> {
               padding: const EdgeInsets.all(8.0),
               decoration: BoxDecoration(
                 color: Colors.black.withOpacity(0.5),
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(10),
                   bottomRight: Radius.circular(10),
                 ),
@@ -301,7 +303,7 @@ class _NewsPageState extends State<NewsPage> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 Text(
                   content,
                   maxLines: 2,

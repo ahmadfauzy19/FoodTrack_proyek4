@@ -1,6 +1,10 @@
+// ignore_for_file: file_names, unnecessary_cast, sort_child_properties_last, sized_box_for_whitespace
+
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'TambahGizi.dart';
+import '../global/uploadImage.dart';
+import 'package:image_picker/image_picker.dart';
 
 class TambahMakanan extends StatefulWidget {
   const TambahMakanan({Key? key}) : super(key: key);
@@ -11,13 +15,14 @@ class TambahMakanan extends StatefulWidget {
 }
 
 class _TambahMakananState extends State<TambahMakanan> {
+  XFile? _image;
   String? _selectedChoice;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tambah Produk'),
+        title: const Text('Tambah Produk'),
         bottom: const PreferredSize(
           preferredSize: Size.fromHeight(0),
           child: Divider(
@@ -26,7 +31,7 @@ class _TambahMakananState extends State<TambahMakanan> {
           ),
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -34,23 +39,23 @@ class _TambahMakananState extends State<TambahMakanan> {
       ),
       body: Center(
         child: Container(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Nama Produk'),
-              SizedBox(height: 5),
+              const Text('Nama Produk'),
+              const SizedBox(height: 5),
               TextField(
                 decoration: InputDecoration(
                   hintText: "Nama Produk",
                   border: OutlineInputBorder(
-                    borderSide: BorderSide(width: 0),
+                    borderSide: const BorderSide(width: 0),
                     borderRadius: BorderRadius.circular(50),
                   ),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 10),
                 ),
               ),
-              SizedBox(height: 0.5),
+              const SizedBox(height: 0.5),
               Row(
                 children: [
                   Radio(
@@ -62,8 +67,8 @@ class _TambahMakananState extends State<TambahMakanan> {
                       });
                     },
                   ),
-                  Text('Makanan'),
-                  SizedBox(width: 20),
+                  const Text('Makanan'),
+                  const SizedBox(width: 20),
                   Radio(
                     value: 'Minuman',
                     groupValue: _selectedChoice,
@@ -73,14 +78,14 @@ class _TambahMakananState extends State<TambahMakanan> {
                       });
                     },
                   ),
-                  Text('Minuman'),
+                  const Text('Minuman'),
                 ],
               ),
-              SizedBox(height: 10),
-              Text("Menguploud Foto"),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
+              const Text("Menguploud Foto"),
+              const SizedBox(height: 10),
               Container(
-                padding: EdgeInsets.all(2),
+                padding: const EdgeInsets.all(2),
                 decoration: BoxDecoration(
                   border:
                       Border.all(color: const Color.fromARGB(255, 69, 68, 68)),
@@ -88,10 +93,12 @@ class _TambahMakananState extends State<TambahMakanan> {
                 ),
                 child: Row(
                   children: [
-                    SizedBox(width: 12),
+                    const SizedBox(width: 12),
                     ElevatedButton(
-                      onPressed: () {},
-                      child: Text(
+                      onPressed: () async {
+                        _image = await UploadImage.getImage(context);
+                      },
+                      child: const Text(
                         "Pilih File",
                         style: TextStyle(
                           color: Colors.black,
@@ -103,7 +110,7 @@ class _TambahMakananState extends State<TambahMakanan> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(0),
                         ),
-                        fixedSize: Size(105, 35),
+                        fixedSize: const Size(105, 35),
                         side: const BorderSide(
                           color: Colors.black,
                           width: 1,
@@ -113,7 +120,7 @@ class _TambahMakananState extends State<TambahMakanan> {
                   ],
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Row(
                 children: [
                   Expanded(
@@ -121,11 +128,12 @@ class _TambahMakananState extends State<TambahMakanan> {
                       decoration: InputDecoration(
                         hintText: "No Barcode",
                         border: OutlineInputBorder(
-                          borderSide: BorderSide(width: 1),
+                          borderSide: const BorderSide(width: 1),
                           borderRadius: BorderRadius.circular(50),
                         ),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                        prefixIcon: Icon(Icons.qr_code_scanner_outlined),
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 10),
+                        prefixIcon: const Icon(Icons.qr_code_scanner_outlined),
                       ),
                     ),
                   ),
@@ -146,7 +154,7 @@ class _TambahMakananState extends State<TambahMakanan> {
                               builder: (context) => const TambahGizi()),
                         );
                       },
-                      child: Text(
+                      child: const Text(
                         "Lanjutkan",
                         style: TextStyle(color: Colors.white),
                       ),

@@ -1,3 +1,6 @@
+// ignore: file_names
+// ignore_for_file: file_names, duplicate_ignore, avoid_print, avoid_unnecessary_containers
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -8,13 +11,17 @@ import 'package:tugas_project4_giziqu/user/Scanresult.dart';
 import 'package:http/http.dart' as http;
 
 class BarcodeScannerScreen extends StatefulWidget {
+  const BarcodeScannerScreen({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _BarcodeScannerScreenState createState() => _BarcodeScannerScreenState();
 }
 
 class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
   String _barcodeScanRes =
       ''; // Variabel untuk menyimpan hasil pemindaian barcode
+  // ignore: unused_field
   bool _isScanning =
       false; // Menandakan apakah pemindaian barcode sedang berlangsung
 
@@ -43,7 +50,9 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
         var response = await http.get(uri);
         if (response.statusCode == 200) {
           var data = json.decode(response.body);
+          // ignore: avoid_print
           print(data);
+          // ignore: use_build_context_synchronously
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -55,6 +64,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
           print('Error: ${response.statusCode}');
         }
       } catch (e) {
+        // ignore: avoid_print
         print('Exception: $e');
       }
 
@@ -76,7 +86,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(''),
+        title: const Text(''),
       ),
       body: Center(
         child: Column(
@@ -85,26 +95,27 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
             Container(
               height: 200,
               width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.grey,
               ),
               child: Column(
                 children: [
-                  Text(
+                  const Text(
                     'Hasil Pemindaian Barcode:',
                     style: TextStyle(fontSize: 18),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Text(
                     _barcodeScanRes,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
             ),
             Container(
-              padding: EdgeInsets.all(20),
-              child: Column(
+              padding: const EdgeInsets.all(20),
+              child: const Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -149,8 +160,9 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: _startBarcodeScan,
         backgroundColor: Colors.green,
-        shape: CircleBorder(side: BorderSide(color: Colors.white, width: 2)),
-        child: Icon(
+        shape:
+            const CircleBorder(side: BorderSide(color: Colors.white, width: 2)),
+        child: const Icon(
           Icons.qr_code_scanner_rounded,
           color: Colors.white,
         ),

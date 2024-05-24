@@ -1,19 +1,37 @@
+// ignore_for_file: unnecessary_null_comparison, unnecessary_cast, unused_field
+
 import 'package:flutter/material.dart';
-import "package:tugas_project4_giziqu/Admin/KelolaArtikel.dart";
-import "TambahMakanan.dart";
-import "KelolaMakanan.dart";
-import "../user/Scanresult.dart";
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:image_picker/image_picker.dart';
+import 'package:tugas_project4_giziqu/LoginPage.dart';
+import '../global/uploadImage.dart';
+import '../global/logout.dart';
+import '../Admin/KelolaArtikel.dart';
+import '../Admin/TambahMakanan.dart';
+import '../Admin/KelolaMakanan.dart';
 
 class AdminPage extends StatefulWidget {
-  const AdminPage({
-    Key? key,
-  }) : super(key: key);
+  final DataUser adminData;
+  const AdminPage({Key? key, required this.adminData}) : super(key: key);
 
   @override
   State<AdminPage> createState() => _AdminPageState();
 }
 
 class _AdminPageState extends State<AdminPage> {
+  XFile? _image;
+  late User? currentUser;
+  late String imageUrl = '';
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    currentUser = FirebaseAuth.instance.currentUser;
+    imageUrl = widget.adminData.foto;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,19 +42,15 @@ class _AdminPageState extends State<AdminPage> {
             Container(
               height: 200,
               padding: const EdgeInsets.all(20),
-              // margin: EdgeInsets.all(30),
               decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage("assets/BG.jpg"),
-                  fit: BoxFit.cover, // Atur sesuai kebutuhan Anda
+                  fit: BoxFit.cover,
                 ),
               ),
               child: Row(
                 children: [
-                  const CircleAvatar(
-                    radius: 30, // Atur radius sesuai kebutuhan Anda
-                    backgroundImage: AssetImage("assets/default.jpeg"),
-                  ),
+                  buildProfileImage(context),
                   Container(
                     margin: const EdgeInsets.all(20),
                     child: Column(
@@ -45,12 +59,15 @@ class _AdminPageState extends State<AdminPage> {
                       children: [
                         Text(
                           semanticsLabel: "hai",
-                          "test",
+                          currentUser != null
+                              ? currentUser!.displayName ?? "Guest"
+                              : "Guest",
                           style: const TextStyle(
-                              fontFamily: "fonts/Schyler-Italic.ttf",
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
+                            fontFamily: "fonts/Schyler-Italic.ttf",
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
                         ),
                         const Text(
                           "Selamat Datang Kembali",
@@ -68,124 +85,167 @@ class _AdminPageState extends State<AdminPage> {
               ),
             ),
             Container(
-                margin: const EdgeInsets.all(30),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Row(
-                      children: [
-                        Text(
-                          "Kelola",
-                          style: TextStyle(
-                              fontFamily: "fonts/Schyler-Italic.ttf",
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Color.fromARGB(255, 0, 0, 0)),
-                        ),
-                      ],
+              margin: const EdgeInsets.all(30),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Kelola",
+                    style: TextStyle(
+                      fontFamily: "fonts/Schyler-Italic.ttf",
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 0, 0, 0),
                     ),
-                    const SizedBox(height: 10), // Jarak antara teks dan tombol
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const TambahMakanan()),
-                        );
-                      },
-                      child: const Row(
-                        children: [
-                          Icon(
-                            Icons.add_circle_outline,
-                            color: Colors.black,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            'Tambah Makanan',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ],
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const KelolaMakanan()),
-                        );
-                      },
-                      child: const Row(
-                        children: [
-                          Icon(
-                            Icons.food_bank_outlined,
-                            color: Colors.black,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            'Kelola Makanan',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ],
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const KelolaMakanan()),
-                        );
-                      },
-                      child: const Row(
-                        children: [
-                          Icon(
-                            Icons.add_circle_outline,
-                            color: Colors.black,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            'Tambah Artikel',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ],
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const KelolaArtikel()),
-                        );
-                      },
-                      child: const Row(
-                        children: [
-                          Icon(
-                            Icons.article_outlined,
-                            color: Colors.black,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            'Kelola Artikel',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                )),
+                  ),
+                  const SizedBox(height: 10),
+                  buildMenuButton(
+                    icon: Icons.add_circle_outline,
+                    text: 'Tambah Makanan',
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const TambahMakanan()),
+                      );
+                    },
+                  ),
+                  buildMenuButton(
+                    icon: Icons.food_bank_outlined,
+                    text: 'Kelola Makanan',
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const KelolaMakanan()),
+                      );
+                    },
+                  ),
+                  buildMenuButton(
+                    icon: Icons.add_circle_outline,
+                    text: 'Tambah Artikel',
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const KelolaMakanan()),
+                      );
+                    },
+                  ),
+                  buildMenuButton(
+                    icon: Icons.article_outlined,
+                    text: 'Kelola Artikel',
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const KelolaArtikel()),
+                      );
+                    },
+                  ),
+                  buildMenuButton(
+                    icon: Icons.logout,
+                    text: 'Keluar',
+                    onPressed: () {
+                      Logout.signOut(context);
+                    },
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
     );
+  }
+
+  Widget buildProfileImage(BuildContext context) {
+    return Stack(
+      children: [
+        GestureDetector(
+          onTap: () async {
+            // ignore: no_leading_underscores_for_local_identifiers
+            XFile? _image = await UploadImage.getImage(context);
+            if (_image != null) {
+              setState(() {
+                isLoading =
+                    true; // Set loading menjadi true saat mulai mengunggah
+              });
+              // ignore: use_build_context_synchronously
+              String? message = await UploadImage.uploadImage(
+                  context, _image, widget.adminData.username as String);
+              if (message != null) {
+                setState(() {
+                  imageUrl = _image.path.split('/').last;
+                });
+              }
+              setState(() {
+                isLoading = false;
+              });
+            }
+          },
+          child: FutureBuilder<String>(
+            future: getImageDownloadUrl(),
+            builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+              if (isLoading) {
+                return const CircularProgressIndicator(); // Tampilkan loading jika sedang mengunggah
+              } else if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator();
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else if (snapshot.hasData) {
+                return CircleAvatar(
+                  radius: 30,
+                  backgroundImage: NetworkImage(snapshot.data!),
+                );
+              } else {
+                return const CircleAvatar(
+                  radius: 30,
+                  backgroundImage: AssetImage("assets/default.jpeg"),
+                );
+              }
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildMenuButton({
+    required IconData icon,
+    required String text,
+    required VoidCallback onPressed,
+  }) {
+    return TextButton(
+      onPressed: onPressed,
+      child: Row(
+        children: [
+          Icon(
+            icon,
+            color: Colors.black,
+          ),
+          const SizedBox(
+            width: 10,
+          ),
+          Text(
+            text,
+            style: const TextStyle(color: Colors.black),
+          )
+        ],
+      ),
+    );
+  }
+
+  Future<String> getImageDownloadUrl() async {
+    try {
+      print("image bos = $imageUrl");
+      final downloadUrl = await firebase_storage.FirebaseStorage.instance
+          .ref('Images/Users/$imageUrl')
+          .getDownloadURL();
+      return downloadUrl;
+    } catch (e) {
+      print('Error getting download URL: $e');
+      rethrow;
+    }
   }
 }

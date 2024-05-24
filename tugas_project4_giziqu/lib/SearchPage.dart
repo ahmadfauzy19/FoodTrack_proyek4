@@ -22,6 +22,7 @@ class _SearchPageState extends State<SearchPage> {
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
         print(data);
+        // ignore: use_build_context_synchronously
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -42,24 +43,24 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Center(
+            const Center(
               child: Text(
                 'Cari Makanan',
                 style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
               ),
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             TextField(
               controller: _searchController,
               decoration: InputDecoration(
@@ -67,12 +68,12 @@ class _SearchPageState extends State<SearchPage> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-                prefixIcon: Icon(Icons.search),
+                contentPadding: const EdgeInsets.symmetric(
+                    vertical: 12.0, horizontal: 16.0),
+                prefixIcon: const Icon(Icons.search),
               ),
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
                 String keyword = _searchController.text.trim();
@@ -85,7 +86,7 @@ class _SearchPageState extends State<SearchPage> {
                   borderRadius: BorderRadius.circular(30.0),
                 ),
               ),
-              child: Text('Search'),
+              child: const Text('Search'),
             ),
           ],
         ),

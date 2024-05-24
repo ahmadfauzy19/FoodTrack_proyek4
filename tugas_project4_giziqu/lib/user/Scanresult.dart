@@ -12,13 +12,13 @@ class FoodImage extends StatelessWidget {
       future: getImageDownloadUrl(),
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else if (snapshot.hasData) {
           return Image.network(snapshot.data!);
         } else {
-          return Text('No image available');
+          return const Text('No image available');
         }
       },
     );
@@ -49,27 +49,27 @@ class Scanresult extends StatelessWidget {
     Map<String, dynamic> nutrition = food['gizi'] ?? {};
 
     return Scaffold(
-      appBar: AppBar(title: Text('Detail Makanan')),
+      appBar: AppBar(title: const Text('Detail Makanan')),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               food['nama_makanan'] ?? 'Nama Makanan',
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             // Gunakan widget FoodImage di sini untuk menampilkan gambar
             food['foto'] != null
                 ? FoodImage(imageUrl: food['foto'])
-                : Container(child: Text('No image')),
-            SizedBox(height: 20),
-            Text(
+                : Container(child: const Text('No image')),
+            const SizedBox(height: 20),
+            const Text(
               'Informasi Nilai Gizi',
               style: TextStyle(fontSize: 22),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Container(
               height: 200,
               decoration: BoxDecoration(
@@ -92,12 +92,12 @@ class Scanresult extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 20),
-            Text(
+            const SizedBox(height: 20),
+            const Text(
               'Produk Terkait',
               style: TextStyle(fontSize: 22),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -105,7 +105,7 @@ class Scanresult extends StatelessWidget {
                 _buildRelatedProductItem('Product 2'),
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -119,7 +119,7 @@ class Scanresult extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30.0),
                 ),
               ),
-              child: Text('Bandingkan'),
+              child: const Text('Bandingkan'),
             ),
           ],
         ),
@@ -134,10 +134,10 @@ class Scanresult extends StatelessWidget {
           title: Text(label),
           trailing: Text(
             value != null ? '$value' : 'N/A',
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
-        Divider(
+        const Divider(
           color: Colors.black12, // Ubah warna sesuai kebutuhan Anda
           thickness: 1.0, // Ubah ketebalan sesuai kebutuhan Anda
           height: 0.0, // Atur tinggi sesuai kebutuhan Anda
@@ -177,7 +177,7 @@ class Scanresult extends StatelessWidget {
               padding: const EdgeInsets.all(8),
               child: Text(
                 name,
-                style: TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white),
                 textAlign: TextAlign.center,
               ),
             ),

@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 class KelolaMakanan extends StatefulWidget {
@@ -29,17 +31,17 @@ class _KelolaMakananState extends State<KelolaMakanan> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Kelola Makanan"),
+        title: const Text("Kelola Makanan"),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15), color: Colors.grey),
           child: Table(
             border: TableBorder.all(borderRadius: BorderRadius.circular(15)),
             children: [
-              TableRow(
+              const TableRow(
                 children: [
                   TableCell(
                     child: Text(
@@ -70,12 +72,12 @@ class _KelolaMakananState extends State<KelolaMakanan> {
                         children: [
                           IconButton(
                             onPressed: () {},
-                            icon: Icon(Icons.edit),
+                            icon: const Icon(Icons.edit),
                             color: Colors.blue,
                           ),
                           IconButton(
                             onPressed: () {},
-                            icon: Icon(Icons.delete),
+                            icon: const Icon(Icons.delete),
                             color: Colors.red,
                           )
                         ],
