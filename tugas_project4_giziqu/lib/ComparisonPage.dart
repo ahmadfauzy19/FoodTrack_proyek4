@@ -6,26 +6,26 @@ class ComparisonPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Center(
+            const Center(
               child: Text(
                 'Bandingkan Produk',
                 style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
               ),
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             ConstrainedBox(
-              constraints: BoxConstraints(maxHeight: 500),
+              constraints: const BoxConstraints(maxHeight: 500),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -37,17 +37,18 @@ class ComparisonPage extends StatelessWidget {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30.0),
                         ),
-                        contentPadding: EdgeInsets.symmetric(
+                        contentPadding: const EdgeInsets.symmetric(
                             vertical: 12.0, horizontal: 16.0),
-                        prefixIcon: Icon(Icons.search), // Icon search di sini
+                        prefixIcon:
+                            const Icon(Icons.search), // Icon search di sini
                       ),
                     ),
                   ),
-                  SizedBox(width: 5.0),
+                  const SizedBox(width: 5.0),
                 ],
               ),
             ),
-            SizedBox(height: 80.0),
+            const SizedBox(height: 80.0),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 60.0),
               child: ElevatedButton(
@@ -59,7 +60,7 @@ class ComparisonPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(30.0),
                   ),
                 ),
-                child: Text('Search'),
+                child: const Text('Search'),
               ),
             ),
           ],

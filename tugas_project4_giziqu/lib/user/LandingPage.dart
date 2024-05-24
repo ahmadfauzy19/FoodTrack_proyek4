@@ -23,6 +23,7 @@ class _LandingPageState extends State<LandingPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(currentUser);
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 102, 183, 65),
       body: SingleChildScrollView(

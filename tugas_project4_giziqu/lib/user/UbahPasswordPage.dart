@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable, file_names, non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 
 class UbahPasswordPage extends StatelessWidget {
@@ -7,7 +9,7 @@ class UbahPasswordPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Ubah Password"),
+        title: const Text("Ubah Password"),
       ),
       body: Center(
         child: Column(
@@ -27,21 +29,21 @@ class UbahPasswordPage extends StatelessWidget {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: Text('Konfirmasi'),
-                      content:
-                          Text('Apakah Anda yakin ingin mengubah password?'),
+                      title: const Text('Konfirmasi'),
+                      content: const Text(
+                          'Apakah Anda yakin ingin mengubah password?'),
                       actions: <Widget>[
                         TextButton(
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
-                          child: Text('Batal'),
+                          child: const Text('Batal'),
                         ),
                         TextButton(
                           onPressed: () {
                             Navigator.of(context).pop(); //
                           },
-                          child: Text('Ubah'),
+                          child: const Text('Ubah'),
                         ),
                       ],
                     );
@@ -78,14 +80,14 @@ Widget EmailChangeForm() {
   String password_lama = "";
   String validasi = "";
   return Container(
-    margin: EdgeInsets.all(20),
+    margin: const EdgeInsets.all(20),
     child: Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Masukkan Password Yang Lama"),
+        const Text("Masukkan Password Yang Lama"),
         Container(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
             color: const Color.fromARGB(26, 145, 142, 142),
@@ -96,9 +98,9 @@ Widget EmailChangeForm() {
             },
           ),
         ),
-        Text("Masukkan Password Yang Baru"),
+        const Text("Masukkan Password Yang Baru"),
         Container(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
             color: const Color.fromARGB(26, 145, 142, 142),
@@ -109,9 +111,9 @@ Widget EmailChangeForm() {
             },
           ),
         ),
-        Text("Validasi Password Yang Baru"),
+        const Text("Validasi Password Yang Baru"),
         Container(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
             color: const Color.fromARGB(26, 145, 142, 142),

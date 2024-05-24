@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 class KelolaArtikel extends StatefulWidget {
@@ -76,7 +78,7 @@ class _KelolaArtikelState extends State<KelolaArtikel> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Kelola Artikel"),
+        title: const Text("Kelola Artikel"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),

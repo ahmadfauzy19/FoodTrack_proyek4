@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_final_fields, library_private_types_in_public_api, avoid_print, file_names
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -5,6 +7,8 @@ import 'package:tugas_project4_giziqu/user/Scanresult.dart';
 import 'global/link.dart';
 
 class SearchPage extends StatefulWidget {
+  const SearchPage({super.key});
+
   @override
   _SearchPageState createState() => _SearchPageState();
 }
@@ -21,7 +25,7 @@ class _SearchPageState extends State<SearchPage> {
       var response = await http.get(uri);
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
-        print(data);
+        // ignore: use_build_context_synchronously
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -42,24 +46,24 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Center(
+            const Center(
               child: Text(
                 'Cari Makanan',
                 style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
               ),
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             TextField(
               controller: _searchController,
               decoration: InputDecoration(
@@ -67,12 +71,12 @@ class _SearchPageState extends State<SearchPage> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-                prefixIcon: Icon(Icons.search),
+                contentPadding: const EdgeInsets.symmetric(
+                    vertical: 12.0, horizontal: 16.0),
+                prefixIcon: const Icon(Icons.search),
               ),
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
                 String keyword = _searchController.text.trim();
@@ -85,7 +89,7 @@ class _SearchPageState extends State<SearchPage> {
                   borderRadius: BorderRadius.circular(30.0),
                 ),
               ),
-              child: Text('Search'),
+              child: const Text('Search'),
             ),
           ],
         ),

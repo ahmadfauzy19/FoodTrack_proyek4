@@ -1,27 +1,86 @@
+// ignore_for_file: use_build_context_synchronously, file_names, avoid_print, unused_element, unused_local_variable
+
+// import 'dart:convert';
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
+// ignore: unnecessary_import
 import 'package:flutter/widgets.dart';
 import 'package:tugas_project4_giziqu/user_auth/FirebaseAuth.dart';
-
 import 'global/link.dart';
 import 'package:flutter/material.dart';
 import 'Admin/AdminPage.dart';
-import 'user/LandingPage.dart';
+// import 'user/LandingPage.dart';
 import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
   // ignore: use_key_in_widget_constructors
   const LoginPage({Key? key});
 
+  static Future<DataUser?> getDataUser(String email) async {
+    final Uri uri = Uri.parse('${link}api/getDataUser');
+    print(email);
+
+    try {
+      final response = await http.post(
+        uri,
+        body: {
+          'email': email,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final responseData = json.decode(response.body);
+        final dataUser = DataUser.fromJson(responseData['user']);
+        return dataUser;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      print('Error fetching user data: $error');
+      return null;
+    }
+  }
+
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
+class DataUser {
+  final String name;
+  final String email;
+  final String role;
+  final String username;
+  final String foto;
+
+  DataUser(
+      {required this.name,
+      required this.email,
+      required this.role,
+      required this.username,
+      required this.foto});
+
+  factory DataUser.fromJson(Map<String, dynamic> json) {
+    return DataUser(
+      name: json['name'],
+      email: json['email'],
+      role: json['role'],
+      username: json['username'],
+      foto: json['foto'],
+    );
+  }
+
+  @override
+  String toString() {
+    return 'User{name: $name, email: $email, role: $role, username: $username, foto: $foto}';
+  }
+}
+
 class _LoginPageState extends State<LoginPage>
     with SingleTickerProviderStateMixin {
+  // ignore: unused_field
   final FirebaseAuthService _auth = FirebaseAuthService();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   late TabController _tabController;
 
@@ -86,74 +145,29 @@ class _LoginPageState extends State<LoginPage>
     return "gagal";
   }
 
-  Future<void> loginUser(String username, String password) async {
-    final Uri uri = Uri.parse('${link}api/login');
-    print(username);
+  Future<DataUser?> getDataUser(String email) async {
+    final Uri uri = Uri.parse('${link}api/getDataUser');
+    print(email);
+
     try {
       final response = await http.post(
         uri,
         body: {
-          'username': username,
-          'password': password,
+          'email': email,
         },
       );
+
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
-        String role = responseData['user']['role'];
-        String name = responseData['user']['name'];
-
-        // Periksa jika 'name' tidak null sebelum digunakan
-        String welcomeMessage = role == "admin"
-            ? 'Login Berhasil, Selamat datang Admin'
-            : 'Login Berhasil, Selamat datang, $name';
-        if (role == 'admin') {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text('Informasi'),
-                content: Text(welcomeMessage),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => AdminPage()),
-                      );
-                    },
-                    child: const Text('OK'),
-                  ),
-                ],
-              );
-            },
-          );
-        } else {
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: const Text('Informasi'),
-                  content: Text(welcomeMessage),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => LandingPage()),
-                        );
-                      },
-                      child: const Text('OK'),
-                    ),
-                  ],
-                );
-              });
-        }
+        final dataUser = DataUser.fromJson(responseData['user']);
+        return dataUser;
       } else {
         _showDialog('Login gagal: ${response.body}');
+        return null;
       }
     } catch (error) {
       _showDialog('Kesalahan saat melakukan login: $error');
+      return null;
     }
   }
 
@@ -192,7 +206,8 @@ class _LoginPageState extends State<LoginPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+      resizeToAvoidBottomInset: false,
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       body: Center(
         child: Column(children: [
           const SizedBox(height: 70.0),
@@ -201,7 +216,7 @@ class _LoginPageState extends State<LoginPage>
               padding: const EdgeInsets.all(20),
               margin: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Color.fromARGB(255, 255, 255, 255),
+                color: const Color.fromARGB(255, 255, 255, 255),
                 borderRadius: BorderRadius.circular(30),
                 border: Border.all(
                   color: Colors.grey,
@@ -296,7 +311,7 @@ class _LoginPageState extends State<LoginPage>
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 100,
           )
         ]),
@@ -308,41 +323,38 @@ class _LoginPageState extends State<LoginPage>
     String email = _emailController.text;
     String password = _passwordController.text;
 
-    try {
-      UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      // Login berhasil, arahkan ke halaman beranda
-      Navigator.pushNamed(context, "/landingpage");
-    } catch (e) {
-      // Jika login gagal, tampilkan pesan kesalahan
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Login Gagal"),
-            content: Text("Email atau password salah. Silakan coba lagi."),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(); // Tutup dialog
-                },
-                child: Text("OK"),
-              ),
-            ],
+    DataUser? dataUser = await getDataUser(email);
+
+    if (dataUser != null) {
+      try {
+        // Masuk dengan menggunakan email dan password yang diperoleh dari DataUser
+        UserCredential userCredential =
+            await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: dataUser.email,
+          password: password,
+        );
+
+        if (dataUser.role == "admin") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AdminPage(adminData: dataUser),
+            ),
           );
-        },
-      );
-      print("Error: $e");
+        } else {
+          Navigator.pushNamed(context, "/landingpage");
+        }
+      } catch (e) {
+        // Tangani kesalahan masuk
+        _showDialog('Kesalahan saat melakukan login: $e');
+      }
     }
   }
 
   Widget _buildLoginForm() {
     return Container(
       padding: const EdgeInsets.all(10),
-      margin: const EdgeInsets.all(10),
+      // margin: const EdgeInsets.all(10),
       child: Column(
         children: [
           TextField(

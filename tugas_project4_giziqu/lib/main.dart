@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'GiziQuApp.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -6,7 +8,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   try {
     await Firebase.initializeApp(
-        options: FirebaseOptions(
+        options: const FirebaseOptions(
       apiKey: "AIzaSyAxJCy3xkHF1iOG9ugk8Jb7F4kxwEEmHjo",
       authDomain: "giziqu-14e75.firebaseapp.com",
       projectId: "giziqu-14e75",
