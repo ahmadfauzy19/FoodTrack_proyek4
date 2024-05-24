@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_final_fields, library_private_types_in_public_api
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -5,6 +7,8 @@ import 'package:tugas_project4_giziqu/user/Scanresult.dart';
 import 'global/link.dart';
 
 class SearchPage extends StatefulWidget {
+  const SearchPage({super.key});
+
   @override
   _SearchPageState createState() => _SearchPageState();
 }
@@ -21,7 +25,6 @@ class _SearchPageState extends State<SearchPage> {
       var response = await http.get(uri);
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
-        print(data);
         // ignore: use_build_context_synchronously
         Navigator.push(
           context,

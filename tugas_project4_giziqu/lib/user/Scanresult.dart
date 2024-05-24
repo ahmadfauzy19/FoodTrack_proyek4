@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_unnecessary_containers, avoid_print
+
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 
@@ -32,7 +34,7 @@ class FoodImage extends StatelessWidget {
       return downloadUrl;
     } catch (e) {
       print('Error getting download URL: $e');
-      throw e;
+      rethrow;
     }
   }
 }
