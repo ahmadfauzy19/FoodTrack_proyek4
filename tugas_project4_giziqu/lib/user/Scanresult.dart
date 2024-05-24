@@ -1,5 +1,6 @@
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
+import 'package:tugas_project4_giziqu/SearchComparisonPage.dart';
 
 class FoodImage extends StatelessWidget {
   final String imageUrl;
@@ -111,7 +112,7 @@ class Scanresult extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => Scanresult(data: data)),
+                      builder: (context) => SearchComparisonPage(data: data)),
                 );
               },
               style: ElevatedButton.styleFrom(
