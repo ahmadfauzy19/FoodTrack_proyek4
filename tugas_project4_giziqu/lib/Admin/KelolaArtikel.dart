@@ -1,6 +1,10 @@
-// ignore_for_file: file_names
+// ignore_for_file: unnecessary_const, avoid_print, file_names
 
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import '../global/link.dart';
+import '../global/LoadingProgress.dart';
 
 class KelolaArtikel extends StatefulWidget {
   const KelolaArtikel({Key? key}) : super(key: key);
@@ -10,20 +14,108 @@ class KelolaArtikel extends StatefulWidget {
 }
 
 class _KelolaArtikelState extends State<KelolaArtikel> {
-  final List<Map<String, String>> artikelList = [
-    {'judulartikel': 'Sebagai Manusia Perlu Berpikir', 'jenis': 'Pemikiran'},
-    {'judulartikel': 'Makanan Sehat untuk Otak', 'jenis': 'Kesehatan'},
-    {'judulartikel': 'Belajar dari Kegagalan', 'jenis': 'Pembelajaran'},
-  ];
+  List<dynamic> _artikelList = [];
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    getDataArtikel();
+  }
+
+  Future<void> getDataArtikel() async {
+    try {
+      final response =
+          await http.get(Uri.parse('${link}api/read_semua_artikel_makanan'));
+      if (response.statusCode == 200) {
+        final List<dynamic> responseData = json.decode(response.body);
+
+        setState(() {
+          _artikelList =
+              responseData.where((element) => element != null).toList();
+          _isLoading = false;
+        });
+        print(_artikelList);
+      } else {
+        throw Exception('Failed to load data');
+      }
+    } catch (error) {
+      print('Error: $error');
+      _showDialog('Error occurred: $error');
+    }
+  }
+
+  Future<void> _deleteItem(String id) async {
+    final Uri uri = Uri.parse("${link}api/delete_artikel_makanan?id=$id");
+    var response = await http.get(uri);
+    if (response.statusCode == 200) {
+      setState(() {
+        _artikelList.removeWhere((item) => item['id'] == id);
+      });
+    }
+
+    Navigator.of(context).pop();
+  }
+
+  Future<void> _showDeleteConfirmation(String id) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Konfirmasi'),
+          content: const Text('Apakah Anda yakin ingin menghapus data ini?'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Batal'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+              child: const Text('Hapus'),
+              onPressed: () => _deleteItem(id),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Informasi'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   Widget buildTable() {
     return Table(
       border: TableBorder.all(),
       children: [
         buildTableRow(['Judul Artikel', 'Jenis', 'Aksi'], isHeader: true),
-        for (var artikel in artikelList)
+        for (var artikel in _artikelList)
           buildTableRow(
-              [artikel['judulartikel']!, artikel['jenis']!, buildActionCell()])
+            [
+              artikel['nama_artikel'],
+              artikel['jenis'],
+              buildActionCell(artikel['id'])
+            ],
+          )
       ],
     );
   }
@@ -53,7 +145,7 @@ class _KelolaArtikelState extends State<KelolaArtikel> {
     );
   }
 
-  Widget buildActionCell() {
+  Widget buildActionCell(String id) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
@@ -65,7 +157,9 @@ class _KelolaArtikelState extends State<KelolaArtikel> {
             color: Colors.blue,
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              _showDeleteConfirmation(id);
+            },
             icon: const Icon(Icons.delete),
             color: Colors.red,
           ),
@@ -76,20 +170,28 @@ class _KelolaArtikelState extends State<KelolaArtikel> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Kelola Artikel"),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Container(
-          decoration: const BoxDecoration(
-            // borderRadius: BorderRadius.circular(15),
-            color: Colors.grey,
-          ),
-          child: buildTable(),
+    if (_isLoading) {
+      return Container(
+        color: const Color.fromARGB(255, 118, 192, 122),
+        child: const LoadingDialog(
+          pesan: "sedang mengambil data",
         ),
-      ),
-    );
+      );
+    } else {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text("Kelola Artikel"),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Container(
+            decoration: const BoxDecoration(
+              color: Colors.grey,
+            ),
+            child: buildTable(),
+          ),
+        ),
+      );
+    }
   }
 }

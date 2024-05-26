@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_project4_giziqu/Admin/AdminPage.dart';
+import 'package:tugas_project4_giziqu/LoginPage.dart';
 import 'package:tugas_project4_giziqu/SplashScreen.dart';
 import 'package:tugas_project4_giziqu/user/LandingPage.dart';
 
@@ -15,9 +16,10 @@ class _GiziQuAppState extends State<GiziQuApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Shrine',
-      initialRoute: '/login',
+      initialRoute: '/start',
       routes: {
-        '/login': (BuildContext context) => const SplashScreen(),
+        '/start': (BuildContext context) => const SplashScreen(),
+        '/login': (BuildContext context) => const LoginPage(),
         '/landingpage': (BuildContext context) => const LandingPage(),
         // '/adminpage': (BuildContext context) => const AdminPage(),
       },
