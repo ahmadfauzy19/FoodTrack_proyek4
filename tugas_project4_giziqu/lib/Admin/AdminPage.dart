@@ -1,10 +1,12 @@
-// ignore_for_file: unnecessary_null_comparison, unnecessary_cast, unused_field
+// ignore_for_file: unnecessary_null_comparison, unnecessary_cast, unused_field, avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:image_picker/image_picker.dart';
+import 'package:tugas_project4_giziqu/Admin/TambahArtikel.dart';
 import 'package:tugas_project4_giziqu/LoginPage.dart';
+// import '../global/link.dart';
 import '../global/uploadImage.dart';
 import '../global/logout.dart';
 import '../Admin/KelolaArtikel.dart';
@@ -128,7 +130,7 @@ class _AdminPageState extends State<AdminPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const KelolaMakanan()),
+                            builder: (context) => const TambahArtikel()),
                       );
                     },
                   ),
@@ -238,7 +240,6 @@ class _AdminPageState extends State<AdminPage> {
 
   Future<String> getImageDownloadUrl() async {
     try {
-      print("image bos = $imageUrl");
       final downloadUrl = await firebase_storage.FirebaseStorage.instance
           .ref('Images/Users/$imageUrl')
           .getDownloadURL();

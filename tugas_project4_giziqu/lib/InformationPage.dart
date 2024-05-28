@@ -35,7 +35,7 @@ class _InformationPageState extends State<InformationPage> {
   _navigateToLoginPage(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => LoginPage()),
+      MaterialPageRoute(builder: (context) => const LoginPage()),
     );
   }
 
@@ -55,7 +55,7 @@ class _InformationPageState extends State<InformationPage> {
 
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/frontbackground.png"),
             fit: BoxFit.cover,
@@ -63,11 +63,11 @@ class _InformationPageState extends State<InformationPage> {
         ),
         child: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(height: 90.0),
+                const SizedBox(height: 90.0),
                 Column(
                   children: [
                     Image.asset(
@@ -75,23 +75,23 @@ class _InformationPageState extends State<InformationPage> {
                       height: 300,
                       width: 300,
                     ),
-                    SizedBox(height: 80),
+                    const SizedBox(height: 80),
                     Text(
                       _titles[_currentPageIndex],
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text(
                   _texts[_currentPageIndex],
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                 ),
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -105,15 +105,16 @@ class _InformationPageState extends State<InformationPage> {
                           });
                         },
                         style: TextButton.styleFrom(
-                          backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                          backgroundColor:
+                              const Color.fromARGB(255, 255, 255, 255),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20.0),
                           ),
                         ),
-                        child: Text(
+                        child: const Text(
                           "Previous",
                           style: TextStyle(
-                            color: const Color.fromARGB(255, 17, 17, 17),
+                            color: Color.fromARGB(255, 17, 17, 17),
                             fontSize: 15,
                           ),
                         ),
@@ -130,7 +131,7 @@ class _InformationPageState extends State<InformationPage> {
                             borderRadius: BorderRadius.circular(20.0),
                           ),
                         ),
-                        child: Text(
+                        child: const Text(
                           "Next",
                           style: TextStyle(
                             color: Color.fromARGB(255, 32, 122, 8),
