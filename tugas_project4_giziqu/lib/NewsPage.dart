@@ -8,6 +8,7 @@ import 'SearchPage.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 import 'package:tugas_project4_giziqu/global/link.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class FoodImage extends StatelessWidget {
   final String imageUrl;
@@ -83,6 +84,15 @@ class _NewsPageState extends State<NewsPage> {
       print(_newsData);
     } else {
       throw Exception('Failed to load news');
+    }
+  }
+
+  Future<void> _launchURL(String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    } else {
+      throw 'Could not launch $url';
     }
   }
 
@@ -202,6 +212,7 @@ class _NewsPageState extends State<NewsPage> {
             context,
             image: _newsData[i]['foto'],
             title: _newsData[i]['nama_artikel'],
+            url: _newsData[i]['link'],
           ));
         }
       }
@@ -219,6 +230,7 @@ class _NewsPageState extends State<NewsPage> {
             image: _newsData[i]['foto'],
             title: _newsData[i]['nama_artikel'],
             content: _newsData[i]['deskripsi'],
+            url: _newsData[i]['link'],
           ));
         }
       }
@@ -229,90 +241,103 @@ class _NewsPageState extends State<NewsPage> {
   }
 
   Widget _buildNewsCard(BuildContext context,
-      {required String image, required String title}) {
-    return Container(
-      margin: const EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Stack(
-        children: [
-          Center(
-            child: SizedBox(
-              width: double.infinity,
-              height: double.infinity,
-              child:
-                  FoodImage(imageUrl: image), // Menggunakan FoodImage di sini
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              padding: const EdgeInsets.all(8.0),
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.5),
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(10),
-                  bottomRight: Radius.circular(10),
-                ),
-              ),
-              child: Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 20,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
+      {required String image, required String title, required String url}) {
+    return GestureDetector(
+      onTap: () {
+        // Handle the tap gesture here
+        _launchURL(url);
+      },
+      child: Container(
+        margin: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Stack(
+          children: [
+            Center(
+              child: SizedBox(
+                width: double.infinity,
+                height: double.infinity,
+                child:
+                    FoodImage(imageUrl: image), // Menggunakan FoodImage di sini
               ),
             ),
-          ),
-        ],
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                padding: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.5),
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(10),
+                    bottomRight: Radius.circular(10),
+                  ),
+                ),
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildLatestNewsItem(BuildContext context,
-      {required String image, required String title, required String content}) {
-    return Container(
-      margin: const EdgeInsets.all(8.0),
-      padding: const EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        crossAxisAlignment:
-            CrossAxisAlignment.center, // Ubah menjadi CrossAxisAlignment.center
-        children: [
-          Container(
-            width: 120,
-            height: 120,
-            child: FoodImage(imageUrl: image), // Gunakan FoodImage di sini
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 5),
-                Text(
-                  content,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
+      {required String image,
+      required String title,
+      required String content,
+      required String url}) {
+    return GestureDetector(
+      onTap: () {
+        _launchURL(url);
+      },
+      child: Container(
+        margin: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              width: 120,
+              height: 120,
+              child: FoodImage(imageUrl: image), // Gunakan FoodImage di sini
             ),
-          ),
-        ],
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    content,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

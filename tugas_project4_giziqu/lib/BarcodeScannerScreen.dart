@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:tugas_project4_giziqu/global/link.dart';
+import 'package:tugas_project4_giziqu/user/ScanBarangPage.dart';
 import 'package:tugas_project4_giziqu/user/Scanresult.dart';
 import 'package:http/http.dart' as http;
 
@@ -141,7 +142,13 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ScanBarangPage()),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                     ),

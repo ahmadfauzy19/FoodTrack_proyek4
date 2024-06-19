@@ -46,6 +46,7 @@ dependencies:
   cloud_firestore: ^4.15.8
   firebase_database: ^10.4.9
   image_picker: ^1.0.8
+  url_launcher: ^6.0.20
   # firebase_auth: ^4.17.8
   # firebase_core: ^2.27.0
 
@@ -86,6 +87,7 @@ flutter:
     - assets/frontbackground.png
     - assets/default.jpeg
     - assets/BG.jpg
+    - assets/test.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

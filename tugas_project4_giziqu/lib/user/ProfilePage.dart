@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import "package:tugas_project4_giziqu/Admin/KelolaArtikel.dart";
 import 'package:tugas_project4_giziqu/user/AkunPage.dart';
 import 'package:tugas_project4_giziqu/BarcodeScannerScreen.dart';
+import 'package:tugas_project4_giziqu/user/DataSayaPage.dart';
+import 'package:tugas_project4_giziqu/user/KebutuhanGiziPage.dart';
 import 'package:tugas_project4_giziqu/user/LandingPage.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -109,11 +111,11 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     TextButton(
                       onPressed: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //       builder: (context) => KelolaMakanan()),
-                        // );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => DataSayaPage()),
+                        );
                       },
                       child: const Row(
                         children: [
@@ -136,7 +138,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const KelolaArtikel()),
+                              builder: (context) => KebutuhanGiziPage()),
                         );
                       },
                       child: const Row(
