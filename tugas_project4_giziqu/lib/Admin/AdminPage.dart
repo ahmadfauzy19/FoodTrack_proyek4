@@ -1,5 +1,5 @@
-// ignore_for_file: unnecessary_null_comparison, unnecessary_cast, unused_field, avoid_print
-
+// ignore_for_file: unnecessary_null_comparison, unnecessary_cast, unused_field, avoid_print, file_names
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -196,10 +196,7 @@ class _AdminPageState extends State<AdminPage> {
               } else if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
               } else if (snapshot.hasData) {
-                return CircleAvatar(
-                  radius: 30,
-                  backgroundImage: NetworkImage(snapshot.data!),
-                );
+                return AvatarWithCustomBorder(imageUrl: snapshot.data!);
               } else {
                 return const CircleAvatar(
                   radius: 30,
@@ -248,5 +245,84 @@ class _AdminPageState extends State<AdminPage> {
       print('Error getting download URL: $e');
       rethrow;
     }
+  }
+}
+
+class AvatarWithCustomBorder extends StatelessWidget {
+  final String imageUrl;
+
+  const AvatarWithCustomBorder({Key? key, required this.imageUrl})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        CustomPaint(
+          size: const Size(70, 70),
+          painter: CircleBorderPainter(),
+        ),
+        CircleAvatar(
+          radius: 30,
+          backgroundImage: NetworkImage(imageUrl),
+        ),
+      ],
+    );
+  }
+}
+
+class CircleBorderPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final Paint paint = Paint()
+      ..strokeWidth = 4.0
+      ..style = PaintingStyle.stroke;
+
+    final double radius = size.width / 2;
+
+    // Draw top right border (blue)
+    paint.color = Colors.blueAccent;
+    canvas.drawArc(
+      Rect.fromCircle(center: Offset(radius, radius), radius: radius),
+      pi / 4, // Start angle
+      pi / 2, // Sweep angle
+      false,
+      paint,
+    );
+
+    // Draw top right border (blue)
+    paint.color = Colors.blueAccent;
+    canvas.drawArc(
+      Rect.fromCircle(center: Offset(radius, radius), radius: radius),
+      -3 * pi / 4, // Start angle
+      pi / 2, // Sweep angle
+      false,
+      paint,
+    );
+
+    // Draw bottom left border (orange)
+    paint.color = Colors.orange;
+    canvas.drawArc(
+      Rect.fromCircle(center: Offset(radius, radius), radius: radius),
+      3 * pi / 4, // Start angle
+      pi / 2, // Sweep angle
+      false,
+      paint,
+    );
+
+    paint.color = Colors.orange;
+    canvas.drawArc(
+      Rect.fromCircle(center: Offset(radius, radius), radius: radius),
+      -pi / 4, // Start angle
+      pi / 2, // Sweep angle
+      false,
+      paint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
   }
 }

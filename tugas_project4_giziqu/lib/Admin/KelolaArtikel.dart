@@ -1,10 +1,11 @@
-// ignore_for_file: unnecessary_const, avoid_print, file_names
+// ignore_for_file: unnecessary_const, avoid_print, file_names, use_build_context_synchronously
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../global/link.dart';
 import '../global/LoadingProgress.dart';
+import 'EditArtikel.dart';
 
 class KelolaArtikel extends StatefulWidget {
   const KelolaArtikel({Key? key}) : super(key: key);
@@ -67,14 +68,17 @@ class _KelolaArtikelState extends State<KelolaArtikel> {
           content: const Text('Apakah Anda yakin ingin menghapus data ini?'),
           actions: <Widget>[
             TextButton(
-              child: const Text('Batal'),
+              child: const Text(
+                'Batal',
+                style: TextStyle(color: Colors.black),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-              child: const Text('Hapus'),
+              child: const Text('Hapus', style: TextStyle(color: Colors.white)),
               onPressed: () => _deleteItem(id),
             ),
           ],
@@ -152,7 +156,14 @@ class _KelolaArtikelState extends State<KelolaArtikel> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EditArtikel(id: id),
+                ),
+              );
+            },
             icon: const Icon(Icons.edit),
             color: Colors.blue,
           ),
@@ -172,7 +183,7 @@ class _KelolaArtikelState extends State<KelolaArtikel> {
   Widget build(BuildContext context) {
     if (_isLoading) {
       return Container(
-        color: const Color.fromARGB(255, 118, 192, 122),
+        color: const Color.fromARGB(255, 63, 181, 69),
         child: const LoadingDialog(
           pesan: "sedang mengambil data",
         ),
