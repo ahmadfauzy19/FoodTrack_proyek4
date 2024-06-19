@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously, unnecessary_brace_in_string_interps, library_private_types_in_public_api, file_names
+// ignore_for_file: use_build_context_synchronously, unnecessary_brace_in_string_interps, library_private_types_in_public_api, file_names, avoid_print
 
 // import 'dart:convert';
 // import 'dart:math';
