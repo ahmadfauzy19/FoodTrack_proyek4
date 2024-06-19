@@ -7,9 +7,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tugas_project4_giziqu/user_auth/FirebaseAuth.dart';
 import 'global/link.dart';
+import 'global/LoadingProgress.dart';
 import 'package:flutter/material.dart';
 import 'Admin/AdminPage.dart';
-// import 'user/LandingPage.dart';
 import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
@@ -81,6 +81,8 @@ class _LoginPageState extends State<LoginPage>
   final FirebaseAuthService _auth = FirebaseAuthService();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  // ignore: unused_field
+  bool _isLoading = true;
 
   late TabController _tabController;
 
@@ -89,6 +91,13 @@ class _LoginPageState extends State<LoginPage>
     final Uri uri = Uri.parse("${link}api/daftar");
 
     try {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return const LoadingDialog(pesan: "Sedang mendaftar...");
+        },
+      );
       final response = await http.post(
         uri,
         body: {
@@ -100,6 +109,7 @@ class _LoginPageState extends State<LoginPage>
       );
 
       if (response.statusCode == 200) {
+        Navigator.of(context).pop();
         _tabController.animateTo(0);
         showDialog(
           context: context,
@@ -120,6 +130,7 @@ class _LoginPageState extends State<LoginPage>
         );
         return "berhasil";
       } else {
+        Navigator.of(context).pop();
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -140,32 +151,54 @@ class _LoginPageState extends State<LoginPage>
         return "gagal";
       }
     } catch (error) {
+      Navigator.of(context).pop();
       print('Kesalahan saat melakukan registrasi: $error');
     }
     return "gagal";
   }
 
   Future<DataUser?> getDataUser(String email) async {
+    // Deklarasi variabel response di luar blok try untuk bisa digunakan di blok catch
+    var response;
+
     final Uri uri = Uri.parse('${link}api/getDataUser');
     print(email);
 
+    setState(() {
+      _isLoading = true;
+    });
+
     try {
-      final response = await http.post(
-        uri,
-        body: {
-          'email': email,
-        },
-      );
+      if (email == '') {
+        _showDialog('email kosong');
+        return null;
+      } else {
+        response = await http.post(
+          uri,
+          body: {
+            'email': email,
+          },
+        );
+      }
 
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
         final dataUser = DataUser.fromJson(responseData['user']);
+        setState(() {
+          _isLoading = false;
+        });
         return dataUser;
       } else {
+        setState(() {
+          _isLoading = false;
+        });
         _showDialog('Login gagal: ${response.body}');
         return null;
       }
     } catch (error) {
+      setState(() {
+        _isLoading = false;
+      });
       _showDialog('Kesalahan saat melakukan login: $error');
       return null;
     }
@@ -322,7 +355,16 @@ class _LoginPageState extends State<LoginPage>
   void _signIn(BuildContext context) async {
     String email = _emailController.text;
     String password = _passwordController.text;
-
+    setState(() {
+      _isLoading = true; // Atur status loading menjadi true
+    });
+    showDialog(
+      context: context,
+      barrierDismissible: false, // agar tidak bisa dismissed saat loading
+      builder: (BuildContext context) {
+        return const LoadingDialog(pesan: "Sedang login...");
+      },
+    );
     DataUser? dataUser = await getDataUser(email);
 
     if (dataUser != null) {
@@ -335,6 +377,7 @@ class _LoginPageState extends State<LoginPage>
         );
 
         if (dataUser.role == "admin") {
+          Navigator.of(context).pop(); // Tutup dialog loading
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -346,8 +389,16 @@ class _LoginPageState extends State<LoginPage>
         }
       } catch (e) {
         // Tangani kesalahan masuk
+        setState(() {
+          _isLoading =
+              false; // Atur status loading menjadi false setelah proses selesai
+        });
+        Navigator.of(context).pop(); // Tutup dialog loading
         _showDialog('Kesalahan saat melakukan login: $e');
       }
+    } else {
+      Navigator.of(context).pop();
+      _showDialog("email kosong");
     }
   }
 

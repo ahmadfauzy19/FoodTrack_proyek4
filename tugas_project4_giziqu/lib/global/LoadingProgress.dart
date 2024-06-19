@@ -1,3 +1,5 @@
+// ignore_for_file: unused_field, library_private_types_in_public_api, file_names
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 
@@ -12,7 +14,7 @@ class LoadingDialog extends StatefulWidget {
 class _LoadingDialogState extends State<LoadingDialog> {
   late Timer _timer;
   int _dotCount = 0;
-  bool _isReversed = false;
+  final bool _isReversed = false;
 
   @override
   void initState() {
@@ -58,7 +60,9 @@ class _LoadingDialogState extends State<LoadingDialog> {
               ],
             ),
             const SizedBox(height: 20),
-            LinearProgressIndicator(),
+            const LinearProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
+            ),
           ],
         ),
       ),

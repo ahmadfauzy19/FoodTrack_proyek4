@@ -313,7 +313,17 @@ class _TambahGiziState extends State<TambahGizi> {
         );
         Navigator.pop(context);
       } else {
+        setState(() {
+          isLoading = false;
+        });
         print('Failed to upload data. Error: ${response.statusCode}');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            backgroundColor: Colors.red,
+            content: Text('Data gagal dikirim!'),
+          ),
+        );
+        Navigator.pop(context);
       }
     } catch (e) {
       setState(() {

@@ -52,28 +52,39 @@ class _EditMakananState extends State<EditMakanan> {
   }
 
   Future<void> _fetchMakananDetails() async {
+    print("barcode = ${widget.barcode}");
     final Uri uri = Uri.parse(
-        "${link}api/makanan/searchByBarcode?barcode=${widget.barcode}");
+        "${link}api/makanan/search_makanan_barcode?keyword=${widget.barcode}");
 
     try {
       var response = await http.get(uri);
       if (response.statusCode == 200) {
-        var data = json.decode(response.body);
-        setState(() {
-          _nameController.text = data['nama_makanan'];
-          _typeController.text = data['jenis'];
-          _kaloriController.text = data['gizi']['kalori'];
-          _karbohidratController.text = data['gizi']['karbohidrat'];
-          _lemakController.text = data['gizi']['lemak'];
-          _natriumController.text = data['gizi']['natrium'];
-          _proteinController.text = data['gizi']['protein'];
-          _seratController.text = data['gizi']['serat'];
-          _vitaminAController.text = data['gizi']['vitamin_a'];
-          _vitaminB1Controller.text = data['gizi']['vitamin_b1'];
-          _vitaminB2Controller.text = data['gizi']['vitamin_b2'];
-          _vitaminB3Controller.text = data['gizi']['vitamin_b3'];
-          _vitaminCController.text = data['gizi']['vitamin_c'];
-        });
+        var jsonResponse = json.decode(response.body);
+
+        if (jsonResponse['data'] != null && jsonResponse['data'].isNotEmpty) {
+          var data = jsonResponse['data'][0];
+
+          setState(() {
+            _nameController.text = data['nama_makanan'] ?? '';
+            _typeController.text = data['jenis'] ?? '';
+
+            var gizi = data['gizi'] ?? {};
+            _kaloriController.text = (gizi['kalori'] ?? '').toString();
+            _karbohidratController.text =
+                (gizi['karbohidrat'] ?? '').toString();
+            _lemakController.text = (gizi['lemak'] ?? '').toString();
+            _natriumController.text = (gizi['natrium'] ?? '').toString();
+            _proteinController.text = (gizi['protein'] ?? '').toString();
+            _seratController.text = (gizi['serat'] ?? '').toString();
+            _vitaminAController.text = (gizi['vitamin_a'] ?? '').toString();
+            _vitaminB1Controller.text = (gizi['vitamin_b1'] ?? '').toString();
+            _vitaminB2Controller.text = (gizi['vitamin_b2'] ?? '').toString();
+            _vitaminB3Controller.text = (gizi['vitamin_b3'] ?? '').toString();
+            _vitaminCController.text = (gizi['vitamin_c'] ?? '').toString();
+          });
+        } else {
+          print('Error: No data found');
+        }
       } else {
         print('Error: ${response.statusCode}');
       }
@@ -89,7 +100,8 @@ class _EditMakananState extends State<EditMakanan> {
       });
 
       try {
-        final Uri uri = Uri.parse("${link}api/makanan/update");
+        final Uri uri =
+            Uri.parse("${link}api/makanan/update_makanan/${widget.barcode}");
         var response = await http.post(
           uri,
           headers: {'Content-Type': 'application/json'},
