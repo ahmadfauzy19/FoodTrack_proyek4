@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:tugas_project4_giziqu/user/LandingPage.dart';
 import 'package:tugas_project4_giziqu/user/ProfilePage.dart';
+import 'BarcodeScannerScreen.dart';
 import 'SearchPage.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
@@ -151,7 +152,14 @@ class _NewsPageState extends State<NewsPage> {
               ],
             ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          // Tambahkan logika untuk membuka halaman untuk memindai QR code
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const BarcodeScannerScreen()),
+          );
+        },
         backgroundColor: Colors.green,
         shape: const CircleBorder(
           side: BorderSide(color: Colors.white, width: 2),
