@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:tugas_project4_giziqu/user/LandingPage.dart';
+import 'package:tugas_project4_giziqu/user/ProfilePage.dart';
 import 'SearchPage.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
@@ -186,14 +187,17 @@ class _NewsPageState extends State<NewsPage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SearchPage()),
+                  MaterialPageRoute(builder: (context) => const SearchPage()),
                 );
               },
               icon: const Icon(Icons.search),
             ),
             IconButton(
               onPressed: () {
-                // Tambahkan logika untuk navigasi ke halaman profil
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ProfilePage()));
               },
               icon: const Icon(Icons.person),
             ),

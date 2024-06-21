@@ -2,16 +2,13 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:image_picker/image_picker.dart';
 import 'package:tugas_project4_giziqu/Admin/TambahArtikel.dart';
-import 'package:tugas_project4_giziqu/LoginPage.dart';
-// import '../global/link.dart';
-import '../global/uploadImage.dart';
 import '../global/logout.dart';
 import '../Admin/KelolaArtikel.dart';
 import '../Admin/TambahMakanan.dart';
 import '../Admin/KelolaMakanan.dart';
+import '../global/DataUser.dart';
+import '../ProfileImage/ProfilImageBuilder.dart';
 
 class AdminPage extends StatefulWidget {
   final DataUser adminData;
@@ -22,16 +19,13 @@ class AdminPage extends StatefulWidget {
 }
 
 class _AdminPageState extends State<AdminPage> {
-  XFile? _image;
   late User? currentUser;
-  late String imageUrl = '';
   bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
     currentUser = FirebaseAuth.instance.currentUser;
-    imageUrl = widget.adminData.foto;
   }
 
   @override
@@ -52,7 +46,11 @@ class _AdminPageState extends State<AdminPage> {
               ),
               child: Row(
                 children: [
-                  buildProfileImage(context),
+                  ProfileImageBuilder(
+                    username: widget.adminData.username,
+                    imageUrl: widget.adminData.foto,
+                  ),
+                  // buildProfileImage(context),
                   Container(
                     margin: const EdgeInsets.all(20),
                     child: Column(
@@ -72,7 +70,7 @@ class _AdminPageState extends State<AdminPage> {
                           ),
                         ),
                         const Text(
-                          "Selamat Datang Kembali",
+                          "Selamat Datang Kembaliii",
                           style: TextStyle(
                             fontFamily: "fonts/Schyler-Italic.ttf",
                             fontSize: 16,
@@ -161,55 +159,6 @@ class _AdminPageState extends State<AdminPage> {
     );
   }
 
-  Widget buildProfileImage(BuildContext context) {
-    return Stack(
-      children: [
-        GestureDetector(
-          onTap: () async {
-            // ignore: no_leading_underscores_for_local_identifiers
-            XFile? _image = await UploadImage.getImage(context);
-            if (_image != null) {
-              setState(() {
-                isLoading =
-                    true; // Set loading menjadi true saat mulai mengunggah
-              });
-              // ignore: use_build_context_synchronously
-              String? message = await UploadImage.uploadImage(
-                  context, _image, widget.adminData.username as String);
-              if (message != null) {
-                setState(() {
-                  imageUrl = _image.path.split('/').last;
-                });
-              }
-              setState(() {
-                isLoading = false;
-              });
-            }
-          },
-          child: FutureBuilder<String>(
-            future: getImageDownloadUrl(),
-            builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-              if (isLoading) {
-                return const CircularProgressIndicator(); // Tampilkan loading jika sedang mengunggah
-              } else if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
-              } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
-              } else if (snapshot.hasData) {
-                return AvatarWithCustomBorder(imageUrl: snapshot.data!);
-              } else {
-                return const CircleAvatar(
-                  radius: 30,
-                  backgroundImage: AssetImage("assets/default.jpeg"),
-                );
-              }
-            },
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget buildMenuButton({
     required IconData icon,
     required String text,
@@ -233,18 +182,6 @@ class _AdminPageState extends State<AdminPage> {
         ],
       ),
     );
-  }
-
-  Future<String> getImageDownloadUrl() async {
-    try {
-      final downloadUrl = await firebase_storage.FirebaseStorage.instance
-          .ref('Images/Users/$imageUrl')
-          .getDownloadURL();
-      return downloadUrl;
-    } catch (e) {
-      print('Error getting download URL: $e');
-      rethrow;
-    }
   }
 }
 

@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, unused_field, file_names
+// ignore_for_file: avoid_print, unused_field, file_names, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -94,14 +94,20 @@ class _KelolaMakananState extends State<KelolaMakanan> {
           content: const Text('Apakah Anda yakin ingin menghapus data ini?'),
           actions: <Widget>[
             TextButton(
-              child: const Text('Batal'),
+              child: const Text(
+                'Batal',
+                style: TextStyle(color: Colors.black),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-              child: const Text('Hapus'),
+              child: const Text(
+                'Hapus',
+                style: TextStyle(color: Colors.white),
+              ),
               onPressed: () => _deleteItem(id),
             ),
           ],
@@ -114,7 +120,7 @@ class _KelolaMakananState extends State<KelolaMakanan> {
   Widget build(BuildContext context) {
     if (_isLoading) {
       return Container(
-          color: const Color.fromARGB(255, 118, 192, 122),
+          color: const Color.fromARGB(255, 63, 181, 69),
           child: const LoadingDialog(pesan: "mengambil data makanan"));
     } else {
       return Scaffold(
@@ -169,6 +175,7 @@ class _KelolaMakananState extends State<KelolaMakanan> {
                         ),
                       ),
                     ],
+                    // ignore: deprecated_member_use
                     dataRowHeight: 60, // Mengatur tinggi setiap baris
                     rows: _makananList
                         .map(

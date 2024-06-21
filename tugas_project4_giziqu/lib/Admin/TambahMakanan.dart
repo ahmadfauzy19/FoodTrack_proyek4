@@ -3,7 +3,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'TambahGizi.dart';
-import '../global/uploadImage.dart';
+import '../ProfileImage/uploadImage.dart';
 import 'package:image_picker/image_picker.dart';
 
 class TambahMakanan extends StatefulWidget {

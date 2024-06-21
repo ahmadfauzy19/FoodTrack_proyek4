@@ -180,7 +180,8 @@ class _LandingPageState extends State<LandingPage> {
           // Tambahkan logika untuk membuka halaman untuk memindai QR code
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => BarcodeScannerScreen()),
+            MaterialPageRoute(
+                builder: (context) => const BarcodeScannerScreen()),
           );
         },
         backgroundColor: Colors.green,
@@ -208,7 +209,7 @@ class _LandingPageState extends State<LandingPage> {
                 // Tambahkan logika untuk navigasi ke halaman berita
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => NewsPage()),
+                  MaterialPageRoute(builder: (context) => const NewsPage()),
                 );
               },
               icon: const Icon(Icons.newspaper),
@@ -219,7 +220,7 @@ class _LandingPageState extends State<LandingPage> {
                 // Tambahkan logika untuk navigasi ke halaman search
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SearchPage()),
+                  MaterialPageRoute(builder: (context) => const SearchPage()),
                 );
               },
               icon: const Icon(Icons.search),
@@ -229,7 +230,7 @@ class _LandingPageState extends State<LandingPage> {
                 // Tambahkan logika untuk navigasi ke halaman profil
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ProfilePage()),
+                  MaterialPageRoute(builder: (context) => const ProfilePage()),
                 );
               },
               icon: const Icon(Icons.person),

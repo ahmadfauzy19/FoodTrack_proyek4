@@ -1,10 +1,14 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 // import "package:tugas_project4_giziqu/Admin/KelolaArtikel.dart";
 import 'package:tugas_project4_giziqu/BarcodeScannerScreen.dart';
+import 'package:tugas_project4_giziqu/NewsPage.dart';
 import 'package:tugas_project4_giziqu/user/LandingPage.dart';
 import 'package:tugas_project4_giziqu/user/ProfilePage.dart';
 import 'package:tugas_project4_giziqu/user/UbahEmailPage.dart';
 import 'package:tugas_project4_giziqu/user/UbahPasswordPage.dart';
+import '../global/logout.dart';
 
 class AkunPage extends StatefulWidget {
   const AkunPage({
@@ -41,19 +45,19 @@ class _AkunPageState extends State<AkunPage> {
                   ),
                   Container(
                     margin: const EdgeInsets.all(20),
-                    child: Column(
+                    child: const Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           "Test",
-                          style: const TextStyle(
+                          style: TextStyle(
                               fontFamily: "fonts/Schyler-Italic.ttf",
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                               color: Colors.white),
                         ),
-                        const Text(
+                        Text(
                           "Selamat Datang Kembali",
                           style: TextStyle(
                             fontFamily: "fonts/Schyler-Italic.ttf",
@@ -136,11 +140,7 @@ class _AkunPageState extends State<AkunPage> {
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const UbahPasswordPage()),
-                        );
+                        Logout.signOut(context);
                       },
                       child: const Row(
                         children: [
@@ -168,7 +168,8 @@ class _AkunPageState extends State<AkunPage> {
           // Tambahkan logika untuk membuka halaman untuk memindai QR code
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => BarcodeScannerScreen()),
+            MaterialPageRoute(
+                builder: (context) => const BarcodeScannerScreen()),
           );
         },
         backgroundColor: Colors.green,
@@ -190,14 +191,15 @@ class _AkunPageState extends State<AkunPage> {
                 // Tambahkan logika untuk navigasi ke halaman beranda
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => LandingPage()),
+                  MaterialPageRoute(builder: (context) => const LandingPage()),
                 );
               },
               icon: const Icon(Icons.home),
             ),
             IconButton(
               onPressed: () {
-                // Tambahkan logika untuk navigasi ke halaman berita
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const NewsPage()));
               },
               icon: const Icon(Icons.newspaper),
             ),
@@ -213,7 +215,7 @@ class _AkunPageState extends State<AkunPage> {
                 // Tambahkan logika untuk navigasi ke halaman profil
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ProfilePage()),
+                  MaterialPageRoute(builder: (context) => const ProfilePage()),
                 );
               },
               icon: const Icon(Icons.person),

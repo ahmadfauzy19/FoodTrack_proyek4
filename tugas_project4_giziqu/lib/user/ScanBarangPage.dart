@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element, avoid_print, avoid_unnecessary_containers, file_names
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -85,8 +87,7 @@ class _ScanBarangPageState extends State<ScanBarangPage> {
       // Buat objek request multipart
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse(
-            'https://d9ea-2400-9800-2b9-1ae7-6ca9-1614-28a1-dab7.ngrok-free.app/predict'), // Ganti URL dengan URL endpoint Anda
+        Uri.parse('${link_yolo}predict'), // Ganti URL dengan URL endpoint Anda
       );
 
       // Tambahkan file ke bagian request multipart
@@ -169,7 +170,7 @@ class _ScanBarangPageState extends State<ScanBarangPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => BarcodeScannerScreen()),
+                            builder: (context) => const BarcodeScannerScreen()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -198,7 +199,7 @@ class _ScanBarangPageState extends State<ScanBarangPage> {
       ),
       // Tambahkan tombol untuk memulai pemindaian barcode
       floatingActionButton: FloatingActionButton(
-        onPressed: _pickImageFromGallery,
+        onPressed: _pickImageFromCamera,
         backgroundColor: Colors.green,
         shape:
             const CircleBorder(side: BorderSide(color: Colors.white, width: 2)),

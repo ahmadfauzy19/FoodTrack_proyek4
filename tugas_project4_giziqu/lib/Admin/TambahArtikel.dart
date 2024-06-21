@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously, unnecessary_brace_in_string_interps, library_private_types_in_public_api, file_names
+// ignore_for_file: use_build_context_synchronously, unnecessary_brace_in_string_interps, library_private_types_in_public_api, file_names, avoid_print
 
 // import 'dart:convert';
 // import 'dart:math';
@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import '../global/link.dart';
-import '../global/uploadImage.dart';
+import '../ProfileImage/uploadImage.dart';
 import '../global/LoadingProgress.dart';
 
 class TambahArtikel extends StatefulWidget {
