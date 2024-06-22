@@ -2,10 +2,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:tugas_project4_giziqu/global/link.dart';
 import 'package:http/http.dart' as http;
+import 'package:tugas_project4_giziqu/model/MakananModel.dart';
+import 'package:tugas_project4_giziqu/services/makanan_service.dart';
 import 'package:tugas_project4_giziqu/user/ComparisonPage.dart';
 
 class SearchComparisonPage extends StatefulWidget {
-  final Map<String, dynamic> data;
+  final List<Makanan> data;
 
   const SearchComparisonPage({Key? key, required this.data}) : super(key: key);
 
@@ -17,28 +19,25 @@ class _SearchComparisonPageState extends State<SearchComparisonPage> {
   final TextEditingController _searchController = TextEditingController();
 
   Future<void> _search(String keyword) async {
-    // Ganti URL_API dengan URL endpoint API yang sesuai
-    final Uri uri =
-        Uri.parse("${link}api/makanan/search_makanan?keyword=$keyword");
-
     try {
-      var response = await http.get(uri);
-      if (response.statusCode == 200) {
-        var data2 = json.decode(response.body);
-        print(data2);
+      List<Makanan> makananList = await MakananService.searchMakanan(keyword);
+      if (makananList.isNotEmpty) {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => ComparisonPage(
-                    data: widget.data,
-                    data2: data2,
-                  )),
+            builder: (context) => ComparisonPage(
+              data: makananList,
+              data2: widget.data,
+            ),
+          ),
         );
       } else {
-        print('Error: ${response.statusCode}');
+        print('Data makanan tidak ditemukan');
+        // Handle ketika data makanan tidak ditemukan, misalnya dengan menampilkan snackbar atau dialog
       }
     } catch (e) {
-      print('Exception: $e');
+      print('Exception saat searching makanan: $e');
+      // Handle exception, misalnya dengan menampilkan snackbar atau dialog
     }
   }
 

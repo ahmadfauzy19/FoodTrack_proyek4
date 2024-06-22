@@ -1,72 +1,56 @@
-// ignore_for_file: avoid_unnecessary_containers, avoid_print
-
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:tugas_project4_giziqu/SearchComparisonPage.dart';
+import 'package:tugas_project4_giziqu/components/FoodImage.dart';
+import 'package:tugas_project4_giziqu/model/MakananModel.dart';
+import 'package:tugas_project4_giziqu/services/makanan_service.dart';
 
-class FoodImage extends StatelessWidget {
-  final String imageUrl;
-
-  const FoodImage({Key? key, required this.imageUrl}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<String>(
-      future: getImageDownloadUrl(),
-      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
-        } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
-        } else if (snapshot.hasData) {
-          return Image.network(snapshot.data!);
-        } else {
-          return const Text('No image available');
-        }
-      },
-    );
-  }
-
-  Future<String> getImageDownloadUrl() async {
-    try {
-      final downloadUrl = await firebase_storage.FirebaseStorage.instance
-          .ref('Images/MakananImage/$imageUrl')
-          .getDownloadURL();
-      return downloadUrl;
-    } catch (e) {
-      print('Error getting download URL: $e');
-      rethrow;
-    }
-  }
-}
-
-class Scanresult extends StatelessWidget {
-  final Map<String, dynamic> data;
+class Scanresult extends StatefulWidget {
+  final List<Makanan> data;
 
   const Scanresult({Key? key, required this.data}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    List<dynamic> foods = data['data'];
-    Map<String, dynamic> food = foods.isNotEmpty ? foods[0] : {};
-    Map<String, dynamic> nutrition = food['gizi'] ?? {};
+  _ScanresultState createState() => _ScanresultState();
+}
 
+class _ScanresultState extends State<Scanresult> {
+  late Future<List<Makanan>> relatedProducts;
+
+  @override
+  void initState() {
+    super.initState();
+    relatedProducts = fetchRelatedProducts();
+    print(relatedProducts);
+  }
+
+  Future<List<Makanan>> fetchRelatedProducts() async {
+    if (widget.data.isNotEmpty) {
+      String jenis = widget.data[0].jenis;
+      return await MakananService.fetchMakananByJenis(jenis);
+    }
+    return [];
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Detail Makanan')),
+      appBar: AppBar(title: Text('Detail Makanan')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              food['nama_makanan'] ?? 'Nama Makanan',
+              widget.data.isNotEmpty
+                  ? widget.data[0].namaMakanan ?? 'Nama Makanan'
+                  : 'Nama Makanan',
               style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
             // Gunakan widget FoodImage di sini untuk menampilkan gambar
-            food['foto'] != null
-                ? FoodImage(imageUrl: food['foto'])
-                : Container(child: const Text('No image')),
+            widget.data.isNotEmpty && widget.data[0].foto != null
+                ? FoodImage(imageUrl: widget.data[0].foto)
+                : const Text('No image available'),
             const SizedBox(height: 20),
             const Text(
               'Informasi Nilai Gizi',
@@ -76,22 +60,77 @@ class Scanresult extends StatelessWidget {
             Container(
               height: 200,
               decoration: BoxDecoration(
-                color: Colors.grey,
+                color: Color.fromARGB(255, 237, 237, 237),
                 borderRadius: BorderRadius.circular(18),
               ),
               child: ListView(
                 children: [
-                  _buildNutritionItem('Kalori', nutrition['kalori']),
-                  _buildNutritionItem('Karbohidrat', nutrition['karbohidrat']),
-                  _buildNutritionItem('Lemak', nutrition['lemak']),
-                  _buildNutritionItem('Protein', nutrition['protein']),
-                  _buildNutritionItem('Serat', nutrition['serat']),
-                  _buildNutritionItem('Natrium', nutrition['natrium']),
-                  _buildNutritionItem('Vitamin A', nutrition['vitamin_a']),
-                  _buildNutritionItem('Vitamin B1', nutrition['vitamin_b1']),
-                  _buildNutritionItem('Vitamin B2', nutrition['vitamin_b2']),
-                  _buildNutritionItem('Vitamin B3', nutrition['vitamin_b3']),
-                  _buildNutritionItem('Vitamin C', nutrition['vitamin_c']),
+                  _buildNutritionItem(
+                      'Kalori',
+                      widget.data.isNotEmpty
+                          ? widget.data[0].gizi['kalori']
+                          : null,
+                      "kcal"),
+                  _buildNutritionItem(
+                      'Karbohidrat',
+                      widget.data.isNotEmpty
+                          ? widget.data[0].gizi['karbohidrat']
+                          : null,
+                      "gram"),
+                  _buildNutritionItem(
+                      'Lemak',
+                      widget.data.isNotEmpty
+                          ? widget.data[0].gizi['lemak']
+                          : null,
+                      "gram"),
+                  _buildNutritionItem(
+                      'Protein',
+                      widget.data.isNotEmpty
+                          ? widget.data[0].gizi['protein']
+                          : null,
+                      "gram"),
+                  _buildNutritionItem(
+                      'Serat',
+                      widget.data.isNotEmpty
+                          ? widget.data[0].gizi['serat']
+                          : null,
+                      "gram"),
+                  _buildNutritionItem(
+                      'Natrium',
+                      widget.data.isNotEmpty
+                          ? widget.data[0].gizi['natrium']
+                          : null,
+                      "gram"),
+                  _buildNutritionItem(
+                      'Vitamin A',
+                      widget.data.isNotEmpty
+                          ? widget.data[0].gizi['vitamin_a']
+                          : null,
+                      "gram"),
+                  _buildNutritionItem(
+                      'Vitamin B1',
+                      widget.data.isNotEmpty
+                          ? widget.data[0].gizi['vitamin_b1']
+                          : null,
+                      "gram"),
+                  _buildNutritionItem(
+                      'Vitamin B2',
+                      widget.data.isNotEmpty
+                          ? widget.data[0].gizi['vitamin_b2']
+                          : null,
+                      "gram"),
+                  _buildNutritionItem(
+                      'Vitamin B3',
+                      widget.data.isNotEmpty
+                          ? widget.data[0].gizi['vitamin_b3']
+                          : null,
+                      "gram"),
+                  _buildNutritionItem(
+                      'Vitamin C',
+                      widget.data.isNotEmpty
+                          ? widget.data[0].gizi['vitamin_c']
+                          : null,
+                      "gram"),
                 ],
               ),
             ),
@@ -101,12 +140,25 @@ class Scanresult extends StatelessWidget {
               style: TextStyle(fontSize: 22),
             ),
             const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildRelatedProductItem('Product 1'),
-                _buildRelatedProductItem('Product 2'),
-              ],
+            FutureBuilder<List<Makanan>>(
+              future: relatedProducts,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return Text('No related products found.');
+                } else {
+                  // Cetak nilai dari relatedProducts di sini
+                  print("relatedProducts: ${snapshot.data}");
+                  return Row(
+                    children: snapshot.data!
+                        .map((makanan) => _buildRelatedProductItem(makanan))
+                        .toList(),
+                  );
+                }
+              },
             ),
             const SizedBox(height: 20),
             ElevatedButton(
@@ -114,7 +166,9 @@ class Scanresult extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => SearchComparisonPage(data: data)),
+                    builder: (context) =>
+                        SearchComparisonPage(data: widget.data),
+                  ),
                 );
               },
               style: ElevatedButton.styleFrom(
@@ -130,62 +184,78 @@ class Scanresult extends StatelessWidget {
     );
   }
 
-  Widget _buildNutritionItem(String label, dynamic value) {
+  Widget _buildNutritionItem(String label, dynamic value, String satuan) {
     return Column(
       children: [
         ListTile(
           title: Text(label),
           trailing: Text(
-            value != null ? '$value' : 'N/A',
+            value != null ? '$value $satuan' : 'N/A',
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
         const Divider(
-          color: Colors.black12, // Ubah warna sesuai kebutuhan Anda
-          thickness: 1.0, // Ubah ketebalan sesuai kebutuhan Anda
-          height: 0.0, // Atur tinggi sesuai kebutuhan Anda
+          color: Colors.black12,
+          thickness: 1.0,
+          height: 0.0,
         ),
       ],
     );
   }
 
-  Widget _buildRelatedProductItem(String name) {
-    return Container(
-      width: 165,
-      height: 150,
-      decoration: BoxDecoration(
-        color: Colors.grey,
-        borderRadius: BorderRadius.circular(18),
-      ),
-      child: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Container(
-              width: 500,
-              height: 100,
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 220, 217, 217),
-                borderRadius: BorderRadius.circular(18),
-              ),
-              child: const Icon(Icons.photo, color: Colors.white),
-            ),
+  Widget _buildRelatedProductItem(Makanan makanan) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: () async {
+          try {
+            List<Makanan> makananList =
+                await MakananService.searchMakanan(makanan.namaMakanan);
+            if (makananList.isNotEmpty) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Scanresult(data: makananList),
+                ),
+              );
+            } else {
+              print('Data makanan tidak ditemukan');
+              // Handle ketika data makanan tidak ditemukan, misalnya dengan menampilkan snackbar atau dialog
+            }
+          } catch (e) {
+            print('Exception saat searching makanan: $e');
+            // Handle exception, misalnya dengan menampilkan snackbar atau dialog
+          }
+        },
+        child: Container(
+          width: 200, // Sesuaikan lebar sesuai kebutuhan
+          margin: const EdgeInsets.symmetric(horizontal: 8.0),
+          decoration: BoxDecoration(
+            color: Colors.grey,
+            borderRadius: BorderRadius.circular(18),
           ),
-          // Judul
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              child: Text(
-                name,
-                style: const TextStyle(color: Colors.white),
-                textAlign: TextAlign.center,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                height: 120, // Tinggi gambar produk
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 220, 217, 217),
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                child: FoodImage(imageUrl: makanan.foto),
               ),
-            ),
+              // Judul
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  makanan.namaMakanan,
+                  style: const TextStyle(color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

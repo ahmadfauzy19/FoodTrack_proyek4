@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:tugas_project4_giziqu/components/NewsImage.dart';
 import 'dart:convert';
 import 'package:tugas_project4_giziqu/user/LandingPage.dart';
 import 'package:tugas_project4_giziqu/user/ProfilePage.dart';
@@ -11,42 +12,6 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 import 'package:tugas_project4_giziqu/global/link.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-class FoodImage extends StatelessWidget {
-  final String imageUrl;
-
-  const FoodImage({Key? key, required this.imageUrl}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<String>(
-      future: getImageDownloadUrl(),
-      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
-        } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
-        } else if (snapshot.hasData) {
-          return Image.network(snapshot.data!);
-        } else {
-          return const Text('No image available');
-        }
-      },
-    );
-  }
-
-  Future<String> getImageDownloadUrl() async {
-    try {
-      final downloadUrl = await firebase_storage.FirebaseStorage.instance
-          .ref('Images/ArtikelImage/$imageUrl')
-          .getDownloadURL();
-      return downloadUrl;
-    } catch (e) {
-      print('Error getting download URL: $e');
-      rethrow;
-    }
-  }
-}
 
 class NewsPage extends StatefulWidget {
   const NewsPage({Key? key}) : super(key: key);
@@ -271,7 +236,7 @@ class _NewsPageState extends State<NewsPage> {
                 width: double.infinity,
                 height: double.infinity,
                 child:
-                    FoodImage(imageUrl: image), // Menggunakan FoodImage di sini
+                    NewsImage(imageUrl: image), // Menggunakan FoodImage di sini
               ),
             ),
             Positioned(
@@ -325,7 +290,11 @@ class _NewsPageState extends State<NewsPage> {
             Container(
               width: 120,
               height: 120,
-              child: FoodImage(imageUrl: image), // Gunakan FoodImage di sini
+              child: NewsImage(
+                imageUrl: image,
+                width: 120,
+                height: 120,
+              ), // Gunakan FoodImage di sini
             ),
             const SizedBox(width: 10),
             Expanded(

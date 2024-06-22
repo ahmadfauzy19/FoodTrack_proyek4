@@ -1,85 +1,52 @@
 // ignore: file_names
 // ignore_for_file: file_names, duplicate_ignore, avoid_print, avoid_unnecessary_containers
 
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:tugas_project4_giziqu/global/link.dart';
+import 'package:tugas_project4_giziqu/model/MakananModel.dart';
+import 'package:tugas_project4_giziqu/services/makanan_service.dart';
 import 'package:tugas_project4_giziqu/user/ScanBarangPage.dart';
-import 'package:tugas_project4_giziqu/user/Scanresult.dart';
-import 'package:http/http.dart' as http;
+import 'package:tugas_project4_giziqu/user/Scanresult.dart'; // Tambahkan import
 
 class BarcodeScannerScreen extends StatefulWidget {
   const BarcodeScannerScreen({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _BarcodeScannerScreenState createState() => _BarcodeScannerScreenState();
 }
 
 class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
-  String _barcodeScanRes =
-      ''; // Variabel untuk menyimpan hasil pemindaian barcode
-  // ignore: unused_field
-  bool _isScanning =
-      false; // Menandakan apakah pemindaian barcode sedang berlangsung
+  String _barcodeScanRes = '';
+  bool _isScanning = false;
+  List<Makanan> _makananList = [];
 
-  // Method untuk memulai pemindaian barcode
   Future<void> _startBarcodeScan() async {
     setState(() {
-      _isScanning =
-          true; // Setel _isScanning menjadi true saat pemindaian dimulai
+      _isScanning = true;
     });
 
-    // Tampilkan dialog dengan tombol tambahan
-
     try {
-      // Mulai pemindaian barcode
-      String barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-        '#ff6666',
-        'Batal',
-        true,
-        ScanMode.BARCODE,
-      );
+      List<Makanan> scannedMakananList = await MakananService.scanBarcode();
+      setState(() {
+        _makananList = scannedMakananList;
+        _isScanning = false;
+      });
 
-      final Uri uri = Uri.parse(
-          "${link}api/makanan/search_makanan_barcode?keyword=$barcodeScanRes");
-
-      try {
-        var response = await http.get(uri);
-        if (response.statusCode == 200) {
-          var data = json.decode(response.body);
-          // ignore: avoid_print
-          print(data);
-          // ignore: use_build_context_synchronously
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => Scanresult(
-                      data: data,
-                    )), // Perubahan di sini
-          );
-        } else {
-          print('Error: ${response.statusCode}');
-        }
-      } catch (e) {
-        // ignore: avoid_print
-        print('Exception: $e');
+      if (_makananList.isNotEmpty) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Scanresult(
+                    data: scannedMakananList,
+                  )),
+        );
+      } else {
+        print('No items found');
       }
-
+    } catch (e) {
       setState(() {
-        _barcodeScanRes = barcodeScanRes; // Simpan hasil pemindaian barcode
-        _isScanning =
-            false; // Setel _isScanning menjadi false setelah pemindaian selesai
+        _isScanning = false;
       });
-    } on PlatformException {
-      setState(() {
-        _barcodeScanRes = 'Failed to scan barcode.';
-        _isScanning =
-            false; // Setel _isScanning menjadi false dalam kasus pemindaian gagal
-      });
+      print('Exception: $e');
     }
   }
 
@@ -163,7 +130,6 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
           ],
         ),
       ),
-      // Tambahkan tombol untuk memulai pemindaian barcode
       floatingActionButton: FloatingActionButton(
         onPressed: _startBarcodeScan,
         backgroundColor: Colors.green,
@@ -178,5 +144,3 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
     );
   }
 }
-
-//  _startBarcodeScan,
