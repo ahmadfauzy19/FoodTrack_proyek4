@@ -1,4 +1,4 @@
-// ignore_for_file: unused_element, avoid_print, avoid_unnecessary_containers, file_names
+// ignore_for_file: unused_element, avoid_print, avoid_unnecessary_containers, file_names, use_build_context_synchronously, unused_import
 
 import 'dart:convert';
 import 'dart:io';
@@ -8,6 +8,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:tugas_project4_giziqu/BarcodeScannerScreen.dart';
 import 'package:tugas_project4_giziqu/global/link.dart';
+import 'package:tugas_project4_giziqu/model/MakananModel.dart';
+import 'package:tugas_project4_giziqu/services/makanan_service.dart';
 import 'package:tugas_project4_giziqu/user/Scanresult.dart';
 
 class ScanBarangPage extends StatefulWidget {
@@ -22,27 +24,23 @@ class _ScanBarangPageState extends State<ScanBarangPage> {
   String _detectionLabel = 'Pilih gambar untuk mendeteksi';
 
   Future<void> _search(String keyword) async {
-    // Ganti URL_API dengan URL endpoint API yang sesuai
-    final Uri uri =
-        Uri.parse("${link}api/makanan/search_makanan?keyword=$keyword");
-
     try {
-      var response = await http.get(uri);
-      if (response.statusCode == 200) {
-        var data = json.decode(response.body);
-        // ignore: use_build_context_synchronously
+      List<Makanan> makananList = await MakananService.searchMakanan(keyword);
+
+      if (makananList.isNotEmpty) {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => Scanresult(
-                    data: data,
-                  )), // Perubahan di sini
+            builder: (context) => Scanresult(data: makananList),
+          ),
         );
       } else {
-        print('Error: ${response.statusCode}');
+        print('Data makanan tidak ditemukan');
+        // Handle ketika data makanan tidak ditemukan, misalnya dengan menampilkan snackbar atau dialog
       }
     } catch (e) {
-      print('Exception: $e');
+      print('Exception saat searching makanan: $e');
+      // Handle exception, misalnya dengan menampilkan snackbar atau dialog
     }
   }
 
@@ -87,9 +85,9 @@ class _ScanBarangPageState extends State<ScanBarangPage> {
       // Buat objek request multipart
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('${link_yolo}predict'), // Ganti URL dengan URL endpoint Anda
+        Uri.parse(
+            'https://98ca-180-244-132-70.ngrok-free.app/predict'), // Ganti URL dengan URL endpoint Anda
       );
-
       // Tambahkan file ke bagian request multipart
       request.files.add(
         await http.MultipartFile.fromPath(
@@ -114,7 +112,6 @@ class _ScanBarangPageState extends State<ScanBarangPage> {
       setState(() {
         _detectionLabel = detectionLabel;
       });
-
       await _search(detectionLabel);
     } catch (e) {
       // Tangkap dan tampilkan error jika terjadi masalah
@@ -199,7 +196,7 @@ class _ScanBarangPageState extends State<ScanBarangPage> {
       ),
       // Tambahkan tombol untuk memulai pemindaian barcode
       floatingActionButton: FloatingActionButton(
-        onPressed: _pickImageFromCamera,
+        onPressed: _pickImageFromGallery,
         backgroundColor: Colors.green,
         shape:
             const CircleBorder(side: BorderSide(color: Colors.white, width: 2)),

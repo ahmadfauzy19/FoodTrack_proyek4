@@ -1,10 +1,9 @@
-// ignore_for_file: prefer_final_fields, library_private_types_in_public_api, avoid_print, file_names
+// ignore_for_file: prefer_final_fields, library_private_types_in_public_api, avoid_print, file_names, use_build_context_synchronously
 
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:tugas_project4_giziqu/model/MakananModel.dart';
 import 'package:tugas_project4_giziqu/user/Scanresult.dart';
-import 'global/link.dart';
+import 'package:tugas_project4_giziqu/services/makanan_service.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -17,27 +16,22 @@ class _SearchPageState extends State<SearchPage> {
   TextEditingController _searchController = TextEditingController();
 
   Future<void> _search(String keyword) async {
-    // Ganti URL_API dengan URL endpoint API yang sesuai
-    final Uri uri =
-        Uri.parse("${link}api/makanan/search_makanan?keyword=$keyword");
-
     try {
-      var response = await http.get(uri);
-      if (response.statusCode == 200) {
-        var data = json.decode(response.body);
-        // ignore: use_build_context_synchronously
+      List<Makanan> makananList = await MakananService.searchMakanan(keyword);
+      if (makananList.isNotEmpty) {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => Scanresult(
-                    data: data,
-                  )), // Perubahan di sini
+            builder: (context) => Scanresult(data: makananList),
+          ),
         );
       } else {
-        print('Error: ${response.statusCode}');
+        print('Data makanan tidak ditemukan');
+        // Handle ketika data makanan tidak ditemukan, misalnya dengan menampilkan snackbar atau dialog
       }
     } catch (e) {
-      print('Exception: $e');
+      print('Exception saat searching makanan: $e');
+      // Handle exception, misalnya dengan menampilkan snackbar atau dialog
     }
   }
 

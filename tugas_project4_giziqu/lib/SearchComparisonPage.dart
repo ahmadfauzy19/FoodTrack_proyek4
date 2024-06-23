@@ -1,11 +1,12 @@
-import 'dart:convert';
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously, avoid_print
+
 import 'package:flutter/material.dart';
-import 'package:tugas_project4_giziqu/global/link.dart';
-import 'package:http/http.dart' as http;
+import 'package:tugas_project4_giziqu/model/MakananModel.dart';
+import 'package:tugas_project4_giziqu/services/makanan_service.dart';
 import 'package:tugas_project4_giziqu/user/ComparisonPage.dart';
 
 class SearchComparisonPage extends StatefulWidget {
-  final Map<String, dynamic> data;
+  final List<Makanan> data;
 
   const SearchComparisonPage({Key? key, required this.data}) : super(key: key);
 
@@ -17,28 +18,25 @@ class _SearchComparisonPageState extends State<SearchComparisonPage> {
   final TextEditingController _searchController = TextEditingController();
 
   Future<void> _search(String keyword) async {
-    // Ganti URL_API dengan URL endpoint API yang sesuai
-    final Uri uri =
-        Uri.parse("${link}api/makanan/search_makanan?keyword=$keyword");
-
     try {
-      var response = await http.get(uri);
-      if (response.statusCode == 200) {
-        var data2 = json.decode(response.body);
-        print(data2);
+      List<Makanan> makananList = await MakananService.searchMakanan(keyword);
+      if (makananList.isNotEmpty) {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => ComparisonPage(
-                    data: widget.data,
-                    data2: data2,
-                  )),
+            builder: (context) => ComparisonPage(
+              data: makananList,
+              data2: widget.data,
+            ),
+          ),
         );
       } else {
-        print('Error: ${response.statusCode}');
+        print('Data makanan tidak ditemukan');
+        // Handle ketika data makanan tidak ditemukan, misalnya dengan menampilkan snackbar atau dialog
       }
     } catch (e) {
-      print('Exception: $e');
+      print('Exception saat searching makanan: $e');
+      // Handle exception, misalnya dengan menampilkan snackbar atau dialog
     }
   }
 
@@ -47,26 +45,26 @@ class _SearchComparisonPageState extends State<SearchComparisonPage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Center(
+            const Center(
               child: Text(
                 'Bandingkan Produk',
                 style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
               ),
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             ConstrainedBox(
-              constraints: BoxConstraints(maxHeight: 500),
+              constraints: const BoxConstraints(maxHeight: 500),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -79,17 +77,18 @@ class _SearchComparisonPageState extends State<SearchComparisonPage> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30.0),
                         ),
-                        contentPadding: EdgeInsets.symmetric(
+                        contentPadding: const EdgeInsets.symmetric(
                             vertical: 12.0, horizontal: 16.0),
-                        prefixIcon: Icon(Icons.search), // Icon search di sini
+                        prefixIcon:
+                            const Icon(Icons.search), // Icon search di sini
                       ),
                     ),
                   ),
-                  SizedBox(width: 5.0),
+                  const SizedBox(width: 5.0),
                 ],
               ),
             ),
-            SizedBox(height: 80.0),
+            const SizedBox(height: 80.0),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 60.0),
               child: ElevatedButton(
@@ -101,7 +100,7 @@ class _SearchComparisonPageState extends State<SearchComparisonPage> {
                     borderRadius: BorderRadius.circular(30.0),
                   ),
                 ),
-                child: Text('Search'),
+                child: const Text('Search'),
               ),
             ),
           ],
