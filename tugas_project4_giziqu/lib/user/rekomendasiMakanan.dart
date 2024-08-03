@@ -132,8 +132,7 @@ class _MakananCard extends StatelessWidget {
               );
             },
             style: ElevatedButton.styleFrom(
-              primary: Colors.green,
-              onPrimary: Colors.white,
+              foregroundColor: Colors.white, backgroundColor: Colors.green,
             ),
             child: const Text('Lihat'),
           ),

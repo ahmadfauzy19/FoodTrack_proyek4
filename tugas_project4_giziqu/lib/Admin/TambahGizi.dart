@@ -183,6 +183,7 @@ class _TambahGiziState extends State<TambahGizi> {
   final TextEditingController _karboController = TextEditingController();
   final TextEditingController _natriumController = TextEditingController();
   final TextEditingController _seratController = TextEditingController();
+  final TextEditingController _gulaController = TextEditingController();
   final TextEditingController _kaloriController = TextEditingController();
   final TextEditingController _vitAController = TextEditingController();
   final TextEditingController _vitB1Controller = TextEditingController();
@@ -191,6 +192,7 @@ class _TambahGiziState extends State<TambahGizi> {
   final TextEditingController _vitCController = TextEditingController();
   final TextEditingController _controller = TextEditingController();
   final TextEditingController _controller1 = TextEditingController();
+
   String? selectedValue;
   String? selectedValuePersaji;
   String? selectedValueSaji;
@@ -235,6 +237,7 @@ class _TambahGiziState extends State<TambahGizi> {
       _vitB3Controller.text,
       _vitCController.text,
       _seratController.text,
+      _gulaController.text,
     ];
 
     final Uri uri = Uri.parse('${link}api/create_makanan');
@@ -271,7 +274,8 @@ class _TambahGiziState extends State<TambahGizi> {
         ..fields['vitamin_b2'] = dataArray[14]
         ..fields['vitamin_b3'] = dataArray[15]
         ..fields['vitamin_c'] = dataArray[16]
-        ..fields['serat'] = dataArray[17];
+        ..fields['serat'] = dataArray[17]
+        ..fields['gula'] = dataArray[18];
 
       if (widget.image != null) {
         request.files.add(
@@ -301,6 +305,7 @@ class _TambahGiziState extends State<TambahGizi> {
         _vitB3Controller.clear();
         _vitCController.clear();
         _seratController.clear();
+        _gulaController.clear();
         selectedValue = null;
         selectedValuePersaji = null;
         selectedValueSaji = null;
@@ -422,6 +427,22 @@ class _TambahGiziState extends State<TambahGizi> {
                       controller: _energiController,
                       unit: selectedValue ??
                           "kkal", // Memasukkan unit yang dipilih
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                const Text("Gula"),
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    TakaranField(
+                      controller: _gulaController,
+                      unit: selectedValue ??
+                          "gram", // Memasukkan unit yang dipilih
                     ),
                   ],
                 ),

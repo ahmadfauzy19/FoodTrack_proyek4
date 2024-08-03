@@ -164,9 +164,9 @@ class _KebutuhanGiziPageState extends State<KebutuhanGiziPage> {
                               );
                             },
                             style: ElevatedButton.styleFrom(
-                              primary:
-                                  Colors.green, // Warna latar belakang tombol
-                              onPrimary: Colors.white, // Warna teks tombol
+                              foregroundColor: Colors.white,
+                              backgroundColor:
+                                  Colors.green, // Warna teks tombol
                             ),
                             child: const Text('Rekomendasi Makanan'),
                           ),
