@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_final_fields, library_private_types_in_public_api, avoid_print, file_names, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:tugas_project4_giziqu/global/LoadingProgress.dart';
 import 'package:tugas_project4_giziqu/model/MakananModel.dart';
 import 'package:tugas_project4_giziqu/user/Scanresult.dart';
 import 'package:tugas_project4_giziqu/services/makanan_service.dart';
@@ -16,8 +17,16 @@ class _SearchPageState extends State<SearchPage> {
   TextEditingController _searchController = TextEditingController();
 
   Future<void> _search(String keyword) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return const LoadingDialog(pesan: "Mengambil data.");
+      },
+    );
     try {
       List<Makanan> makananList = await MakananService.searchMakanan(keyword);
+      Navigator.pop(context);
       if (makananList.isNotEmpty) {
         Navigator.push(
           context,
@@ -26,12 +35,34 @@ class _SearchPageState extends State<SearchPage> {
           ),
         );
       } else {
+        // Navigator.pop(context);
         print('Data makanan tidak ditemukan');
-        // Handle ketika data makanan tidak ditemukan, misalnya dengan menampilkan snackbar atau dialog
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('Data makanan tidak ditemukan'),
+            backgroundColor: const Color(0xFFB71C1C), // Warna merah gelap
+            action: SnackBarAction(
+              label: 'Tutup',
+              onPressed: () {},
+              textColor: Colors.yellow, // Warna teks tombol aksi
+            ),
+          ),
+        );
       }
     } catch (e) {
       print('Exception saat searching makanan: $e');
-      // Handle exception, misalnya dengan menampilkan snackbar atau dialog
+      // Tambahkan handling exception, misalnya dengan menampilkan snackbar atau dialog
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Exception saat searching makanan: $e'),
+          backgroundColor: const Color(0xFFB71C1C), // Warna merah gelap
+          action: SnackBarAction(
+            label: 'Tutup',
+            onPressed: () {},
+            textColor: Colors.yellow, // Warna teks tombol aksi
+          ),
+        ),
+      );
     }
   }
 

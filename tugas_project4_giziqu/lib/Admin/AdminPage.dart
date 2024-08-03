@@ -7,7 +7,7 @@ import '../global/logout.dart';
 import '../Admin/KelolaArtikel.dart';
 import '../Admin/TambahMakanan.dart';
 import '../Admin/KelolaMakanan.dart';
-import '../global/DataUser.dart';
+import '../model/DataUser.dart';
 import '../ProfileImage/ProfilImageBuilder.dart';
 
 class AdminPage extends StatefulWidget {
@@ -49,6 +49,7 @@ class _AdminPageState extends State<AdminPage> {
                   ProfileImageBuilder(
                     username: widget.adminData.username,
                     imageUrl: widget.adminData.foto,
+                    activateTap: true,
                   ),
                   // buildProfileImage(context),
                   Container(

@@ -15,7 +15,6 @@ void main() async {
       appId: "1:452585413053:android:778cfeacf7cf35954e1ad4",
       messagingSenderId: "452585413053",
       storageBucket: "gs://giziqu-14e75.appspot.com",
-      // Tambahkan opsi lainnya sesuai kebutuhan
     ));
   } catch (e) {
     print('Error initializing Firebase: $e');

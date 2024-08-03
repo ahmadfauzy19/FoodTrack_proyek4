@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_string_interpolations, avoid_print, avoid_function_literals_in_foreach_calls
+
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -8,7 +10,7 @@ import 'package:tugas_project4_giziqu/model/MakananModel.dart';
 class MakananService {
   static Future<List<Makanan>> searchMakanan(String keyword) async {
     final String baseUrl = "$link"; // Ganti dengan base URL endpoint API Anda
-    final String searchEndpoint = "api/makanan/search_makanan";
+    const String searchEndpoint = "api/makanan/search_makanan";
 
     final Uri uri = Uri.parse("$baseUrl$searchEndpoint?keyword=$keyword");
 
@@ -34,7 +36,7 @@ class MakananService {
 
   static Future<List<Makanan>> fetchMakananByJenis(String jenis) async {
     final String baseUrl = "$link"; // Ganti dengan base URL endpoint API Anda
-    final String searchEndpoint = "api/makanan/search_makanan_by_jenis";
+    const String searchEndpoint = "api/makanan/search_makanan_by_jenis";
     final response =
         await http.get(Uri.parse('$baseUrl$searchEndpoint?jenis=$jenis'));
 
@@ -54,6 +56,7 @@ class MakananService {
         true,
         ScanMode.BARCODE,
       );
+      print('isi barcode bos ${barcodeScanRes}');
 
       if (barcodeScanRes == '-1') {
         return [];
@@ -87,5 +90,19 @@ class MakananService {
       jsonList.add(makanan.toJson());
     });
     return jsonList;
+  }
+
+  static Future<List<Makanan>> fetchRecomendasiMakanan(String email) async {
+    final String baseUrl = "$link"; // Ganti dengan base URL endpoint API Anda
+    const String searchEndpoint = "api/makanan/rekomendasi_makanan";
+    final response =
+        await http.get(Uri.parse('$baseUrl$searchEndpoint?email=$email'));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body)['data'];
+      return data.map((json) => Makanan.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to load makanan');
+    }
   }
 }

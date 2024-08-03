@@ -3,8 +3,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../global/GetDataUser.dart'; // Impor UserService jika diperlukan
-import '../global/DataUser.dart'; // Impor DataUser jika diperlukan
+import '../services/GetDataUser.dart'; // Impor UserService jika diperlukan
+import '../model/DataUser.dart'; // Impor DataUser jika diperlukan
 import '../global/LoadingProgress.dart'; // Impor LoadingDialog jika diperlukan
 import '../Admin/AdminPage.dart';
 

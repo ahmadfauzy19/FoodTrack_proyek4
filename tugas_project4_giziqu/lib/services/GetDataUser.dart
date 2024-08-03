@@ -3,15 +3,14 @@
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'link.dart';
-import 'DataUser.dart'; // Pastikan untuk mengimpor file data_user.dart di mana DataUser didefinisikan.
+import '../global/link.dart';
+import '../model/DataUser.dart'; // Pastikan untuk mengimpor file data_user.dart di mana DataUser didefinisikan.
 
 class UserService {
   DataUser? dataUser; // Variabel data user sebagai properti
   Future<DataUser?> getDataUser(String email) async {
     http.Response response;
     final Uri uri = Uri.parse('${link}api/getDataUser');
-    // try {
     if (email == '') {
       return null;
     } else {
@@ -34,10 +33,6 @@ class UserService {
         return null;
       }
     }
-    // } catch (error) {
-    //   print('Error fetching user data: $error');
-    //   return null;
-    // }
     return null;
   }
 }

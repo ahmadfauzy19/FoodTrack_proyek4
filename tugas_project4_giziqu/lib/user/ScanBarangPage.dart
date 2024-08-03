@@ -1,4 +1,4 @@
-// ignore_for_file: unused_element, avoid_print, avoid_unnecessary_containers, file_names, use_build_context_synchronously, unused_import
+// ignore_for_file: unused_element, avoid_print, avoid_unnecessary_containers, file_names, use_build_context_synchronously, unused_import, unnecessary_brace_in_string_interps
 
 import 'dart:convert';
 import 'dart:io';
@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:tugas_project4_giziqu/BarcodeScannerScreen.dart';
+import 'package:tugas_project4_giziqu/global/bottom_app_bar/bottom_app_bar_widget.dart';
 import 'package:tugas_project4_giziqu/global/link.dart';
 import 'package:tugas_project4_giziqu/model/MakananModel.dart';
 import 'package:tugas_project4_giziqu/services/makanan_service.dart';
@@ -21,11 +22,21 @@ class ScanBarangPage extends StatefulWidget {
 
 class _ScanBarangPageState extends State<ScanBarangPage> {
   File? _pickedImage;
+  bool _isScanning = false;
+  List<Makanan> makananList = [];
   String _detectionLabel = 'Pilih gambar untuk mendeteksi';
 
   Future<void> _search(String keyword) async {
+    setState(() {
+      _isScanning = true;
+    });
     try {
-      List<Makanan> makananList = await MakananService.searchMakanan(keyword);
+      List<Makanan> scanMakananList =
+          await MakananService.searchMakanan(keyword);
+      setState(() {
+        makananList = scanMakananList;
+        _isScanning = false;
+      });
 
       if (makananList.isNotEmpty) {
         Navigator.push(
@@ -36,11 +47,40 @@ class _ScanBarangPageState extends State<ScanBarangPage> {
         );
       } else {
         print('Data makanan tidak ditemukan');
-        // Handle ketika data makanan tidak ditemukan, misalnya dengan menampilkan snackbar atau dialog
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text(
+              'Data makanan tidak ditemukan',
+              style: TextStyle(color: Colors.white), // Warna teks konten
+            ),
+            backgroundColor: const Color(0xFFB71C1C), // Warna merah gelap
+            action: SnackBarAction(
+              label: 'Tutup',
+              onPressed: () {},
+              textColor: Colors.yellow, // Warna teks tombol aksi
+            ),
+          ),
+        );
       }
     } catch (e) {
+      setState(() {
+        _isScanning = false;
+      });
       print('Exception saat searching makanan: $e');
-      // Handle exception, misalnya dengan menampilkan snackbar atau dialog
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Exception saat searching makanan: $e',
+            style: const TextStyle(color: Colors.white), // Warna teks konten
+          ),
+          backgroundColor: const Color(0xFFB71C1C), // Warna merah gelap
+          action: SnackBarAction(
+            label: 'Tutup',
+            onPressed: () {},
+            textColor: Colors.yellow, // Warna teks tombol aksi
+          ),
+        ),
+      );
     }
   }
 
@@ -85,8 +125,7 @@ class _ScanBarangPageState extends State<ScanBarangPage> {
       // Buat objek request multipart
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse(
-            'https://98ca-180-244-132-70.ngrok-free.app/predict'), // Ganti URL dengan URL endpoint Anda
+        Uri.parse('${link_yolo}/predict'), // Ganti URL dengan URL endpoint Anda
       );
       // Tambahkan file ke bagian request multipart
       request.files.add(
@@ -126,77 +165,82 @@ class _ScanBarangPageState extends State<ScanBarangPage> {
         title: const Text(''),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Container(
-              height: 200,
-              width: MediaQuery.of(context).size.width,
-              decoration: const BoxDecoration(
-                color: Colors.grey,
-              ),
-              child: Column(
-                children: [
-                  const Text(
-                    'Hasil Pemindaian Barcode:',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  Text(_detectionLabel),
-                ],
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.all(20),
-              child: const Column(
+        child: _isScanning
+            ? const CircularProgressIndicator(
+                color: Colors.orange,
+              )
+            : Column(
                 mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text("Pengingat"),
-                  Text(
-                      "Pastikan Scan barcode sesuai dengan posisinya dan pastikan koneksi Internet lancar"),
-                ],
-              ),
-            ),
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const BarcodeScannerScreen()),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
+                  Container(
+                    height: 200,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: const BoxDecoration(
+                      color: Colors.grey,
                     ),
-                    child: const Text(
-                      "Scan Barcode",
-                      style: TextStyle(color: Colors.black),
+                    child: Column(
+                      children: [
+                        const Text(
+                          'Hasil Pemindaian Barcode:',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                        Text(_detectionLabel),
+                      ],
                     ),
                   ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                    ),
-                    child: const Text(
-                      "Scan Barang",
-                      style: TextStyle(color: Colors.white),
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text("Pengingat"),
+                        Text(
+                            "Pastikan foto yang diambil jelas dan pastikan koneksi Internet lancar"),
+                      ],
                     ),
                   ),
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const BarcodeScannerScreen()),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                          ),
+                          child: const Text(
+                            "Scan Barcode",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green,
+                          ),
+                          child: const Text(
+                            "Scan Barang",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
                 ],
               ),
-            )
-          ],
-        ),
       ),
       // Tambahkan tombol untuk memulai pemindaian barcode
       floatingActionButton: FloatingActionButton(
-        onPressed: _pickImageFromGallery,
+        onPressed: _pickImageFromCamera,
         backgroundColor: Colors.green,
         shape:
             const CircleBorder(side: BorderSide(color: Colors.white, width: 2)),
@@ -205,7 +249,8 @@ class _ScanBarangPageState extends State<ScanBarangPage> {
           color: Colors.white,
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: const BottomAppBarWidget(),
     );
   }
 }

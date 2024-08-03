@@ -1,15 +1,11 @@
 // ignore_for_file: file_names, avoid_print, library_private_types_in_public_api, sized_box_for_whitespace, unnecessary_null_comparison
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:tugas_project4_giziqu/components/NewsImage.dart';
-import 'dart:convert';
-import 'package:tugas_project4_giziqu/user/LandingPage.dart';
-import 'package:tugas_project4_giziqu/user/ProfilePage.dart';
-import 'BarcodeScannerScreen.dart';
-import 'SearchPage.dart';
-
-import 'package:tugas_project4_giziqu/global/link.dart';
+import 'package:tugas_project4_giziqu/global/LoadingProgress.dart';
+import 'package:tugas_project4_giziqu/global/bottom_app_bar/bottom_app_bar_widget.dart';
+import 'package:tugas_project4_giziqu/global/bottom_app_bar/floating_action_button_widget.dart';
+import 'package:tugas_project4_giziqu/services/artikel_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class NewsPage extends StatefulWidget {
@@ -21,8 +17,8 @@ class NewsPage extends StatefulWidget {
 
 class _NewsPageState extends State<NewsPage> {
   List<Map<String, dynamic>> _newsData = [];
-  bool _isLoading =
-      true; // Menandakan apakah sedang dalam proses loading atau tidak
+  final ArtikelServices _newsService = ArtikelServices();
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -32,24 +28,17 @@ class _NewsPageState extends State<NewsPage> {
 
   // Fungsi untuk mengambil data dari API
   Future<void> _fetchNews() async {
-    final response =
-        await http.get(Uri.parse('${link}api/read_semua_artikel_makanan'));
-    if (response.statusCode == 200) {
-      final List<dynamic> responseData = jsonDecode(response.body);
-      final List<Map<String, dynamic>> filteredData = responseData
-          .where((data) => data != null)
-          .cast<Map<String, dynamic>>()
-          .toList();
-
+    try {
+      final newsData = await _newsService.fetchNews();
       setState(() {
-        _newsData = filteredData;
+        _newsData = newsData;
         _isLoading =
             false; // Setelah data terambil, tidak lagi dalam proses loading
       });
       // Cetak _newsData setelah diperbarui
       print(_newsData);
-    } else {
-      throw Exception('Failed to load news');
+    } catch (e) {
+      print('Failed to load news: $e');
     }
   }
 
@@ -76,8 +65,7 @@ class _NewsPageState extends State<NewsPage> {
       ),
       body: _isLoading
           ? const Center(
-              child:
-                  CircularProgressIndicator(), // Tampilkan loading indicator jika data belum termuat
+              child: LoadingDialog(pesan: "Mengambil data."),
             )
           : ListView(
               children: [
@@ -115,67 +103,9 @@ class _NewsPageState extends State<NewsPage> {
                 ),
               ],
             ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Tambahkan logika untuk membuka halaman untuk memindai QR code
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const BarcodeScannerScreen()),
-          );
-        },
-        backgroundColor: Colors.green,
-        shape: const CircleBorder(
-          side: BorderSide(color: Colors.white, width: 2),
-        ),
-        child: const Icon(
-          Icons.qr_code_scanner_rounded,
-          color: Colors.white,
-        ),
-      ),
+      floatingActionButton: const FloatingActionButtonWidget(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.white,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LandingPage()),
-                );
-              },
-              icon: const Icon(Icons.home),
-            ),
-            IconButton(
-              onPressed: () {
-                // Tambahkan logika untuk navigasi ke halaman berita
-              },
-              icon: const Icon(Icons.newspaper),
-            ),
-            const SizedBox(width: 50),
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SearchPage()),
-                );
-              },
-              icon: const Icon(Icons.search),
-            ),
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ProfilePage()));
-              },
-              icon: const Icon(Icons.person),
-            ),
-          ],
-        ),
-      ),
+      bottomNavigationBar: const BottomAppBarWidget(),
     );
   }
 

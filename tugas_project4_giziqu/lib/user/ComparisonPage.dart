@@ -15,7 +15,7 @@ class ComparisonPage extends StatelessWidget {
     print("Data 2: $data2");
     return Scaffold(
       appBar: AppBar(
-        title: Text("Comparison Page"),
+        title: const Text("Comparison Page"),
       ),
       body: PageView(
         children: [
@@ -50,25 +50,25 @@ class PageComparison extends StatelessWidget {
         : Makanan(namaMakanan: '', foto: '', gizi: {}, jenis: '');
 
     return SingleChildScrollView(
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             food.namaMakanan,
-            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           // Gunakan widget FoodImage di sini untuk menampilkan gambar
           food.foto.isNotEmpty
               ? FoodImage(imageUrl: food.foto)
-              : Container(child: Text('No image')),
-          SizedBox(height: 20),
-          Text(
+              : Container(child: const Text('No image')),
+          const SizedBox(height: 20),
+          const Text(
             'Informasi Nilai Gizi',
             style: TextStyle(fontSize: 22),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Container(
             height: 200,
             decoration: BoxDecoration(
@@ -117,9 +117,9 @@ class PageComparison extends StatelessWidget {
           : (num.tryParse(comparisonValue) ?? 0);
 
       if (numericValue < numericComparisonValue) {
-        backgroundColor = Color.fromARGB(255, 255, 108, 98);
+        backgroundColor = const Color.fromARGB(255, 255, 108, 98);
       } else if (numericValue > numericComparisonValue) {
-        backgroundColor = Color.fromARGB(255, 108, 255, 113);
+        backgroundColor = const Color.fromARGB(255, 108, 255, 113);
       } else {
         backgroundColor = Colors.grey; // Jika sama, maka warna abu-abu
       }
@@ -136,12 +136,12 @@ class PageComparison extends StatelessWidget {
             title: Text(label),
             trailing: Text(
               value != null ? '$value $satuan' : 'N/A',
-              style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.black),
             ),
           ),
         ),
-        Divider(
+        const Divider(
           color: Colors.black12,
           thickness: 1.0,
           height: 0.0,

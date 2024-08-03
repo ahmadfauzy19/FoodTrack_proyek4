@@ -1,11 +1,14 @@
 // ignore_for_file: file_names
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 // import "package:tugas_project4_giziqu/Admin/KelolaArtikel.dart";
-import 'package:tugas_project4_giziqu/BarcodeScannerScreen.dart';
-import 'package:tugas_project4_giziqu/NewsPage.dart';
-import 'package:tugas_project4_giziqu/user/LandingPage.dart';
-import 'package:tugas_project4_giziqu/user/ProfilePage.dart';
+import 'package:tugas_project4_giziqu/ProfileImage/ProfilImageBuilder.dart';
+import 'package:tugas_project4_giziqu/global/LoadingProgress.dart';
+import 'package:tugas_project4_giziqu/global/bottom_app_bar/bottom_app_bar_widget.dart';
+import 'package:tugas_project4_giziqu/global/bottom_app_bar/floating_action_button_widget.dart';
+import 'package:tugas_project4_giziqu/model/DataUser.dart';
+import 'package:tugas_project4_giziqu/services/GetDataUser.dart';
 import 'package:tugas_project4_giziqu/user/UbahEmailPage.dart';
 import 'package:tugas_project4_giziqu/user/UbahPasswordPage.dart';
 import '../global/logout.dart';
@@ -20,209 +23,188 @@ class AkunPage extends StatefulWidget {
 }
 
 class _AkunPageState extends State<AkunPage> {
+  User? currentUser;
+  String? userEmail;
+  Future<DataUser?>? futureDataUser;
+  late String imageUrl = '';
+  UserService userService = UserService();
+
+  @override
+  void initState() {
+    super.initState();
+    currentUser = FirebaseAuth.instance.currentUser;
+    userEmail = currentUser?.email;
+    if (userEmail != null) {
+      futureDataUser = userService.getDataUser(userEmail!);
+      futureDataUser!.then((DataUser? dataUser) {
+        imageUrl = dataUser!.foto;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 233, 230, 223),
-      body: Center(
-        child: Column(
-          children: [
-            Container(
-              height: 200,
-              padding: const EdgeInsets.all(20),
-              // margin: EdgeInsets.all(30),
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/BG.jpg"),
-                  fit: BoxFit.cover, // Atur sesuai kebutuhan Anda
-                ),
-              ),
-              child: Row(
-                children: [
-                  const CircleAvatar(
-                    radius: 30, // Atur radius sesuai kebutuhan Anda
-                    backgroundImage: AssetImage("assets/default.jpeg"),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.all(20),
-                    child: const Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Test",
-                          style: TextStyle(
-                              fontFamily: "fonts/Schyler-Italic.ttf",
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        ),
-                        Text(
-                          "Selamat Datang Kembali",
-                          style: TextStyle(
-                            fontFamily: "fonts/Schyler-Italic.ttf",
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-                margin: const EdgeInsets.all(30),
+      body: FutureBuilder<DataUser?>(
+          future: futureDataUser,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: LoadingDialog(pesan: "Loading."));
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else if (!snapshot.hasData || snapshot.data == null) {
+              return const Center(child: Text('No user data found'));
+            } else {
+              DataUser dataUser = snapshot.data!;
+              return Center(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Row(
-                      children: [
-                        Text(
-                          "Akun",
-                          style: TextStyle(
-                              fontFamily: "fonts/Schyler-Italic.ttf",
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Color.fromARGB(255, 0, 0, 0)),
+                    Container(
+                      height: 200,
+                      padding: const EdgeInsets.all(20),
+                      // margin: EdgeInsets.all(30),
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage("assets/BG.jpg"),
+                          fit: BoxFit.cover, // Atur sesuai kebutuhan Anda
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 10), // Jarak antara teks dan tombol
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const UbahEmailPage()),
-                        );
-                      },
-                      child: const Row(
+                      ),
+                      child: Row(
                         children: [
-                          Icon(
-                            Icons.email,
-                            color: Colors.black,
+                          ProfileImageBuilder(
+                            username: dataUser.username,
+                            imageUrl: imageUrl,
+                            activateTap: true,
                           ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            'Ubah Email',
-                            style: TextStyle(color: Colors.black),
+                          Container(
+                            margin: const EdgeInsets.all(20),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  dataUser.name,
+                                  style: const TextStyle(
+                                      fontFamily: "fonts/Schyler-Italic.ttf",
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                                const Text(
+                                  "Selamat Datang Kembali",
+                                  style: TextStyle(
+                                    fontFamily: "fonts/Schyler-Italic.ttf",
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
                     ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const UbahPasswordPage()),
-                        );
-                      },
-                      child: const Row(
-                        children: [
-                          Icon(
-                            Icons.lock,
-                            color: Colors.black,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            'Ubah Password',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ],
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Logout.signOut(context);
-                      },
-                      child: const Row(
-                        children: [
-                          Icon(
-                            Icons.logout,
-                            color: Colors.black,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            'Logout',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ],
-                      ),
-                    ),
+                    Container(
+                        margin: const EdgeInsets.all(30),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Row(
+                              children: [
+                                Text(
+                                  "Akun",
+                                  style: TextStyle(
+                                      fontFamily: "fonts/Schyler-Italic.ttf",
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color.fromARGB(255, 0, 0, 0)),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                                height: 10), // Jarak antara teks dan tombol
+                            TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const UbahEmailPage()),
+                                );
+                              },
+                              child: const Row(
+                                children: [
+                                  Icon(
+                                    Icons.email,
+                                    color: Colors.black,
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    'Ubah Email',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const UbahPasswordPage()),
+                                );
+                              },
+                              child: const Row(
+                                children: [
+                                  Icon(
+                                    Icons.lock,
+                                    color: Colors.black,
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    'Ubah Password',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Logout.signOut(context);
+                              },
+                              child: const Row(
+                                children: [
+                                  Icon(
+                                    Icons.logout,
+                                    color: Colors.black,
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    'Logout',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        )),
                   ],
-                )),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Tambahkan logika untuk membuka halaman untuk memindai QR code
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const BarcodeScannerScreen()),
-          );
-        },
-        backgroundColor: Colors.green,
-        shape:
-            const CircleBorder(side: BorderSide(color: Colors.white, width: 2)),
-        child: const Icon(
-          Icons.qr_code_scanner_rounded,
-          color: Colors.white,
-        ),
-      ),
+                ),
+              );
+            }
+          }),
+      floatingActionButton: const FloatingActionButtonWidget(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.white,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            IconButton(
-              onPressed: () {
-                // Tambahkan logika untuk navigasi ke halaman beranda
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LandingPage()),
-                );
-              },
-              icon: const Icon(Icons.home),
-            ),
-            IconButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const NewsPage()));
-              },
-              icon: const Icon(Icons.newspaper),
-            ),
-            const SizedBox(width: 50),
-            IconButton(
-              onPressed: () {
-                // Tambahkan logika untuk navigasi ke halaman search
-              },
-              icon: const Icon(Icons.search),
-            ),
-            IconButton(
-              onPressed: () {
-                // Tambahkan logika untuk navigasi ke halaman profil
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const ProfilePage()),
-                );
-              },
-              icon: const Icon(Icons.person),
-            ),
-          ],
-        ),
-      ),
+      bottomNavigationBar: const BottomAppBarWidget(),
     );
   }
 }

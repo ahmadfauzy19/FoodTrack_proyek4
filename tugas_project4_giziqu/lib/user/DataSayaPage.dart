@@ -1,5 +1,6 @@
-import 'dart:convert';
+// ignore_for_file: unnecessary_const, avoid_print, non_constant_identifier_names, file_names
 
+import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -15,11 +16,12 @@ class DataSayaPage extends StatefulWidget {
 class _DataSayaPageState extends State<DataSayaPage> {
   User? currentUser;
   String? userEmail;
+  bool isLoading = false;
 
   // Controllers untuk TextFields
-  TextEditingController tinggiBadanController = TextEditingController();
-  TextEditingController beratBadanController = TextEditingController();
-  TextEditingController usiaController = TextEditingController();
+  final TextEditingController tinggiBadanController = TextEditingController();
+  final TextEditingController beratBadanController = TextEditingController();
+  final TextEditingController usiaController = TextEditingController();
 
   // Variabel untuk nilai default dropdown
   String dropdownValue = 'laki-laki';
@@ -31,51 +33,72 @@ class _DataSayaPageState extends State<DataSayaPage> {
     currentUser = FirebaseAuth.instance.currentUser;
     userEmail = currentUser?.email;
     print('User email: $userEmail');
-    _fetchUserData(
-        userEmail!); // Panggil fungsi untuk mendapatkan data pengguna saat initState dipanggil
+    if (userEmail != null) {
+      _fetchUserData(userEmail!);
+    }
   }
 
   Future<void> _fetchUserData(String email) async {
+    setState(() {
+      isLoading = true;
+    });
+
     final Uri uri = Uri.parse("${link}api/read_profile_by_email?email=$email");
 
     try {
-      var response = await http.get(uri);
+      final response = await http.get(uri);
       if (response.statusCode == 200) {
-        var userData = json.decode(response.body);
-        // print(userData);
+        final userData = json.decode(response.body);
 
-        // Set nilai default pada TextField
-        tinggiBadanController.text = userData['tinggi_badan'].toString();
-        beratBadanController.text = userData['berat_badan'].toString();
-        usiaController.text = userData['usia'].toString();
-
-        // Set nilai default pada DropdownButton
         setState(() {
-          // dropdownValue = userData['jenis_kelamin'];
+          tinggiBadanController.text = userData['tinggi_badan'].toString();
+          beratBadanController.text = userData['berat_badan'].toString();
+          usiaController.text = userData['usia'].toString();
           dropdownValueAktivitas = userData['faktor_aktivitas'];
+          isLoading = false;
         });
-
-        // Lakukan sesuatu dengan data profil pengguna yang diterima, misalnya simpan ke dalam variabel atau lakukan operasi lain
       } else {
         print('Error: ${response.statusCode}');
       }
     } catch (e) {
       print('Exception: $e');
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
-  var jenisKelamin = [
-    'laki-laki',
-    'perempuan',
-  ];
+  Future<void> _saveProfileData() async {
+    setState(() {
+      isLoading = true;
+    });
 
-  var faktorAktivitas = [
-    'Sangat jarang olahraga',
-    'Jarang olahraga',
-    'Cukup olahraga',
-    'Sering olahraga',
-    'Sangat sering olahraga',
-  ];
+    final email = userEmail!;
+    final tinggiBadan = int.tryParse(tinggiBadanController.text) ?? 0;
+    final beratBadan = int.tryParse(beratBadanController.text) ?? 0;
+    final jenisKelamin = dropdownValue;
+    final usia = int.tryParse(usiaController.text) ?? 0;
+    final faktorAktivitas = dropdownValueAktivitas;
+
+    final status = await create_update_profile_diri(
+      email,
+      tinggiBadan,
+      beratBadan,
+      jenisKelamin,
+      usia,
+      faktorAktivitas,
+    );
+
+    setState(() {
+      isLoading = false;
+    });
+
+    if (status == "berhasil") {
+      // Refresh user data after successful save
+      _fetchUserData(email);
+    }
+  }
 
   Future<String> create_update_profile_diri(
     String email,
@@ -101,240 +124,214 @@ class _DataSayaPageState extends State<DataSayaPage> {
       );
 
       if (response.statusCode == 200) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Informasi'),
-              content: const Text('Data berhasil disimpan.'),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('OK'),
-                ),
-              ],
-            );
-          },
-        );
+        _showDialog('Informasi', 'Data berhasil disimpan.');
         return "berhasil";
       } else {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Informasi'),
-              content: Text('Data gagal disimpan: ${response.body}'),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('OK'),
-                ),
-              ],
-            );
-          },
-        );
+        _showDialog('Informasi', 'Data gagal disimpan: ${response.body}');
         return "gagal";
       }
     } catch (error) {
-      print('Kesalahan dalam menghitung : $error');
+      print('Kesalahan dalam menghitung: $error');
+      _showDialog('Informasi', 'Terjadi kesalahan: $error');
       return "gagal";
     }
   }
 
-  void _saveProfileData() {
-    String email = userEmail!;
-    int tinggiBadan = int.tryParse(tinggiBadanController.text) ?? 0;
-    int beratBadan = int.tryParse(beratBadanController.text) ?? 0;
-    String jenisKelamin = dropdownValue;
-    int usia = int.tryParse(usiaController.text) ?? 0;
-    String faktorAktivitas = dropdownValueAktivitas;
-
-    create_update_profile_diri(
-      email,
-      tinggiBadan,
-      beratBadan,
-      jenisKelamin,
-      usia,
-      faktorAktivitas,
+  void _showDialog(String title, String content) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(content),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Lengkapi Data")),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Flexible(
-                  flex: 1,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+      appBar: AppBar(title: const Text("Lengkapi Data")),
+      body: isLoading
+          ? const Center(
+              child: const CircularProgressIndicator(
+              color: Colors.orange,
+            ))
+          : SingleChildScrollView(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
                     children: [
-                      SizedBox(height: 20),
-                      Text(
-                        'Tinggi Badan (cm)',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 10),
-                      Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(border: Border.all()),
-                        child: TextField(
+                      Flexible(
+                        flex: 1,
+                        child: _buildTextField(
                           controller: tinggiBadanController,
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.all(10),
-                            hintText: 'Masukkan tinggi badan',
-                            border: InputBorder.none,
-                          ),
+                          label: 'Tinggi Badan (cm)',
+                          hintText: 'Masukkan tinggi badan',
                         ),
                       ),
-                    ],
-                  ),
-                ),
-                SizedBox(width: 20),
-                Flexible(
-                  flex: 1,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 20),
-                      Text(
-                        'Berat Badan (kg)',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 10),
-                      Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(border: Border.all()),
-                        child: TextField(
+                      const SizedBox(width: 20),
+                      Flexible(
+                        flex: 1,
+                        child: _buildTextField(
                           controller: beratBadanController,
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.all(10),
-                            hintText: 'Masukkan berat badan',
-                            border: InputBorder.none,
-                          ),
+                          label: 'Berat Badan (kg)',
+                          hintText: 'Masukkan berat badan',
                         ),
                       ),
                     ],
                   ),
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Jenis Kelamin',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            Container(
-              width: double.infinity,
-              decoration: BoxDecoration(border: Border.all()),
-              child: DropdownButton<String>(
-                value: dropdownValue,
-                icon: const Icon(Icons.keyboard_arrow_down),
-                iconSize: 24,
-                elevation: 16,
-                isExpanded: true,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    dropdownValue = newValue!;
-                  });
-                },
-                items: jenisKelamin.map((String item) {
-                  return DropdownMenuItem<String>(
-                    value: item,
-                    child: Text(item),
-                  );
-                }).toList(),
+                  const SizedBox(height: 20),
+                  _buildDropdown(
+                    label: 'Jenis Kelamin',
+                    value: dropdownValue,
+                    items: jenisKelamin,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        dropdownValue = newValue!;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  _buildTextField(
+                    controller: usiaController,
+                    label: 'Usia (tahun)',
+                    hintText: 'Masukkan Usia',
+                  ),
+                  const SizedBox(height: 20),
+                  _buildDropdown(
+                    label: 'Faktor Aktivitas',
+                    value: dropdownValueAktivitas,
+                    items: faktorAktivitas,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        dropdownValueAktivitas = newValue!;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: _saveProfileData,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                        ),
+                        child: const Text(
+                          "Hitung",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                      const SizedBox(width: 20),
+                      ElevatedButton(
+                        onPressed: () {
+                          // Implement reset logic if needed
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                        ),
+                        child: const Text(
+                          "Reset",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-            SizedBox(height: 20),
-            Text(
-              'Usia (tahun)',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            Container(
-              width: double.infinity,
-              decoration: BoxDecoration(border: Border.all()),
-              child: TextField(
-                controller: usiaController,
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.all(10),
-                  hintText: 'Masukkan Usia',
-                  border: InputBorder.none,
-                ),
-              ),
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Faktor Aktivitas',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            Container(
-              width: double.infinity,
-              decoration: BoxDecoration(border: Border.all()),
-              child: DropdownButton<String>(
-                value: dropdownValueAktivitas,
-                icon: const Icon(Icons.keyboard_arrow_down),
-                iconSize: 24,
-                elevation: 16,
-                isExpanded: true,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    dropdownValueAktivitas = newValue!;
-                  });
-                },
-                items: faktorAktivitas.map((String item) {
-                  return DropdownMenuItem<String>(
-                    value: item,
-                    child: Text(item),
-                  );
-                }).toList(),
-              ),
-            ),
-            SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    _saveProfileData();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                  ),
-                  child: const Text(
-                    "Hitung",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-                SizedBox(width: 20),
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                  ),
-                  child: const Text(
-                    "Reset",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
     );
   }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    required String hintText,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 20),
+        Text(
+          label,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 10),
+        Container(
+          width: double.infinity,
+          decoration: BoxDecoration(border: Border.all()),
+          child: TextField(
+            controller: controller,
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.all(10),
+              hintText: hintText,
+              border: InputBorder.none,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDropdown({
+    required String label,
+    required String value,
+    required List<String> items,
+    required ValueChanged<String?> onChanged,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 20),
+        Text(
+          label,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 10),
+        Container(
+          width: double.infinity,
+          decoration: BoxDecoration(border: Border.all()),
+          child: DropdownButton<String>(
+            value: value,
+            icon: const Icon(Icons.keyboard_arrow_down),
+            iconSize: 24,
+            elevation: 16,
+            isExpanded: true,
+            onChanged: onChanged,
+            items: items.map((String item) {
+              return DropdownMenuItem<String>(
+                value: item,
+                child: Text(item),
+              );
+            }).toList(),
+          ),
+        ),
+      ],
+    );
+  }
+
+  var jenisKelamin = [
+    'laki-laki',
+    'perempuan',
+  ];
+
+  var faktorAktivitas = [
+    'Sangat jarang olahraga',
+    'Jarang olahraga',
+    'Cukup olahraga',
+    'Sering olahraga',
+    'Sangat sering olahraga',
+  ];
 }

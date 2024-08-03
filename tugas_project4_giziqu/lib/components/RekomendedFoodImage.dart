@@ -3,23 +3,23 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_project4_giziqu/services/firebase_services.dart';
 
-class NewsImage extends StatelessWidget {
+class RecommendedFoodImage extends StatelessWidget {
   final String imageUrl;
   final double width;
   final double height;
 
-  const NewsImage({
+  const RecommendedFoodImage({
     Key? key,
     required this.imageUrl,
-    this.width = 200, // Default width
-    this.height = 200, // Default height
+    this.width = 80, // Default width for recommended images
+    this.height = 80, // Default height for recommended images
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<String>(
       future:
-          FirebaseService.getImageDownloadUrl(imageUrl, "Images/ArtikelImage/"),
+          FirebaseService.getImageDownloadUrl(imageUrl, "Images/MakananImage/"),
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return SizedBox(
@@ -30,11 +30,14 @@ class NewsImage extends StatelessWidget {
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else if (snapshot.hasData) {
-          return Image.network(
-            snapshot.data!,
-            width: width,
-            height: height,
-            fit: BoxFit.cover,
+          return ClipRRect(
+            borderRadius: BorderRadius.circular(10), // Rounded corners
+            child: Image.network(
+              snapshot.data!,
+              width: width,
+              height: height,
+              fit: BoxFit.cover,
+            ),
           );
         } else {
           return SizedBox(

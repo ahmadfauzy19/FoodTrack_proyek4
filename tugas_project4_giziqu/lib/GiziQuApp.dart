@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 // import 'package:tugas_project4_giziqu/Admin/AdminPage.dart';
 import 'package:tugas_project4_giziqu/LoginPage.dart';
 import 'package:tugas_project4_giziqu/SplashScreen.dart';
-import 'package:tugas_project4_giziqu/user/LandingPage.dart';
+import 'user/landingpage/landing_page.dart';
 
 class GiziQuApp extends StatefulWidget {
   const GiziQuApp({super.key});

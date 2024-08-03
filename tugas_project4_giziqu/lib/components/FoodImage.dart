@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:tugas_project4_giziqu/services/firebase_services.dart';
 
@@ -23,7 +25,7 @@ class FoodImage extends StatelessWidget {
           return SizedBox(
             width: width,
             height: height,
-            child: CircularProgressIndicator(),
+            child: const CircularProgressIndicator(),
           );
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
@@ -38,7 +40,7 @@ class FoodImage extends StatelessWidget {
           return SizedBox(
             width: width,
             height: height,
-            child: Center(
+            child: const Center(
               child: Text('No image available'),
             ),
           );

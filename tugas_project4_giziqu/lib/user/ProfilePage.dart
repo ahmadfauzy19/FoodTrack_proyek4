@@ -4,16 +4,14 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tugas_project4_giziqu/NewsPage.dart';
 import 'package:tugas_project4_giziqu/ProfileImage/ProfilImageBuilder.dart';
-import 'package:tugas_project4_giziqu/SearchPage.dart';
+import 'package:tugas_project4_giziqu/global/bottom_app_bar/bottom_app_bar_widget.dart';
+import 'package:tugas_project4_giziqu/global/bottom_app_bar/floating_action_button_widget.dart';
 import 'package:tugas_project4_giziqu/user/AkunPage.dart';
-import 'package:tugas_project4_giziqu/BarcodeScannerScreen.dart';
 import 'package:tugas_project4_giziqu/user/DataSayaPage.dart';
 import 'package:tugas_project4_giziqu/user/KebutuhanGiziPage.dart';
-import 'package:tugas_project4_giziqu/user/LandingPage.dart';
-import '../global/DataUser.dart';
-import '../global/GetDataUser.dart';
+import '../model/DataUser.dart';
+import '../services/GetDataUser.dart';
 import '../global/LoadingProgress.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -96,7 +94,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: Row(
                       children: [
                         ProfileImageBuilder(
-                            username: dataUser.username, imageUrl: imageUrl),
+                          username: dataUser.username,
+                          imageUrl: imageUrl,
+                          activateTap: false,
+                        ),
                         Container(
                           margin: const EdgeInsets.all(20),
                           child: Column(
@@ -225,69 +226,9 @@ class _ProfilePageState extends State<ProfilePage> {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Tambahkan logika untuk membuka halaman untuk memindai QR code
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const BarcodeScannerScreen()),
-          );
-        },
-        backgroundColor: Colors.green,
-        shape:
-            const CircleBorder(side: BorderSide(color: Colors.white, width: 2)),
-        child: const Icon(
-          Icons.qr_code_scanner_rounded,
-          color: Colors.white,
-        ),
-      ),
+      floatingActionButton: const FloatingActionButtonWidget(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.white,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            IconButton(
-              onPressed: () {
-                // Tambahkan logika untuk navigasi ke halaman beranda
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LandingPage()),
-                );
-              },
-              icon: const Icon(Icons.home),
-            ),
-            IconButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const NewsPage()));
-              },
-              icon: const Icon(Icons.newspaper),
-            ),
-            const SizedBox(width: 50),
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const SearchPage()));
-              },
-              icon: const Icon(Icons.search),
-            ),
-            IconButton(
-              onPressed: () {
-                // Tambahkan logika untuk navigasi ke halaman profil
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const ProfilePage()),
-                );
-              },
-              icon: const Icon(Icons.person),
-            ),
-          ],
-        ),
-      ),
+      bottomNavigationBar: const BottomAppBarWidget(),
     );
   }
 }
