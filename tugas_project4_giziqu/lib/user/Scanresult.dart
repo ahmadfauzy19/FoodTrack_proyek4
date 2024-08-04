@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_project4_giziqu/SearchComparisonPage.dart';
 import 'package:tugas_project4_giziqu/components/FoodImage.dart';
+import 'package:tugas_project4_giziqu/components/GIziIndicator.dart';
 import 'package:tugas_project4_giziqu/model/MakananModel.dart';
 import 'package:tugas_project4_giziqu/services/makanan_service.dart';
 
@@ -54,6 +55,64 @@ class _ScanresultState extends State<Scanresult> {
                 ? FoodImage(imageUrl: widget.data[0].foto)
                 : const Text('No image available'),
             const SizedBox(height: 20),
+
+            Container(
+              padding: const EdgeInsets.all(
+                  16.0), // Menambahkan padding di sekeliling container
+              decoration: BoxDecoration(
+                color: Colors.grey[200], // Warna abu-abu muda
+                borderRadius: BorderRadius.circular(10.0), // Sudut membulat
+              ),
+              child: Column(
+                crossAxisAlignment:
+                    CrossAxisAlignment.start, // Menyusun teks di kiri
+                children: [
+                  Center(
+                    child: const Text(
+                      'Label Gizi',
+                      style:
+                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    'Kalori',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  StatusWidget(
+                    status: widget.data[0].label_gizi['energi_label'],
+                  ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    'Gula',
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                  ),
+                  StatusWidget(
+                    status: widget.data[0].label_gizi['gula_label'],
+                  ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    'Lemak',
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                  ),
+                  StatusWidget(
+                    status: widget.data[0].label_gizi['lemak_label'],
+                  ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    'Natrium',
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                  ),
+                  StatusWidget(
+                    status: widget.data[0].label_gizi['natrium_label'],
+                  ),
+                  const SizedBox(height: 20),
+                ],
+              ),
+            ),
             const Text(
               'Informasi Nilai Gizi',
               style: TextStyle(fontSize: 22),
@@ -70,7 +129,7 @@ class _ScanresultState extends State<Scanresult> {
                   _buildNutritionItem(
                       'Kalori',
                       widget.data.isNotEmpty
-                          ? widget.data[0].gizi['kalori']
+                          ? widget.data[0].gizi['energi']
                           : null,
                       "kcal"),
                   _buildNutritionItem(

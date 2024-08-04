@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_project4_giziqu/components/FoodImage.dart';
+import 'package:tugas_project4_giziqu/components/GIziIndicator.dart';
 import 'package:tugas_project4_giziqu/model/MakananModel.dart';
 
 class ComparisonPage extends StatelessWidget {
@@ -44,10 +45,12 @@ class PageComparison extends StatelessWidget {
   Widget build(BuildContext context) {
     Makanan food = data.isNotEmpty
         ? data[0]
-        : Makanan(namaMakanan: '', foto: '', gizi: {}, jenis: '');
+        : Makanan(
+            namaMakanan: '', foto: '', gizi: {}, jenis: '', label_gizi: {});
     Makanan foodComparison = data2.isNotEmpty
         ? data2[0]
-        : Makanan(namaMakanan: '', foto: '', gizi: {}, jenis: '');
+        : Makanan(
+            namaMakanan: '', foto: '', gizi: {}, jenis: '', label_gizi: {});
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
@@ -99,6 +102,65 @@ class PageComparison extends StatelessWidget {
                     foodComparison.gizi['vitamin_b3'], "gram"),
                 _buildNutritionItem('Vitamin C', food.gizi['vitamin_c'],
                     foodComparison.gizi['vitamin_c'], "gram"),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Container(
+            padding: const EdgeInsets.all(
+                16.0), // Menambahkan padding di sekeliling container
+            decoration: BoxDecoration(
+              color: Colors.grey[200], // Warna abu-abu muda
+              borderRadius: BorderRadius.circular(10.0), // Sudut membulat
+            ),
+            child: Column(
+              crossAxisAlignment:
+                  CrossAxisAlignment.start, // Menyusun teks di kiri
+              children: [
+                Center(
+                  child: const Text(
+                    'Label Gizi',
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  'Kalori',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                StatusWidget(
+                  status: food.label_gizi['energi_label'],
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  'Gula',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                ),
+                StatusWidget(
+                  status: food.label_gizi['gula_label'],
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  'Lemak',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                ),
+                StatusWidget(
+                  status: food.label_gizi['lemak_label'],
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  'Natrium',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                ),
+                StatusWidget(
+                  status: food.label_gizi['natrium_label'],
+                ),
+                const SizedBox(height: 20),
               ],
             ),
           ),

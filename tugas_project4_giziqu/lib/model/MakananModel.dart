@@ -3,12 +3,14 @@ class Makanan {
   final String foto;
   final Map<String, dynamic> gizi;
   final String jenis;
+  final Map<String, dynamic> label_gizi;
 
   Makanan({
     required this.namaMakanan,
     required this.foto,
     required this.gizi,
     required this.jenis,
+    required this.label_gizi,
   });
 
   factory Makanan.fromJson(Map<String, dynamic> json) {
@@ -17,6 +19,7 @@ class Makanan {
       foto: json['foto'] ?? '',
       gizi: json['gizi'] ?? {},
       jenis: json['jenis'] ?? '',
+      label_gizi: json['label_gizi'] ?? '',
     );
   }
 
